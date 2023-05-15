@@ -60,77 +60,9 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
     return result;
 };
 
-// const baseQueryWithReauth = async (args, api, extraOptions) => {
-//     const { refresh, access, user } = api.getState().auth;
-
-//     console.log("args", args);
-//     console.log("api", api);
-//     console.log("getState()", api.getState());
-//     console.log("extra", extraOptions);
-//     console.log(refresh, access, user);
-
-//     if (!access) return await baseQuery(args, api, extraOptions);
-
-//     const isExpired = dayjs.unix(jwtDecode(access)?.exp).diff(dayjs()) < 1;
-//     const isExpiredRefresh =
-//         dayjs.unix(jwtDecode(refresh)?.exp).diff(dayjs()) < 1;
-
-//     if (isExpiredRefresh) {
-//         api.dispatch(logOut());
-//         return await baseQuery(args, api, extraOptions);
-//     }
-//     console.log(dayjs.unix(jwtDecode(access)?.exp));
-//     if (!isExpired) return await baseQuery(args, api, extraOptions);
-//     console.log(dayjs.unix(jwtDecode(access)?.exp));
-//     if (!refreshTokenRequest) refreshTokenRequest = refreshToken(refresh);
-//     console.log(refreshTokenRequest);
-//     console.log("helloworld");
-//     const authObj = await refreshTokenRequest.data;
-//     console.log("piece of shit");
-//     console.log(authObj);
-//     refreshTokenRequest = null;
-//     await api.dispatch(setCredentials(authObj));
-
-//     return await baseQuery(args, api, extraOptions);
-
-// const isExpiredRefresh =
-//     dayjs.unix(jwtDecode(refresh)?.exp).diff(dayjs()) < 1;
-
-// let result = await baseQuery(args, api, extraOptions);
-
-// if (result?.error?.originalStatus === 401) {
-//     if (isExpiredRefresh) {
-//         api.dispatch(logOut());
-//         return result;
-//     }
-
-//     // send refresh token to get new access token
-
-//     const refreshResult = await fetch(`${baseUrl}refresh`, {
-//         body: {
-//             refresh,
-//         },
-//         method: "POST",
-//     });
-//     console.log(refreshResult);
-
-//     if (refreshResult.ok) {
-//         const data = refreshResult.json();
-//         // store the new token
-//         api.dispatch(setCredentials({ ...data }));
-//         // retry the original query with new access token
-//         result = await baseQuery(args, api, extraOptions);
-//     } else {
-//         api.dispatch(logOut());
-//     }
-// }
-
-// return result;
-// };
-
 export const AuthApi = createApi({
     reducerPath: "authUralInern",
-    baseQuery: baseQuery,
+    baseQuery: fetchBaseQuery({ baseUrl }),
     endpoints: (builder) => ({
         login: builder.mutation({
             query: (credentials) => ({
@@ -151,13 +83,142 @@ export const AuthApi = createApi({
 
 export const uralInernApi = createApi({
     reducerPath: "uralInern",
+    tagTypes: ["user-info", "image", "role", "team", "stage", "estimate"],
+    // providesTags: ["product"] - для гетов
+    // invalidatesTags: ["product"] - для мутаторов
     baseQuery: baseQueryWithReauth,
     endpoints: (builder) => ({
         getUser: builder.query({
-            query: (_) => ({
-                url: "user/2",
+            query: ({ id }) => ({
+                url: `user/${id}/`,
                 method: "GET",
             }),
+            providesTags: ["image"],
+        }),
+        changeImage: builder.mutation({
+            query: ({ id, image }) => ({
+                url: `change-image/${id}/`,
+                method: "PUT",
+                body: { image },
+            }),
+            invalidatesTags: ["image"],
+        }),
+        getMyTeams: builder.query({
+            query: () => ({
+                url: `teams/`,
+                method: "GET",
+            }),
+            providesTags: ["team"],
+        }),
+        getTeam: builder.query({
+            query: ({ id }) => ({
+                url: `team/${id}/`,
+                method: "GET",
+            }),
+            providesTags: ["team", "role"],
+        }),
+        getUserInfo: builder.query({
+            query: ({ id }) => ({
+                url: `user-info/${id}/`,
+                method: "GET",
+            }),
+            providesTags: ["user-info"],
+        }),
+        changeUserInfo: builder.mutation({
+            query: ({ id, body }) => ({
+                url: `user-info/${id}/`,
+                method: "PUT",
+                body: { ...body },
+            }),
+            invalidatesTags: ["user-info"],
+        }),
+        getStages: builder.query({
+            query: ({ id }) => {
+                const url = id ? `stage/${id}/` : `stage/`;
+                return {
+                    url,
+                    method: "GET",
+                };
+            },
+            providesTags: ["stage"],
+        }),
+
+        getListCriteria: builder.query({
+            query: () => ({
+                url: "evaluation-creteria/",
+                method: "GET",
+            }),
+        }),
+        getListRoles: builder.query({
+            query: () => ({
+                url: "roles/",
+                method: "GET",
+            }),
+        }),
+        changeRole: builder.mutation({
+            query: ({ body }) => ({
+                url: "change-role/",
+                method: "PUT",
+                body,
+            }),
+            invalidatesTags: ["role"],
+        }),
+        estimate: builder.mutation({
+            query: ({ body }) => ({
+                url: "estimate/",
+                method: "POST",
+                body,
+            }),
+            invalidatesTags: ["estimate"],
+        }),
+        getEstimations: builder.query({
+            query: ({ user_id, team_id }) => ({
+                url: `estimations/${user_id}/${team_id}/`,
+                method: "GET",
+            }),
+            providesTags: ["estimate"],
+        }),
+        getForms: builder.query({
+            query: ({ id }) => ({
+                url: `forms/${id}/`,
+                method: "GET",
+            }),
+            providesTags: ["estimate"],
+        }),
+        getFormForTeam: builder.query({
+            query: ({ user_id, team_id }) => ({
+                url: `forms-for-team/${user_id}/${team_id}`,
+                method: "GET",
+            }),
+            providesTags: ["estimate"],
+        }),
+        getProject: builder.query({
+            query: ({ id }) => ({
+                url: `project/${id}/`,
+                method: "GET",
+            }),
+        }),
+        createTeam: builder.mutation({
+            query: ({ body }) => ({
+                url: "team/",
+                method: "POST",
+                body,
+            }),
+            invalidatesTags: ["team"],
+        }),
+        getTutorsInternts: builder.query({
+            query: () => ({
+                url: "interns-tutors/",
+                method: "GET",
+            }),
+        }),
+        putTeam: builder.mutation({
+            query: ({ id, body }) => ({
+                url: `team/${id}`,
+                method: "PUT",
+                body,
+            }),
+            invalidatesTags: ["team"],
         }),
     }),
 });

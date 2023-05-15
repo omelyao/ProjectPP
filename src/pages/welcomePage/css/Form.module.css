@@ -1,11 +1,12 @@
 .enter-form{
-    margin-top: 188px;
-    margin-left: 435px;
+    position: absolute;
+    top: 10%;
+    left: 30%;
     background: #EDEDED;
     border-radius: 15px;
     width: 410px;
     margin-bottom:189px;
-    position: absolute;
+
 }
 
 .head-form{
@@ -15,22 +16,44 @@
 
 .enter{
     margin-top: 25px;
-    margin-left: 41px;
-    font-weight: 400;
+    margin-left: 41px;  
     font-size: 24px;
 }
 
 .registr{
-    margin-top: 26px;
+    margin-top: 25px;
     font-size: 24px;
     margin-left: 34px;
+}
+
+
+.enter:hover, .registr:hover{
+    cursor: pointer;    
+}
+
+.enter:active, .registr:active{
     font-weight: 700;
+    
 }
 
 .cross{
-    margin-left: 97.73px;
-    margin-top: 25px;
+    position: absolute;
+    top: 18px;
+    right:15px;
+    padding: 3px;
+    border-radius: 50%;
 }
+
+
+.cross:hover{
+    cursor: pointer;
+    background-color: #cfcccc;
+}
+
+.selected{
+    font-weight: 700;
+}
+
 
 .fields{
     margin-top: 27.46px;
@@ -64,6 +87,17 @@
     font-size: 16px;
     border:none;
 }
+
+.enter-button:hover{
+    cursor: pointer;
+    background-color: #F9A425;
+}
+
+.enter-button:active{
+    cursor: pointer;
+    background-color: #E86A00;
+}
+
 
 .main-footer{
     background: #303030;

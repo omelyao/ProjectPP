@@ -2,16 +2,14 @@ import React, { useState } from 'react';
 import classes from "./css/WelcomePage.module.css"
 import AuthForm from './components/AuthForm';
 import RegistrationForm from './components/RegistrationForm';
+import Form from './components/Form';
 
 function WelcomePage(props) {
     const [state1, setState1] = useState(0);
     
-    
-
     return (
     <div>
-        {state1 === 1 && <AuthForm  onChange={setState1}/>}
-        {state1 === 2 && <RegistrationForm onChange={setState1}/>}
+        <Form onChange={setState1} form={state1}/>
         <main className={classes["main"]}>    
             <h2 className={classes["welcome-phrase"]}>Добро пожаловать!</h2>
             <div className={classes["content"]}>
