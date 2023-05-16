@@ -3,6 +3,7 @@ import classes from "./css/WelcomePage.module.css"
 import AuthForm from './components/AuthForm';
 import RegistrationForm from './components/RegistrationForm';
 import Form from './components/Form';
+import Footer from '../../Components/Footer';
 
 function WelcomePage(props) {
     const [state1, setState1] = useState(0);
@@ -26,6 +27,7 @@ function WelcomePage(props) {
                 <button className={classes["aut"]} onClick={() =>setState1(1)}>Войти</button>
             </div>
         </main>
+        <Footer/>
     </div>
     );
 }

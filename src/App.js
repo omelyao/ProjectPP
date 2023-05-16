@@ -9,7 +9,9 @@ import AssessmentPage from "./pages/assessmentPage/AssessmentPage";
 import Report from "./pages/report/Report";
 import LoginRoute from "./routers/LoginRoute";
 import Header from "./Components/Header";
-import Footer from "./Components/Footer";
+import Stages from "./pages/stages/Stages";
+import Project from "./pages/project/Project";
+import ProjectInterns from "./pages/projectInterns/ProjectInterns";
 function App() {
     return (
         <div>
@@ -18,12 +20,17 @@ function App() {
                 <Route path="/" />
                 {/* <PrivateRoute path="/main" element={HomePage} /> */}
                 <Route path="/user/:userId" element={<User />} />
+                <Route path="project/:projectId" element={<Project />} />
+                <Route
+                    path="projectInerns/:projectId"
+                    element={<ProjectInterns />}
+                />
                 <Route path="/team/:teamId" element={<Team />} />
                 <Route path="/login" element={<WelcomePage />} />
+                <Route path="/stages/:teamId" element={<Stages />} />
                 <Route path="/form/:teamId" element={<AssessmentPage />} />
-                <Route path="/report/:teamId/:userId" element={<Report />} />
+                <Route path="/report/:userId/:teamId" element={<Report />} />
             </Routes>
-            <Footer />
         </div>
     );
 }

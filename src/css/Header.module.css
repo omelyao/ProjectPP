@@ -12,6 +12,12 @@
     margin-left:22px;
     margin-top:19px;
 }
+
+.nav-icon:hover, .profile:hover, .settings-icon:hover, .exit:hover{
+    cursor: pointer;
+    background-color: red;
+}
+
 .small-logo{
     margin-left:11px;
     margin-top:7px;
@@ -20,11 +26,11 @@
 .profile{
     display:flex;
     margin-right:auto;
+    margin-left: 47px;
 }
 
 .profile img{
     margin-top:19px;
-    margin-left: 47px;
 }
 
 .profile p{

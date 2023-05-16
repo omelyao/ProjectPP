@@ -134,7 +134,7 @@ export const uralInernApi = createApi({
         }),
         getStages: builder.query({
             query: ({ id }) => {
-                const url = id ? `stage/${id}/` : `stage/`;
+                const url = id ? `stage/?id_team=${id}` : `stage/`;
                 return {
                     url,
                     method: "GET",
@@ -172,8 +172,8 @@ export const uralInernApi = createApi({
             invalidatesTags: ["estimate"],
         }),
         getEstimations: builder.query({
-            query: ({ user_id, team_id }) => ({
-                url: `estimations/${user_id}/${team_id}/`,
+            query: ({ userId, teamId }) => ({
+                url: `estimations/${userId}/${teamId}/`,
                 method: "GET",
             }),
             providesTags: ["estimate"],
@@ -223,5 +223,24 @@ export const uralInernApi = createApi({
     }),
 });
 
-export const { useGetUserQuery } = uralInernApi;
+export const {
+    useGetUserQuery,
+    useChangeImageMutation,
+    useChangeRoleMutation,
+    useChangeUserInfoMutation,
+    useCreateTeamMutation,
+    useEstimateMutation,
+    useGetEstimationsQuery,
+    useGetFormForTeamQuery,
+    useGetFormsQuery,
+    useGetListCriteriaQuery,
+    useGetListRolesQuery,
+    useGetMyTeamsQuery,
+    useGetProjectQuery,
+    useGetStagesQuery,
+    useGetTeamQuery,
+    useGetTutorsInterntsQuery,
+    usePutTeamMutation,
+    useGetUserInfoQuery,
+} = uralInernApi;
 export const { useLoginMutation, useRegisterMutation } = AuthApi;

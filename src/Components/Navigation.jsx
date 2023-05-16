@@ -1,10 +1,24 @@
 import React from 'react';
 import classes from "../css/Navigation.module.css"
+import { useGetMyTeamsQuery } from '../redux/authApi';
+import NavigationRole from './NavigationRole';
 function Navigation({open}) {
 
+    const team = useGetMyTeamsQuery();
+
+    if(team.isLoading){
+        console.log(team);
+        return <div style={{display:"none"}}></div>
+    }
     return (
         <div className={`${classes["navigation"]} ${open && classes["active"]}`}>
-            <div className={classes["roles"]}>
+        {team.data.director.length > 0 && <NavigationRole teams={team.data.director} mainTitle={"Я - руководитель"}/>}
+        
+        {team.data.tutor.length > 0 && <NavigationRole teams={team.data.tutor} mainTitle={"Я - куратор"}/>}
+        
+        {team.data.intern.length > 0 && <NavigationRole teams={team.data.intern} mainTitle={"Я - стажёр"}/>}
+
+            {/* <div className={classes["roles"]}>
                 <div className={classes["name-role"]}>Руководитель</div>
                 <div className={classes["name-role-value"]}>Нет доступа</div>
             </div>
@@ -29,7 +43,7 @@ function Navigation({open}) {
                         <p>Команда n</p>
                     </li>
                 </ul>
-            </div>
+            </div> */}
         </div>
     );
 }
