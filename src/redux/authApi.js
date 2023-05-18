@@ -83,7 +83,15 @@ export const AuthApi = createApi({
 
 export const uralInernApi = createApi({
     reducerPath: "uralInern",
-    tagTypes: ["user-info", "image", "role", "team", "stage", "estimate"],
+    tagTypes: [
+        "user-info",
+        "image",
+        "role",
+        "team",
+        "stage",
+        "estimate",
+        "project",
+    ],
     // providesTags: ["product"] - для гетов
     // invalidatesTags: ["product"] - для мутаторов
     baseQuery: baseQueryWithReauth,
@@ -197,6 +205,7 @@ export const uralInernApi = createApi({
                 url: `project/${id}/`,
                 method: "GET",
             }),
+            providesTags: ["project"],
         }),
         createTeam: builder.mutation({
             query: ({ body }) => ({
@@ -204,7 +213,7 @@ export const uralInernApi = createApi({
                 method: "POST",
                 body,
             }),
-            invalidatesTags: ["team"],
+            invalidatesTags: ["team", "project"],
         }),
         getTutorsInternts: builder.query({
             query: () => ({
@@ -214,11 +223,11 @@ export const uralInernApi = createApi({
         }),
         putTeam: builder.mutation({
             query: ({ id, body }) => ({
-                url: `team/${id}`,
+                url: `team/${id}/`,
                 method: "PUT",
                 body,
             }),
-            invalidatesTags: ["team"],
+            invalidatesTags: ["team", "project"],
         }),
     }),
 });
