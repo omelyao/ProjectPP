@@ -67,7 +67,6 @@ function CreateTeam({open, onClose, tutors, interns}) {
             </div>
             <div className={classes["button-create"]}>
                 <button onClick={sendEditedTeam} className={classes["create"]}>Создать</button>
-                <button className={classes["cancel"]}>Удалить</button>
             </div>
         </div>
     </Modal>

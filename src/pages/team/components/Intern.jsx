@@ -1,6 +1,6 @@
 import React from 'react';
 import classes from "../css/Team.module.css"
-import { useGetListRolesQuery, useGetUserInfoQuery, useGetUserQuery } from '../../../redux/authApi';
+import { domen, useGetListRolesQuery, useGetUserInfoQuery, useGetUserQuery } from '../../../redux/authApi';
 import { useSelector } from 'react-redux';
 import Role from './Role';
 
@@ -19,7 +19,7 @@ function Intern({intern}) {
         <div className={classes["photo"]}>
             <img 
                 src={ internName.data.image 
-                    ? "http://127.0.0.1:8000"+ internName.data.image  
+                    ? domen+ internName.data.image  
                     : require("../../../images/profile.svg").default
                 }
                 width="97" height="110"

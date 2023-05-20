@@ -1,8 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { logOut, refreshToken, setCredentials } from "./authSlice";
-import axios from "axios";
-import dayjs from "dayjs";
-import jwtDecode from "jwt-decode";
+import { logOut, setCredentials } from "./authSlice";
 import { Mutex } from "async-mutex";
 
 export const domen = "http://127.0.0.1:8000";
@@ -272,6 +269,13 @@ export const uralInernApi = createApi({
                 url: "",
             }),
         }),
+        getTeamsInProject: builder.query({
+            query: ({ id }) => ({
+                url: `team/?id_project=${id}`,
+                method: "GET",
+            }),
+            providesTags: ["team", "role"],
+        }),
     }),
 });
 
@@ -311,5 +315,7 @@ export const {
     useLazyGetUserInfoQuery,
     useLazyGetUserQuery,
     useDeleteImageMutation,
+    useGetTeamsInProjectQuery,
+    useLazyGetTeamsInProjectQuery,
 } = uralInernApi;
 export const { useLoginMutation, useRegisterMutation } = AuthApi;

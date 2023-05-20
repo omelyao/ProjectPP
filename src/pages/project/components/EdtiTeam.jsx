@@ -12,19 +12,20 @@ function EdtiTeam({open, onClose, team, tutors, interns}) {
          )
     const setInterns = new Set(team.interns.map(intern => intern.id_intern));
     
+
     const [curName, setCurName] = useState(team.title);
-    const [curTutor, setCurTutor] = useState(tutors[0].id);
+    const [curTutor, setCurTutor] = useState(team.id_tutor);
     const [selectedValues, setSelectedValues] = useState(chInterns.filter(intern => setInterns.has(intern.id_intern)));
     
     const [editTeam] = usePutTeamMutation();
 
     const sendEditedTeam =  async () => {
         const body = {
-            "id_project": 1,
+            "id_project": team.id_project,
             "id_tutor": curTutor,
             "interns": selectedValues,
             "title": curName,
-            "team_chat": null,
+            "team_chat": team.team_chat,
             "teg": curName
         }
         const res = await editTeam({id:team.id, body})
@@ -52,8 +53,10 @@ function EdtiTeam({open, onClose, team, tutors, interns}) {
                     <select
                         onChange={e => setCurTutor(e.target.value)}
                         className={classes["one-selector"]}
+                        defaultValue={curTutor}
                         name="form-selector"
                         id="form-selector">
+                        
                         {tutors.map(tutor =>  <option value={tutor.id}>{ `${tutor.last_name} ${tutor.first_name} ${tutor?.patronymic ?? ""}`} </option>)}
                     </select>
                 </div>
@@ -67,8 +70,7 @@ function EdtiTeam({open, onClose, team, tutors, interns}) {
                 </div>
             </div>
             <div className={classes["button-create"]}>
-                <button onClick={sendEditedTeam} className={classes["create"]}>Создать</button>
-                <button className={classes["cancel"]}>Удалить</button>
+                <button onClick={sendEditedTeam} className={classes["create"]}>Изменить</button>
             </div>
         </div>
     </Modal>

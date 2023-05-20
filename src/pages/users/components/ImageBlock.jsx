@@ -12,12 +12,12 @@ function ImageBlock({user}) {
         formData.append("image", photos[0], photos[0].name);
 
         console.log(formData.image);
-        const res = changePhoto({id:user.id, body: formData});
+        changePhoto({id:user.id, body: formData});
 
 
     };
     const deletePhoto = async () =>{
-        const res = await delPhoto({id:user.id})
+        await delPhoto({id:user.id})
 
     };
     return (
@@ -40,7 +40,6 @@ function ImageBlock({user}) {
                                 />
                                 <span >Изменить фото</span>
                             </label>
-
                             <p
                                 onClick={() => deletePhoto()}
                                 className={classes["photo_del"]}
