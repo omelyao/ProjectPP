@@ -1,28 +1,45 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import classes from "./css/Stages.module.css"
 import Stage from './components/Stage';
 import { useParams } from 'react-router-dom';
-import { useGetStagesQuery, useGetTeamQuery } from '../../redux/authApi';
+import { useGetListCriteriaQuery, useGetStagesQuery, useGetTeamQuery, useLazyGetProjectQuery, useLazyGetTeamQuery } from '../../redux/authApi';
+import CreateStage from './components/CreateStage';
 function Stages() {
     const {teamId} = useParams();
+    const [open, setOpen] = useState(false);
     const stages = useGetStagesQuery({id: teamId});
-    const team = useGetTeamQuery({id: teamId});
-    if(stages.isLoading || team.isLoading){
+    const [triggerTeam] = useLazyGetTeamQuery();
+    const [team, setTeam] = useState();
+
+    const criteria = useGetListCriteriaQuery();
+    const [triggerProj] = useLazyGetProjectQuery()
+    const [project, setProject] = useState()
+    useEffect(() =>{
+        const getTeamAndProj = async() =>{
+            const resTeam = await triggerTeam({id: teamId}, true);
+            const proj = await triggerProj({id:resTeam.data.id_project}, true);
+            setTeam(resTeam.data);
+            setProject(proj.data);
+        }
+        getTeamAndProj();
+    },[teamId])
+    
+    if(stages.isLoading || criteria.isLoading || !project || !team){
         return <div></div>;
     }
-    console.log(stages.data);
-    console.log(team.data);
+    console.log(project);
+    console.log(team);
     return (<div className={classes["main"]}>
 <div className={classes["stages-main"]}>
             <div className={classes["stages-info"]}>
                 <h2>Этапы</h2>
                 <div className={classes["info"]}>
-                    <p>Проект: {team.data.id_project}</p>
-                    <p>Команда: {team.data.title}</p>
+                    <p>Проект: {project.title}</p>
+                    <p>Команда: {team.title}</p>
                 </div>
             </div>
             <div className={classes["table"]}>
-                <ul className={classes["main-ul"]}>
+                <ul style={{padding:0}} className={classes["main-ul"]}>
                         <li className={classes['command-info-person-head']}>
                             <div className={classes["number"]}>Номер</div>
                             <div className={classes["name"]}>Название</div>
@@ -30,12 +47,13 @@ function Stages() {
                             <div className={classes["date"]}>Дата для оценки</div>
                             <div className={classes["status"]}>Статус</div>
                         </li>
-                        {stages.data.map(stage => <Stage stage={stage}/>)}
+                        {stages.data.map(stage => <Stage criteria={criteria.data} stage={stage}/>)}
 
                 </ul>
             </div>
+            {open && <CreateStage criteria={criteria.data} open={open} onClose={() => setOpen(false)} />}
             <div className={classes["button"]}>
-                <button className={classes["stage-create"]}>создать этап</button>
+                <button className={classes["stage-create"]} onClick={() => setOpen(true)}>создать этап</button>
             </div>
         </div>
     </div>

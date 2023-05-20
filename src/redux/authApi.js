@@ -5,9 +5,11 @@ import dayjs from "dayjs";
 import jwtDecode from "jwt-decode";
 import { Mutex } from "async-mutex";
 
-const baseUrl = "http://127.0.0.1:8000/UralIntern/";
+export const domen = "http://127.0.0.1:8000";
 //http://studprzi.beget.tech
 //http://127.0.0.1:8000
+
+const baseUrl = `${domen}/UralIntern/`;
 
 const baseQuery = fetchBaseQuery({
     baseUrl,
@@ -22,7 +24,7 @@ const baseQuery = fetchBaseQuery({
 
 const mutex = new Mutex();
 const baseQueryWithReauth = async (args, api, extraOptions) => {
-    console.log(dayjs.unix(api.getState()?.auth?.user?.exp));
+    //console.log(dayjs.unix(api.getState()?.auth?.user?.exp));
     // wait until the mutex is available without locking it
     await mutex.waitForUnlock();
     let result = await baseQuery(args, api, extraOptions);
@@ -104,13 +106,26 @@ export const uralInernApi = createApi({
             providesTags: ["image"],
         }),
         changeImage: builder.mutation({
-            query: ({ id, image }) => ({
+            query: ({ id, body }) => ({
+                prepareHeaders: (headers) => {
+                    headers.set("Content-Type", "multipart/form-data");
+                    return headers;
+                },
                 url: `change-image/${id}/`,
                 method: "PUT",
-                body: { image },
+                body,
             }),
             invalidatesTags: ["image"],
         }),
+        deleteImage: builder.mutation({
+            query: ({ id }) => ({
+                url: `change-image/${id}/`,
+                method: "PUT",
+                body: { image: null },
+            }),
+            invalidatesTags: ["image"],
+        }),
+
         getMyTeams: builder.query({
             query: () => ({
                 url: `teams/`,
@@ -153,7 +168,7 @@ export const uralInernApi = createApi({
 
         getListCriteria: builder.query({
             query: () => ({
-                url: "evaluation-creteria/",
+                url: "evaluation-criteria/",
                 method: "GET",
             }),
         }),
@@ -229,6 +244,34 @@ export const uralInernApi = createApi({
             }),
             invalidatesTags: ["team", "project"],
         }),
+        putStage: builder.mutation({
+            query: ({ id, body }) => ({
+                url: `stage/${id}/`,
+                method: "PUT",
+                body,
+            }),
+            invalidatesTags: ["stage"],
+        }),
+        // deleteStage: builder.mutation({
+        //     query: ({ id }) => ({
+        //         url: `stage/${id}/`,
+        //         method: "DELETE",
+        //     }),
+        //     invalidatesTags: ["stage"],
+        // }),
+        createStage: builder.mutation({
+            query: ({ body }) => ({
+                url: `stage/`,
+                method: "POST",
+                body,
+            }),
+            invalidatesTags: ["stage"],
+        }),
+        getEstimationForForm: builder.query({
+            query: ({ stageId, userId, internId }) => ({
+                url: "",
+            }),
+        }),
     }),
 });
 
@@ -251,5 +294,22 @@ export const {
     useGetTutorsInterntsQuery,
     usePutTeamMutation,
     useGetUserInfoQuery,
+    useCreateStageMutation,
+    usePutStageMutation,
+    useLazyGetEstimationForFormQuery,
+    useLazyGetEstimationsQuery,
+    useLazyGetFormForTeamQuery,
+    useLazyGetFormsQuery,
+    useLazyGetListCriteriaQuery,
+    useLazyGetListRolesQuery,
+    useGetEstimationForFormQuery,
+    useLazyGetMyTeamsQuery,
+    useLazyGetProjectQuery,
+    useLazyGetStagesQuery,
+    useLazyGetTeamQuery,
+    useLazyGetTutorsInterntsQuery,
+    useLazyGetUserInfoQuery,
+    useLazyGetUserQuery,
+    useDeleteImageMutation,
 } = uralInernApi;
 export const { useLoginMutation, useRegisterMutation } = AuthApi;

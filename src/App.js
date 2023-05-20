@@ -12,6 +12,7 @@ import Header from "./Components/Header";
 import Stages from "./pages/stages/Stages";
 import Project from "./pages/project/Project";
 import ProjectInterns from "./pages/projectInterns/ProjectInterns";
+import ChangeUser from "./pages/users/ChangeUser";
 function App() {
     return (
         <div>
@@ -27,6 +28,7 @@ function App() {
                 />
                 <Route path="/team/:teamId" element={<Team />} />
                 <Route path="/login" element={<WelcomePage />} />
+                <Route path="change-info" element={<ChangeUser />} />
                 <Route path="/stages/:teamId" element={<Stages />} />
                 <Route path="/form/:teamId" element={<AssessmentPage />} />
                 <Route path="/report/:userId/:teamId" element={<Report />} />

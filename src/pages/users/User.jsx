@@ -1,7 +1,7 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import classes from "./css/User.module.css"
-import { useGetUserInfoQuery, useGetUserQuery } from '../../redux/authApi';
+import { domen, useGetUserInfoQuery, useGetUserQuery } from '../../redux/authApi';
 
 function User(props) {
     const {userId} = useParams();
@@ -17,7 +17,7 @@ function User(props) {
         <div className={classes["profile-info"]}>
             <div className={classes["main-profile"]}>
                 <h2>Профиль</h2>
-                <img className={classes["photo-student"]} src={ user.data.image ?"http://127.0.0.1:8000"+ user.data.image  : require("../../images/profile.svg").default} width="135" height="135" alt='123'/>
+                <img className={classes["photo-student"]} src={ user.data.image ? domen + user.data.image  : require("../../images/profile.svg").default} width="135" height="135" alt='123'/>
                 <div className={classes["fio-email"]}>
                     <p className={classes["fio"]}>{ `${user.data.last_name} ${user.data.first_name} ${user.data?.patronymic ?? ""}`}</p>
                     <p className={classes["email"]}>{user.data.email}</p>

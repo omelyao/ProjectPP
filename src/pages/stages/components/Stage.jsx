@@ -1,6 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import classes from "../css/Stages.module.css"
-function Stage({stage}) {
+import EditStage from './EditStage';
+function Stage({stage, criteria}) {
+    const [open, setOpen] = useState(false);
+
+
     return (
         <li key={stage.id} className={classes['command-info-person']}>
         <div className={classes["number"]}>{stage.id}</div>
@@ -13,8 +17,14 @@ function Stage({stage}) {
                 {stage.evaluation_criteria.map(crit => <option key={crit.id} disabled>{crit.title}</option> )}
                 <option value="" disabled selected hidden>Критерии</option>
             </select>
-            <img className={classes["link-pen"]} src={require("../../../images/pen.svg").default} width="16" height="16" alt="Карандаш"/>
+            
+            <img className={classes["link-pen"]}
+                onClick={() => setOpen(true)} 
+                src={require("../../../images/pen.svg").default}
+                width="16" height="16" alt="Карандаш"
+            />
         </div>
+        {open && <EditStage open={open} onClose={() => setOpen(false)} stage={stage} criteria={criteria}/>}
     </li>
     );
 }

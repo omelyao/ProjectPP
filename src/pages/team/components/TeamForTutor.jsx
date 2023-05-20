@@ -3,13 +3,20 @@ import classes from '../css/TeamForTutor.module.css'
 import TeamInfoForTutor from './TeamInfoForTutor';
 import ListIntertsForTutor from './ListIntertsForTutor';
 import { useNavigate } from 'react-router-dom';
+import { useGetProjectQuery } from '../../../redux/authApi';
 
 function TeamForTutor({team}) {
     const navigate = useNavigate();
+    const project = useGetProjectQuery({id:team.id})
+
+    if (project.isLoading){
+        return<div></div>
+    }
+
 
     return (
         <div className={classes["team"]}>
-            <TeamInfoForTutor project={team.id_project} team_chat={team.team_chat} title={team.title}/>
+            <TeamInfoForTutor project={project.data} team_chat={team.team_chat} title={team.title}/>
         <div className={classes["command-info"]}>
             <ListIntertsForTutor interns={team.interns}/>
             <div className={classes["buttons"]}>
