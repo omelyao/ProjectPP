@@ -52,7 +52,7 @@
     text-align: center;
 }
 
-#form-selector{
+.form-selector{
     width: 350px;
     height: 35px;
     background: rgba(240, 240, 240, 0.4);

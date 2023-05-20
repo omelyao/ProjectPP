@@ -28,15 +28,15 @@ function ProjectInterns() {
 
     useEffect(() =>{
         async function getTeams(){
-            const res = await triggerTeams({id:projectId});
-            const rolesRes = await triggerRoles();
+            const res = await triggerTeams({id:projectId}, true);
+            const rolesRes = await triggerRoles(undefined, true);
             const dictRoles = ChangeRoles(rolesRes.data);
 
 
             const result = [];
             for(let team of res.data){
                 for(let intern of team.interns){
-                    const internName = await triggerUser({id:intern.id_intern});
+                    const internName = await triggerUser({id:intern.id_intern}, true);
 
                     result.push({...intern,
                         "roleTitle": dictRoles[intern.role],

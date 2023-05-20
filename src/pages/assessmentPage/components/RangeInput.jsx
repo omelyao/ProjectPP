@@ -8,7 +8,7 @@ function RangeInput({value, id, onChange}) {
         const max = target.max;
         const val = target.value;
         target.style.backgroundSize = (val - min) * 100 / (max - min) + '% 100%';
-        onChange(id, target.value);
+        onChange(id, Number(target.value));
       }
     
     return (
@@ -18,7 +18,7 @@ function RangeInput({value, id, onChange}) {
 
          className={classes["input"]} value={value} type="range"
          step={0.1} min={-1} max={3}
-         style={{backgroundSize:`${(value - -1) * 100 / (4)}% 100%`}}
+         style={{backgroundSize:`${(value + 1) * 100 / (4)}% 100%`}}
          onChange={(e) => handleInputChange(e)} />
         <output className={classes["output"]}  id="rangevalue">{value}</output>
     </div>

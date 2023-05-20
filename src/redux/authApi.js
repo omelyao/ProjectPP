@@ -189,28 +189,40 @@ export const uralInernApi = createApi({
                 method: "POST",
                 body,
             }),
-            invalidatesTags: ["estimate"],
+            invalidatesTags: (result, error, arg) => {
+                console.log("arg", arg);
+                return [{ type: "estimate", id: arg.body.id_intern }];
+            },
         }),
         getEstimations: builder.query({
             query: ({ userId, teamId }) => ({
                 url: `estimations/${userId}/${teamId}/`,
                 method: "GET",
             }),
-            providesTags: ["estimate"],
+            providesTags: (result, error, arg) => {
+                console.log("arg", arg);
+                return [{ type: "estimate", id: arg.userId }];
+            },
         }),
         getForms: builder.query({
             query: ({ id }) => ({
                 url: `forms/${id}/`,
                 method: "GET",
             }),
-            providesTags: ["estimate"],
+            providesTags: (result, error, arg) => {
+                console.log("arg", arg);
+                return [{ type: "estimate", id: arg.id }];
+            },
         }),
         getFormForTeam: builder.query({
             query: ({ user_id, team_id }) => ({
                 url: `forms-for-team/${user_id}/${team_id}`,
                 method: "GET",
             }),
-            providesTags: ["estimate"],
+            providesTags: (result, error, arg) => {
+                console.log("arg", arg);
+                return [{ type: "estimate", id: arg.user_id }];
+            },
         }),
         getProject: builder.query({
             query: ({ id }) => ({
@@ -265,9 +277,13 @@ export const uralInernApi = createApi({
             invalidatesTags: ["stage"],
         }),
         getEstimationForForm: builder.query({
-            query: ({ stageId, userId, internId }) => ({
-                url: "",
+            query: ({ stageId, appraiserId, internId }) => ({
+                url: `estimation/?id_stage=${stageId}&?id_user=${appraiserId}&id_intern=${internId}`,
+                method: "GET",
             }),
+            providesTags: (result, error, arg) => [
+                { type: "estimate", id: arg.internId },
+            ],
         }),
         getTeamsInProject: builder.query({
             query: ({ id }) => ({

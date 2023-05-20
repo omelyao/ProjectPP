@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import classes from "./css/Stages.module.css"
 import Stage from './components/Stage';
 import { useParams } from 'react-router-dom';
-import { useGetListCriteriaQuery, useGetStagesQuery, useGetTeamQuery, useLazyGetProjectQuery, useLazyGetTeamQuery } from '../../redux/authApi';
+import { useGetListCriteriaQuery, useGetStagesQuery, useLazyGetProjectQuery, useLazyGetTeamQuery } from '../../redux/authApi';
 import CreateStage from './components/CreateStage';
 function Stages() {
     const {teamId} = useParams();
