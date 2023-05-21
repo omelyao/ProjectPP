@@ -16,10 +16,14 @@
 /* @import url(https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap); */
 
 body{
-  background: #F5F5F5;
+  background: white;
   font-family: "Roboto";
   color: #000000;
   font-size: 16px;
   line-height:18px;
   margin:0;
+}
+
+.active{
+  color: #D06A00 !important;
 }

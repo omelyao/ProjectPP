@@ -41,7 +41,8 @@ function ProjectInterns() {
                     result.push({...intern,
                         "roleTitle": dictRoles[intern.role],
                         "teamTitle": team.title,
-                        "name": `${internName.data.last_name} ${internName.data.first_name} ${internName.data?.patronymic ?? ""}`
+                        "name": `${internName.data.last_name} ${internName.data.first_name} ${internName.data?.patronymic ?? ""}`,
+                        "image": internName.data.image
                         })
                 }
             }

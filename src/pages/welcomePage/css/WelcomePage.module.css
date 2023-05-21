@@ -62,3 +62,20 @@ margin-top: 27px;
     font-weight: 700;
     font-size: 16px;
     }
+
+.reg:hover{
+    cursor: pointer;
+    background-color: #F9A425;
+}
+.aut:hover{
+    cursor: pointer;
+    background-color: #B0B0B0;
+    color: white;
+}
+.reg:active{
+    background-color: #E86A00;
+}
+.aut:active{
+    background-color: black;
+    color: white;
+}

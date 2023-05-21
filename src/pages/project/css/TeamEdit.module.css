@@ -11,6 +11,10 @@
 .img{
     margin-top: 19.66px;
     margin-left: 453.66px;
+    width: 26.68px;
+    height: 26.68px;
+    padding: 6px;
+    border-radius: 50%;
 }
 
 .team-create-form h2{
@@ -94,17 +98,23 @@ padding-top: 5px;
     border:none;
 }
 
-.cancel:hover{
+.create:hover, .cancel:hover{
     cursor: pointer;
-    background-color: red;
-
+    background-color: #B0B0B0;
+    color: white;
+}
+.create:active, .cancel:active{
+    cursor: pointer;
+    background-color: black;
+    color: white;
 }
 
-.create:hover{
-    cursor: pointer;
-    background-color: red;
-}
+
 .img:hover{
     cursor: pointer;
-    background-color: red;
+    background-color: #616161;
+}
+
+.img:active{
+    background-color:#3d3d3d ;
 }

@@ -36,11 +36,13 @@ function CreateTeam({open, onClose, tutors, interns}) {
     return (
         <Modal sx={{position: "absolute"}} disableScrollLock={true} disableAutoFocus={true}  open={open} onClose={onClose}>
         <div className={classes["team-create-form"]}>
+        <div className={classes["img"]} onClick={() => onClose()}>
             <img src={require("../../../images/cross-white.svg").default}
-                className={classes["img"]}
+                
                 width="26.68" height="26.68"
                 alt="Белый крестик"/>
-            <h2>создать команду команду</h2>
+            </div>
+            <h2>создать команду</h2>
             <div className={classes["fields"]}>
                 <div>
                     <p>Название</p>

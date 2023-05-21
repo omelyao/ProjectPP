@@ -57,7 +57,7 @@ function Header() {
                 <p>Выйти</p>
             </div>
         </header>
-        <Navigation open={open}/>
+        <Navigation open={open} onClose={() => setOpen(false)}/>
     </div>
     );
 }

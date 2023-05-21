@@ -3,7 +3,7 @@ import classes from '../css/Team.module.css'
 import TeamInfo from './TeamInfo';
 import ListInterns from './ListInterns';
 import { useSelector } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useGetProjectQuery, useGetUserQuery } from '../../../redux/authApi';
 
 function TeamCommon({team}) {
@@ -12,7 +12,7 @@ function TeamCommon({team}) {
     const navigate = useNavigate();
     const tutor = useGetUserQuery({id:team.id_tutor});
 
-    const project = useGetProjectQuery({id:team.id})
+    const project = useGetProjectQuery({id:team.id_project})
 
     if (project.isLoading || tutor.isLoading){
         return<div></div>
@@ -28,8 +28,8 @@ function TeamCommon({team}) {
             />
             <ListInterns interns={team.interns}/>
  { flag&&  <div className={classes["buttons"]}>
-                <button className={classes["give-a-mark"]} onClick={() => navigate(`/form/${teamId}`)} >Оценка по этапам</button>
-                <button className={classes["get-report"]} onClick={() => navigate(`/report/${user.user_id}/${teamId}`)} >Моя статистика</button>
+                <Link to={`/form/${teamId}`}><button className={classes["give-a-mark"]}>Оценка по этапам</button></Link>
+                <Link to={`/report/${user.user_id}/${teamId}`}><button className={classes["get-report"]} >Моя статистика</button></Link>
             </div>}
         </div>
     );

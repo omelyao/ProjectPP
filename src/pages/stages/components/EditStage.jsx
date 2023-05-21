@@ -31,10 +31,12 @@ function EditStage({stage, criteria, open, onClose}) {
     return (
         <Modal open={open} onClose={onClose}  sx={{position: "absolute"}} disableScrollLock={true} disableAutoFocus={true}  >
         <div className={classes["stage-create-form"]}>
-        <img className={classes["img"]}
-            src={require("../../../images/cross-white.svg").default}
-            width="26.68" height="26.68"
-            alt="Белый крестик"/>
+        <div className={classes["img"]} onClick={() => onClose()}>
+            <img src={require("../../../images/cross-white.svg").default}
+                
+                width="26.68" height="26.68"
+                alt="Белый крестик"/>
+            </div>
         
         <h2>Редактировать этап</h2>
         <div className={classes["fields"]}>

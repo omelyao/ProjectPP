@@ -17,7 +17,7 @@ function LineInfo({title, values, name}) {
     }
 
     const sendNewInfo = async () =>{
-        const body = {...values, [name]:inp};
+        const body = {...values, [name]:inp.length > 0? inp:null};
         const res = await changeInfo({id: user.user_id, body});
         if (!res.error){
             cancel();
@@ -29,15 +29,21 @@ function LineInfo({title, values, name}) {
         <div className={`${classes["inp-container"]}`}>
             {title}:
             <input type="text" value={inp} onChange={(e) => setInp(e.target.value)} placeholder='нет данных'  className={classes["inp"]} />
-            <img className={classes["link-pen"]} onClick={() => sendNewInfo()}  src={require("../../../images/Y.svg").default} width="16" height="16" alt="Карандаш"/>
-            <img className={classes["link-pen"]} onClick={() => cancel()} src={require("../../../images/cross.svg").default} width="16" height="16" alt="Карандаш"/>
+            <div onClick={() => sendNewInfo()} className={classes["yes"]}>
+                <img className={classes["link-pen"]}   src={require("../../../images/Y.svg").default} width="16" height="16" alt="Карандаш"/>
+            </div>
+            <div  onClick={() => cancel()} className={classes["cancel"]}>
+                <img className={classes["link-pen"]} src={require("../../../images/cross.svg").default} width="16" height="16" alt="Карандаш"/>
+            </div>
         </div>)
     }
 
     return (
     <div className={`${classes["line-container"]}`}>{title}:
         <div className={classes["inf"]}>{values[name] ?? "нет данных"}</div>
-        <img className={classes["link-pen"]} onClick={() => setIsEdit(true)} src={require("../../../images/pen.svg").default} width="16" height="16" alt="Карандаш"/>
+        <div className={classes["pen"]}  onClick={() => setIsEdit(true)} >
+            <img className={classes["link-pen"]} src={require("../../../images/pen.svg").default} width="16" height="16" alt="Карандаш"/>
+        </div>
     </div>
 
     );

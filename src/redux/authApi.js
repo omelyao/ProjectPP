@@ -211,7 +211,7 @@ export const uralInernApi = createApi({
             }),
             providesTags: (result, error, arg) => {
                 console.log("arg", arg);
-                return [{ type: "estimate", id: arg.id }];
+                return [{ type: "estimate", id: arg.id }, "stage"];
             },
         }),
         getFormForTeam: builder.query({
@@ -283,6 +283,7 @@ export const uralInernApi = createApi({
             }),
             providesTags: (result, error, arg) => [
                 { type: "estimate", id: arg.internId },
+                "stage",
             ],
         }),
         getTeamsInProject: builder.query({

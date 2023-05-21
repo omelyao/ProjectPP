@@ -12,11 +12,11 @@ function Navigation({open}) {
     }
     return (
         <div className={`${classes["navigation"]} ${open && classes["active"]}`}>
-        {team.data.director.length > 0 && <NavigationRole teams={team.data.director} mainTitle={"Я - руководитель"}/>}
+        {team.data.director.length > 0 && <NavigationRole teams={team.data.director} mainTitle={"Проекты"} link={"project"} />}
         
-        {team.data.tutor.length > 0 && <NavigationRole teams={team.data.tutor} mainTitle={"Я - куратор"}/>}
+        {team.data.tutor.length > 0 && <NavigationRole teams={team.data.tutor} mainTitle={"кураторство"} link ={"team"} />}
         
-        {team.data.intern.length > 0 && <NavigationRole teams={team.data.intern} mainTitle={"Я - стажёр"}/>}
+        {team.data.intern.length > 0 && <NavigationRole teams={team.data.intern} mainTitle={"Команды"} link ={"team"} />}
 
             {/* <div className={classes["roles"]}>
                 <div className={classes["name-role"]}>Руководитель</div>

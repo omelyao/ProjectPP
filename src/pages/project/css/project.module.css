@@ -33,11 +33,6 @@
 }
 
 
-.statistics-and-link:hover{
-    cursor: pointer;
-    color: brown;
-    
-}
 
 .statistics-and-link p{
     font-size: 18px;
@@ -128,12 +123,32 @@
     border-radius: 30px;
 }
 
-.link-pen:hover{
-    cursor: pointer;
-    background-color: brown;
-}
 
 .team-create:hover{
     cursor: pointer;
-    background-color: brown;
+}
+
+.pen, .cancel{
+    width: 16px;
+    height: 16px;
+    margin-left:auto;
+    padding: 6px;
+    border-radius: 50%;
+}
+
+
+.pen:hover, .cancel:hover{
+    cursor: pointer;
+    background-color: #E4E4E4;
+}
+
+.pen:active, .cancel:active{
+    background-color: #CACACA;
+}
+
+
+.statistics-and-link:hover{
+    cursor: pointer;
+    color: rgba(249, 164, 37, 0.6);
+    
 }

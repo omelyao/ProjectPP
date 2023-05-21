@@ -175,7 +175,38 @@ th:first-child, td:first-child{
     display: none;
 }
 
-.forms:hover, .table:hover, .give-a-mark:hover, .get-stages:hover {
+.forms:hover{
+    border-radius: 5px;
     cursor: pointer;
-    background-color: red;
+    background-color: #B0B0B0;
+    color: white;
+}
+
+.table:hover{
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #B0B0B0;
+    color: white;
+}
+
+.give-a-mark:hover{
+    cursor: pointer;
+    background-color: #F9A425;
+}
+
+.give-a-mark:active{
+    cursor: pointer;
+    background-color: #E86A00;
+}
+
+.get-stages:hover {
+    cursor: pointer;
+    background-color: #B0B0B0;
+    color: white;
+}
+
+.get-stages:active {
+    cursor: pointer;
+    background-color: black;
+    color: white;
 }

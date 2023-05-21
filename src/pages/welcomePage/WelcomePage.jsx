@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import classes from "./css/WelcomePage.module.css"
-import AuthForm from './components/AuthForm';
-import RegistrationForm from './components/RegistrationForm';
 import Form from './components/Form';
 import Footer from '../../Components/Footer';
 

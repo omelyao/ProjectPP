@@ -128,3 +128,12 @@
     fill:#F57C00;
     cursor: pointer;
 }
+
+.give-a-mark:hover{
+    cursor: pointer;
+    background-color: #F9A425;
+}
+
+.give-a-mark:active{
+    background-color: #E86A00;
+}

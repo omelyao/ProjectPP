@@ -1,5 +1,5 @@
 import "alertifyjs/build/css/alertify.css";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import WelcomePage from "./pages/welcomePage/WelcomePage";
 import Temp from "./Components/Temp";
 import User from "./pages/users/User";
@@ -18,20 +18,79 @@ function App() {
         <div>
             <Header />
             <Routes>
-                <Route path="/" />
+                <Route path="/" element={<Navigate to={"/login"} replace />} />
                 {/* <PrivateRoute path="/main" element={HomePage} /> */}
-                <Route path="/user/:userId" element={<User />} />
-                <Route path="project/:projectId" element={<Project />} />
+                <Route
+                    path="/user/:userId"
+                    element={
+                        <PrivateRoute>
+                            <User />
+                        </PrivateRoute>
+                    }
+                />
+                <Route
+                    path="project/:projectId"
+                    element={
+                        <PrivateRoute>
+                            <Project />
+                        </PrivateRoute>
+                    }
+                />
                 <Route
                     path="projectInerns/:projectId"
                     element={<ProjectInterns />}
                 />
-                <Route path="/team/:teamId" element={<Team />} />
-                <Route path="/login" element={<WelcomePage />} />
-                <Route path="change-info" element={<ChangeUser />} />
-                <Route path="/stages/:teamId" element={<Stages />} />
-                <Route path="/form/:teamId" element={<AssessmentPage />} />
-                <Route path="/report/:userId/:teamId" element={<Report />} />
+                <Route
+                    path="/team/:teamId"
+                    element={
+                        <PrivateRoute>
+                            <Team />
+                        </PrivateRoute>
+                    }
+                />
+
+                <Route
+                    path="/login"
+                    element={
+                        <LoginRoute>
+                            <WelcomePage />
+                        </LoginRoute>
+                    }
+                />
+
+                <Route
+                    path="change-info"
+                    element={
+                        <PrivateRoute>
+                            <ChangeUser />
+                        </PrivateRoute>
+                    }
+                />
+                <Route
+                    path="/stages/:teamId"
+                    element={
+                        <PrivateRoute>
+                            <Stages />
+                        </PrivateRoute>
+                    }
+                />
+                <Route
+                    path="/form/:teamId"
+                    element={
+                        <PrivateRoute>
+                            <AssessmentPage />
+                        </PrivateRoute>
+                    }
+                />
+                <Route
+                    path="/report/:userId/:teamId"
+                    element={
+                        <PrivateRoute>
+                            <Report />
+                        </PrivateRoute>
+                    }
+                />
+                <Route path="*" element={<Navigate to={"/login"} replace />} />
             </Routes>
         </div>
     );

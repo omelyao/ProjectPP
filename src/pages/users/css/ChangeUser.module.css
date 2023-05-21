@@ -105,10 +105,6 @@
     margin-left:auto;
     color: #F57C00;
 }
-.link-pen{
-    margin-left:auto;
-}
-
 
 
 .input__wrapper {
@@ -140,11 +136,6 @@
     left: 50%;
     transform: translate(-50%, 0);
 }
-.input__file-button:hover{
-
-    cursor: pointer;
-    background: #964d03;
-}
 
 .input__file-button-text {
     margin: 0 auto;
@@ -153,18 +144,56 @@
 }
 
 
+.input__file-button:hover{
+
+    cursor: pointer;
+    background: #F9A425;
+    color: white;
+    
+}
+
+.input__file-button:active{
+    background: #F57C00;
+    color: white;
+}
+
 
 .photo_del:hover{
     cursor: pointer;
     color: #f5a14e;
 }
+.photo_del:active{
+    color: #F57C00;
+}
 
 
 
+.yes,.cancel,.pen{
+    width: 16px;
+    height: 16px;
+    margin-left:auto;
+    padding: 6px;
+    border-radius: 50%;
+}
 
 
+.pen:hover, .cancel:hover{
+    cursor: pointer;
+    background-color: #E4E4E4;
+}
+
+.pen:active, .cancel:active{
+    background-color: #CACACA;
+}
 
 
+.yes:hover{
+    background-color: rgba(249, 164, 37, 0.4);
+    cursor: pointer;
+}
+.yes:active{
+    background-color: rgba(249, 164, 37, 0.6);
+}
 
 
 

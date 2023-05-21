@@ -1,15 +1,15 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Route } from 'react-router-dom';
+import { Navigate, Route } from 'react-router-dom';
 
-function PrivateRoute({children, ...props}) {
+function PrivateRoute({children}) {
     const {user} = useSelector(state => state.auth);
     if (!user){
-        return;
+        return <Navigate to={"/login"}/>;
     }
 
     return (
-        <Route {...props}>{children} </Route>
+        children
     );
 };
 

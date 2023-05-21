@@ -7,7 +7,7 @@ import { useGetProjectQuery } from '../../../redux/authApi';
 
 function TeamForTutor({team}) {
     const navigate = useNavigate();
-    const project = useGetProjectQuery({id:team.id})
+    const project = useGetProjectQuery({id:team.id_project})
 
     if (project.isLoading){
         return<div></div>

@@ -25,8 +25,8 @@ function AuthForm() {
     <div>
         <hr/>
         <div className={classes["fields"]}>
-            <input type="text" className={classes["inp"]} value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Почта"/>
-            <input type="text" className={classes["inp"]}  value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Пароль"/>
+            <input type="email" className={classes["inp"]} value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Почта"/>
+            <input type="password" className={classes["inp"]}  value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Пароль"/>
         </div>
         <div className={classes["button"]}>
             <button className={classes["enter-button"]} onClick={handle}>Войти</button>

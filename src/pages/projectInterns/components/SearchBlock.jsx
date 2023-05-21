@@ -45,7 +45,7 @@ function SearchBlock({interns, onSelect, roles }) {
             />}
             <div className={classes["search-trainee"]}>
                 <input type="text" value={internName} onChange={(e) => setInternName(e.target.value) } placeholder="Искать стажёра..."/>
-                <img src={require("../../../images/find.svg").default} onClick={filter} width="12.65" height="12.65" alt="поиск"/>
+                <img style={{cursor:"pointer"}} src={require("../../../images/find.svg").default} onClick={filter} width="12.65" height="12.65" alt="поиск"/>
             </div>
             <div className={classes["filter-sort"]} onClick={() => setOpenFilter(!openFilter)}>
                 <img src={require("../../../images/filter.svg").default}  width="13.33" height="13.33" alt="фильтр"/>

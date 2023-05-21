@@ -17,7 +17,9 @@ function TeamProj({team, tutors, interns}) {
         <li key={Date.now()} className={classes['command-info-person']}>
         <Link to={`/team/${team.id}`}  className={classes["team-head"]}>{team.title}</Link>
         <div className={classes["tutor-head"]}>{`${tutor.data.last_name} ${tutor.data.first_name} ${tutor.data?.patronymic ?? ""}`}</div>
-        <img className={classes["link-pen"]} src={require("../../../images/pen.svg").default} onClick={() => setOpen(true)}  width="16" height="16" alt="Карандаш"/>
+        <div className={classes["pen"]}>
+            <img className={classes["link-pen"]} src={require("../../../images/pen.svg").default} onClick={() => setOpen(true)}  width="16" height="16" alt="Карандаш"/>
+        </div>
         {open && <EdtiTeam tutors={tutors} interns={interns} open={open} onClose={() => setOpen(false)} team={team}/>}
 </li>
     );

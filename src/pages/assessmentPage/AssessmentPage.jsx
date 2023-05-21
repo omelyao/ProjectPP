@@ -92,7 +92,7 @@ function AssessmentPage() {
             }
             setNames(nms);
             setProject(proj.data);
-            setEstimations(result);
+            setEstimations({...result});
             setTeam(tm.data);
             setStages(st.data);
             setCurrentStage({...st.data[0]})

@@ -108,9 +108,7 @@ width:168px;
     border-radius: 30px;
     border:none;
 }
-.link-pen{
-    margin-top: 14.3px;
-}
+
 
 .button-create{
     display: flex;
@@ -147,6 +145,10 @@ width:168px;
 .img{
     margin-top: 19.66px;
     margin-left: 453.66px;
+    width: 26.68px;
+    height: 26.68px;
+    padding: 6px;
+    border-radius: 50%;
 }
 
 .stage-create-form h2{
@@ -230,20 +232,49 @@ padding-top: 5px;
     border:none;
 }
 
+
+.link-pen{
+    display: inline-block;
+    margin-top: 14.3px;
+    width: 16px;
+    height: 16px;
+    padding: 6px;
+    border-radius: 50%;
+}
+
 .link-pen:hover{
     cursor: pointer;
-    background-color: red;
+    background-color: #E4E4E4;;
+}
+
+.link-pen:active{
+    cursor: pointer;
+    background-color: #CACACA;
 }
 
 .stage-create:hover{
     cursor: pointer;
-    background-color: red;
+    background-color: #B0B0B0;
+    color: white;
 }
+
+.stage-create:active{
+    background-color: black;
+    color: white;
+}
+
 
 .create:hover{
     cursor: pointer;
-    background-color: red;
+    background-color: #B0B0B0;
+    color: white;
 }
+
+.stage-create:active{
+    background-color: black;
+    color: white;
+}
+
 
 .cancel:hover{
     cursor: pointer;
@@ -252,4 +283,13 @@ padding-top: 5px;
 
 .criteria:hover{
     cursor: pointer;
+}
+
+.img:hover{
+    cursor: pointer;
+    background-color: #616161;
+}
+
+.img:active{
+    background-color:#3d3d3d ;
 }

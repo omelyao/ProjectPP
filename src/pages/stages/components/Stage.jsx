@@ -17,12 +17,13 @@ function Stage({stage, criteria}) {
                 {stage.evaluation_criteria.map(crit => <option key={crit.id} disabled>{crit.title}</option> )}
                 <option value="" disabled selected hidden>Критерии</option>
             </select>
-            
-            <img className={classes["link-pen"]}
-                onClick={() => setOpen(true)} 
+            <div className={classes["link-pen"]} onClick={() => setOpen(true)} >
+            <img 
+                
                 src={require("../../../images/pen.svg").default}
                 width="16" height="16" alt="Карандаш"
             />
+            </div>
         </div>
         {open && <EditStage open={open} onClose={() => setOpen(false)} stage={stage} criteria={criteria}/>}
     </li>

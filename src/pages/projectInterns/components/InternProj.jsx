@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import classes from '../css/ProjectInterns.module.css'
-import { useGetFormForTeamQuery, useGetUserInfoQuery, useGetUserQuery } from '../../../redux/authApi';
+import { domen, useGetFormForTeamQuery, useGetUserInfoQuery, useGetUserQuery } from '../../../redux/authApi';
 import StatisticsTable from '../../team/components/StatisticsTable';
 
 
@@ -14,11 +14,12 @@ function InternProj({intern}) {
     if (internInfo.isLoading || form.isLoading){
         return <div></div>
     }
+    console.log(intern);
     return (
         <div>
         <li className={classes['command-info-person']}>
             <div className={classes["photo"]}>
-                <img src={require("../../../images/profile.svg").default} width="40" height="44" alt="123"/>
+                <img src={ intern.image ? domen + intern.image  : require("../../../images/profile.svg").default} width="40" height="44" alt="123"/>
             </div>
             <div className={`${classes["text"]} ${classes["fio"]}`}>{intern.name}</div>
             <div className={`${classes["text"]} ${classes["role"]}`}>{intern.roleTitle}</div>

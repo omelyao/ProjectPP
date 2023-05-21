@@ -9,13 +9,17 @@
     display:flex;
 }
 .nav-icon{
-    margin-left:22px;
-    margin-top:19px;
+    padding: 18px;
 }
 
 .nav-icon:hover, .profile:hover, .settings-icon:hover, .exit:hover{
     cursor: pointer;
-    background-color: red;
+    background-color: #4F4F4F;
+}
+
+.nav-icon:active, .profile:active, .settings-icon:active, .exit:active{
+    cursor: pointer;
+    background-color: rgba(79, 79, 79, 0.4);
 }
 
 .small-logo{
@@ -27,6 +31,8 @@
     display:flex;
     margin-right:auto;
     margin-left: 47px;
+    padding-left: 20px;
+    padding-right: 19px;
 }
 
 .profile img{
@@ -38,13 +44,13 @@
     margin-top:22px;
 }
 .settings-icon{
-    margin-right:15px;
-    margin-top:15px;
+    margin:0px;
+    padding:14px;
 }
-
 .exit{
     display:flex;
-    margin-right:30px;
+    padding-right:17px;
+    padding-left:17px;
 }
 
 .exit img{

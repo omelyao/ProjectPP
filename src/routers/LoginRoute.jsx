@@ -1,9 +1,16 @@
 import React from 'react';
-import { Route } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { Navigate, Route } from 'react-router-dom';
 
-function LoginRoute({children, ...props}) {
+function LoginRoute({children}) {
+    const {user} = useSelector((state) => state.auth);
+
+    if (user){
+        return <Navigate to={`/user/${user.user_id}`}/>
+    }
+
     return (
-        <Route {...props}>{children}</Route>
+        children
     );
 }
 
