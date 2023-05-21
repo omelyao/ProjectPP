@@ -1,11 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
 import jwtDecode from "jwt-decode";
-
-export const refreshToken = (token) =>
-    axios.post("http://127.0.0.1:8000/UralIntern/token/refresh/", {
-        refresh: token,
-    });
 
 const authSlice = createSlice({
     name: "auth",
