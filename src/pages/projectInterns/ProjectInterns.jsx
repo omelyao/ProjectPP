@@ -49,7 +49,7 @@ function ProjectInterns() {
             setRoles([...rolesRes.data])
             setSelectedInterns([...result])
             setInterns([...result]);
-            console.log(result);
+            //console.log(result);
         }
         getTeams()
     },[projectId, triggerRoles, triggerTeams])

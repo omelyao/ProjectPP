@@ -11,9 +11,9 @@ function Report() {
     if (isLoading){
         return <div></div>
     }
-    console.log(data);
-    console.log(data.self_estimation.map((est) => Number(est.estimation) < -2? -1 :est.estimation ))
-    console.log(data.self_estimation.map((est) => est.evaluation_criteria ))
+    //console.log(data);
+    //console.log(data.self_estimation.map((est) => Number(est.estimation) < -2? -1 :est.estimation ))
+    //console.log(data.self_estimation.map((est) => est.evaluation_criteria ))
     return (
         <div className={classes["main"]}>
 

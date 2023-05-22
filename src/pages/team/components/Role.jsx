@@ -11,11 +11,11 @@ function Role({idRole,idTeam, idIntern}) {
     const [changeRole, isLoading] = useChangeRoleMutation();
 
     const handlRole = async ()=>{
-        console.log({id_intern:idIntern, id_team:idTeam, role:selectRole});
+        //console.log({id_intern:idIntern, id_team:idTeam, role:selectRole});
 
         const res = await changeRole({body:{id_intern:idIntern, id_team:idTeam, role:selectRole}});
         setIsChange(false);
-        console.log(res);
+        //console.log(res);
     }
 
 

@@ -10,8 +10,8 @@ function User(props) {
     if(user.isLoading || userInfo.isLoading){
         return <div></div>;
     }
-    console.log("user", user);
-    console.log("userInfo", userInfo);
+    //console.log("user", user);
+    //console.log("userInfo", userInfo);
 
     return (
         <div className={classes["profile-info"]}>

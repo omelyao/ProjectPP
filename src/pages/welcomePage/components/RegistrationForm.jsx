@@ -22,10 +22,10 @@ function RegistrationForm({onChange}) {
         const abc = await reg(registerForm);
 
         if (!abc.error){
-            alertify.alert("happy")
+            alertify.notify("регистрация прошла успешно!",  "success");
             onChange(1);
         }else{
-            console.log(abc.error.data);
+            //console.log(abc.error.data);
             for(let key in abc.error.data){
                 if (key === "email"){
                     alertify.error("такая почта занята");

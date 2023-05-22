@@ -1,7 +1,6 @@
 import "alertifyjs/build/css/alertify.css";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import WelcomePage from "./pages/welcomePage/WelcomePage";
-import Temp from "./Components/Temp";
 import User from "./pages/users/User";
 import Team from "./pages/team/Team";
 import PrivateRoute from "./routers/PrivateRoute";

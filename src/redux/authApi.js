@@ -21,7 +21,7 @@ const baseQuery = fetchBaseQuery({
 
 const mutex = new Mutex();
 const baseQueryWithReauth = async (args, api, extraOptions) => {
-    //console.log(dayjs.unix(api.getState()?.auth?.user?.exp));
+    ////console.log(dayjs.unix(api.getState()?.auth?.user?.exp));
     // wait until the mutex is available without locking it
     await mutex.waitForUnlock();
     let result = await baseQuery(args, api, extraOptions);
@@ -190,7 +190,7 @@ export const uralInernApi = createApi({
                 body,
             }),
             invalidatesTags: (result, error, arg) => {
-                console.log("arg", arg);
+                //console.log("arg", arg);
                 return [{ type: "estimate", id: arg.body.id_intern }];
             },
         }),
@@ -200,7 +200,7 @@ export const uralInernApi = createApi({
                 method: "GET",
             }),
             providesTags: (result, error, arg) => {
-                console.log("arg", arg);
+                //console.log("arg", arg);
                 return [{ type: "estimate", id: arg.userId }];
             },
         }),
@@ -210,7 +210,7 @@ export const uralInernApi = createApi({
                 method: "GET",
             }),
             providesTags: (result, error, arg) => {
-                console.log("arg", arg);
+                //console.log("arg", arg);
                 return [{ type: "estimate", id: arg.id }, "stage"];
             },
         }),
@@ -220,7 +220,7 @@ export const uralInernApi = createApi({
                 method: "GET",
             }),
             providesTags: (result, error, arg) => {
-                console.log("arg", arg);
+                //console.log("arg", arg);
                 return [{ type: "estimate", id: arg.user_id }];
             },
         }),

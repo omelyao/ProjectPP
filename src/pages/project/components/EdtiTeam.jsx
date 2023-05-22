@@ -3,6 +3,7 @@ import classes from '../css/TeamEdit.module.css'
 import { Modal } from '@mui/material';
 import { useGetTutorsInterntsQuery, usePutTeamMutation } from '../../../redux/authApi';
 import SelectInterns from './SelectInterns';
+import alertify from 'alertifyjs';
 
 
 function EdtiTeam({open, onClose, team, tutors, interns}) {
@@ -30,7 +31,7 @@ function EdtiTeam({open, onClose, team, tutors, interns}) {
         }
         const res = await editTeam({id:team.id, body})
         if (!res.error){
-            console.log("happy");
+            alertify.notify("команда успешно изменена", "success");
         }
         onClose();
     }

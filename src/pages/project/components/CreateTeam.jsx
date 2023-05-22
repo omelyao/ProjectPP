@@ -3,6 +3,7 @@ import classes from '../css/TeamEdit.module.css'
 import { Modal } from '@mui/material';
 import { useCreateTeamMutation } from '../../../redux/authApi';
 import SelectInterns from './SelectInterns';
+import alertify from 'alertifyjs';
 
 
 function CreateTeam({open, onClose, tutors, interns}) {
@@ -28,7 +29,7 @@ function CreateTeam({open, onClose, tutors, interns}) {
         }
         const res = await createTeam({ body});
         if (!res.error){
-            console.log("happy");
+            alertify.notify("команда успешно создана", "success");
         }
         onClose();
     }

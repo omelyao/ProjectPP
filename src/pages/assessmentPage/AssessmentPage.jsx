@@ -4,6 +4,7 @@ import Criterion from './components/Criterion';
 import { useParams } from 'react-router-dom';
 import { useEstimateMutation, useLazyGetEstimationForFormQuery, useLazyGetProjectQuery, useLazyGetStagesQuery, useLazyGetTeamQuery, useLazyGetUserQuery } from '../../redux/authApi';
 import { useSelector } from 'react-redux';
+import alertify from 'alertifyjs';
 
 
 function AssessmentPage() {
@@ -26,11 +27,12 @@ function AssessmentPage() {
         for (let est in currentEstimation){
             await estimate({body: currentEstimation[est]});
         }
+        alertify.notify("оценка успешно отправлена", "success");
 
     };
     const swapStage = (id) =>{
 
-        console.log(estimations[id]);
+        //console.log(estimations[id]);
         const key = Object.keys(currentEstimation)[0];
         setCurrentEstimation({...estimations[id][currentEstimation[key].id_intern]})
         setCurrentStage({...stages.find(stage => stage.id === id)})

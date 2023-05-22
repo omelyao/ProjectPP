@@ -14,7 +14,7 @@ function InternProj({intern}) {
     if (internInfo.isLoading || form.isLoading){
         return <div></div>
     }
-    console.log(intern);
+    //console.log(intern);
     return (
         <div>
         <li className={classes['command-info-person']}>

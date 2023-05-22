@@ -4,7 +4,7 @@ import { Radar } from 'react-chartjs-2';
 
 function RadarGraph({legend,labels,values}) {
     
-    console.log(values)
+    //console.log(values)
     const datasets = [
         {
           label: legend,

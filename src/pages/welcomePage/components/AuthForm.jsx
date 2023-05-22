@@ -5,6 +5,7 @@ import { useLoginMutation } from '../../../redux/authApi';
 import { setCredentials } from '../../../redux/authSlice';
 import { useNavigate } from 'react-router-dom';
 import jwtDecode from 'jwt-decode';
+import alertify from 'alertifyjs';
 
 function AuthForm() {
 
@@ -15,10 +16,16 @@ function AuthForm() {
     const [login, {isLoading}] = useLoginMutation()
     const handle = async () => {
         const data = await login({email, password});
+        if(data.error){
+            //console.log(data.error)
+            alertify.error(data.error);
+            return
+        }
         dispatch(setCredentials({...data.data}));
         setEmail("");
         setPassword("");
         const user = jwtDecode(data.data.access);
+        alertify.notify("", "success");
         navigate(`/user/${user.user_id}`);
     }
     return (

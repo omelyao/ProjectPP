@@ -3,7 +3,7 @@ import classes from '../css/ChangeUser.module.css'
 import { domen, useChangeImageMutation, useDeleteImageMutation } from '../../../redux/authApi';
 
 function ImageBlock({user}) {
-    console.log(user);
+    //console.log(user);
 
     const [changePhoto] = useChangeImageMutation()
     const [delPhoto] = useDeleteImageMutation()
@@ -11,7 +11,7 @@ function ImageBlock({user}) {
         const formData = new FormData();
         formData.append("image", photos[0], photos[0].name);
 
-        console.log(formData.image);
+        //console.log(formData.image);
         changePhoto({id:user.id, body: formData});
 
 

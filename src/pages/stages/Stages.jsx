@@ -27,8 +27,8 @@ function Stages() {
     if(stages.isLoading || criteria.isLoading || !project || !team){
         return <div></div>;
     }
-    console.log(project);
-    console.log(team);
+    //console.log(project);
+    //console.log(team);
     return (<div className={classes["main"]}>
 <div className={classes["stages-main"]}>
             <div className={classes["stages-info"]}>
