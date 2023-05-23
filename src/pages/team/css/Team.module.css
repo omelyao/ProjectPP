@@ -98,6 +98,7 @@
 .command-info .pen-pic{
     border-radius:0;
     margin-left:7px;
+    
 }
 .give-a-mark{
     background: #F57C00;
@@ -127,9 +128,26 @@
     color: #000000;
 }
 
-.give-a-mark:hover, .get-report:hover{
+.give-a-mark:hover{
     cursor: pointer;
-    background-color: red;
+    background-color: #F9A425;
+}
+
+.give-a-mark:active{
+    cursor: pointer;
+    background-color: #E86A00;
+}
+
+.get-report:hover{
+    cursor: pointer;
+    background-color: #B0B0B0;
+    color: white;
+}
+
+.get-report:active{
+    cursor: pointer;
+    background-color: black;
+    color: white;
 }
 
 
@@ -147,24 +165,61 @@
     background: rgba(217, 217, 217, 0.8);
     border-radius: 10px;
 }
-.XY-pic{
+.X-pic, .Y-pic{
     margin-left:7px;
+    padding: 6px;
+    display: inline-block;
+    border-radius: 50%;
+}
+
+.X-pic:hover{
+    cursor: pointer;
+    background-color: #E4E4E4;
+}
+
+.X-pic:active{
+    background-color: #CACACA;
+}
+
+
+.Y-pic:hover{
+    background-color: rgba(249, 164, 37, 0.4);
+    cursor: pointer;
+}
+.Y-pic:active{
+    background-color: rgba(249, 164, 37, 0.6);
+}
+
+
+
+
+.pen-pic{
+    display: inline-flex;;
+    width: 16px;
+    height: 16px;
+    padding: 6px;
+    border-radius: 50%;
 }
 
 .XY-pic:hover{
+
     cursor: pointer;
-    background-color: red;
+    background-color: #E4E4E4;
 }
 .pen-pic:hover{
+
     cursor: pointer;
-    background-color: red;
+    background-color: #E4E4E4;
 }
 
-.select-role:hover{
-    cursor: pointer;
-    background-color: bisque;
+.pen-pic:active{
+
+    background-color: #CACACA;
 }
+
 
 .opt{
     cursor: pointer;
 }
+
+

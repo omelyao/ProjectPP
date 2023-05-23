@@ -45,31 +45,33 @@ function Role({idRole,idTeam, idIntern}) {
                 {role.title}
             </option>)}
         </select>
-        <img className={classes["XY-pic"]}
-             onClick={() => handlRole()}
-            src={require('../../../images/Y.svg').default} 
-            width="16" height="16"
-            alt='123'
-        />
+        
+        <div className={classes["Y-pic"]} onClick={() => handlRole()}>
+            <img 
+             src={require('../../../images/Y.svg').default} 
+            width="16" height="16" alt="123"
+            />
+        </div>
 
-        <img className={classes["XY-pic"]}
-
-            onClick={() => setIsChange(false)}
-            src={require('../../../images/X.svg').default}
-            width="16" height="16"
-            alt='123'
-        />
+        <div className={classes["X-pic"]} onClick={() => setIsChange(false)}>
+            <img 
+             src={require('../../../images/X.svg').default} 
+            width="16" height="16" alt="123"
+            />
+        </div>
     </p>)
     }
 
     return (
         <p>{getRole()}
 
-        {user.user_id === idIntern && <img className={classes["pen-pic"]}
-            onClick={() => setIsChange(true)}
-            src={require('../../../images/pen.svg').default}
+        {user.user_id === idIntern &&(
+        <div className={classes["pen-pic"]} onClick={() => setIsChange(true)}>
+            <img 
+             src={require('../../../images/pen.svg').default} 
             width="16" height="16" alt="123"
-        />}
+            />
+        </div>)}
     </p>
     );
 }
