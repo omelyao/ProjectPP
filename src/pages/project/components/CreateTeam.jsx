@@ -4,6 +4,7 @@ import { Modal } from '@mui/material';
 import { useCreateTeamMutation } from '../../../redux/authApi';
 import SelectInterns from './SelectInterns';
 import alertify from 'alertifyjs';
+import { useParams } from 'react-router-dom';
 
 
 function CreateTeam({open, onClose, tutors, interns}) {
@@ -11,7 +12,7 @@ function CreateTeam({open, onClose, tutors, interns}) {
         {name: `${intern.last_name} ${intern.first_name} ${intern?.patronymic ?? ""}`,
         id_intern:intern.id })
          )
-    
+    const {projectId} = useParams();
     const [curName, setCurName] = useState("");
     const [curTutor, setCurTutor] = useState(tutors[0].id);
     const [selectedValues, setSelectedValues] = useState([]);
@@ -20,7 +21,7 @@ function CreateTeam({open, onClose, tutors, interns}) {
 
     const sendEditedTeam =  async () => {
         const body = {
-            "id_project": 1,
+            "id_project": projectId,
             "id_tutor": curTutor,
             "interns": selectedValues,
             "title": curName,

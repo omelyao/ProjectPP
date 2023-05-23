@@ -6,7 +6,7 @@ function Navigation({open}) {
 
     const team = useGetMyTeamsQuery();
 
-    if(team.isLoading){
+    if(team.isLoading || team.error){
         //console.log(team);
         return <div style={{display:"none"}}></div>
     }

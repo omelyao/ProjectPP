@@ -278,7 +278,7 @@ export const uralInernApi = createApi({
         }),
         getEstimationForForm: builder.query({
             query: ({ stageId, appraiserId, internId }) => ({
-                url: `estimation/?id_stage=${stageId}&?id_user=${appraiserId}&id_intern=${internId}`,
+                url: `estimation/?id_stage=${stageId}&id_user=${appraiserId}&id_intern=${internId}`,
                 method: "GET",
             }),
             providesTags: (result, error, arg) => [
