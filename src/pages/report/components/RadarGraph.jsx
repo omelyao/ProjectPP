@@ -1,6 +1,23 @@
-import 'chart.js/auto';
-import React from 'react';
+import {
+  Chart as ChartJS,
+  RadialLinearScale,
+  PointElement,
+  LineElement,
+  Filler,
+  Tooltip,
+  Legend
+} from 'chart.js';
 import { Radar } from 'react-chartjs-2';
+import React from 'react';
+
+ChartJS.register(
+  RadialLinearScale,
+  PointElement,
+  LineElement,
+  Filler,
+  Tooltip,
+  Legend
+);
 
 function RadarGraph({legend,labels,values}) {
     
@@ -22,19 +39,11 @@ function RadarGraph({legend,labels,values}) {
 
     const data = {labels, datasets};
     const chartOptions = {
-      legend: {
-        display: false
-      },
-        scale: {
-          ticks: {
-            min: -1,
-            max: 3,
-          },
-          pointLabels: {
-            fontSize: 18
-          }
-        },
-    };      
+      scale: {
+          min: -1,
+          max: 3,
+      }  
+    }
 
     return (
       <div>
@@ -42,7 +51,7 @@ function RadarGraph({legend,labels,values}) {
         width={520}
         height={420}
         type='radar'
-         options={chartOptions} data={data}/>
+        options={chartOptions} data={data}/>
          </div>
     );
 }
