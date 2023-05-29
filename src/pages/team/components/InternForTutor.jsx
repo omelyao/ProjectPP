@@ -3,7 +3,7 @@ import classes from '../css/TeamForTutor.module.css'
 import StatisticsTable from './StatisticsTable';
 import { domen, useGetFormForTeamQuery, useGetUserInfoQuery, useGetUserQuery } from '../../../redux/authApi';
 import Role from './Role';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 
 function InternForTutor({intern}) {
@@ -20,12 +20,14 @@ function InternForTutor({intern}) {
     <div>
         <li className={classes['command-info-person']}>
             <div className={classes["photo"]}>
-                <img src={ internName.data.image 
+                <img
+                    style={{borderRadius:"10px"}}
+                 src={ internName.data.image 
                     ? domen + internName.data.image  
                     : require("../../../images/profile.svg").default
                 } width="40" height="44" alt="123"/></div>
             <div className={`${classes["text"]} ${classes["fio"]}`}>
-                { `${internName.data.last_name} ${internName.data.first_name} ${internName.data?.patronymic ?? ""}`}
+                <Link to={`/user/${intern.id_intern}`}>{ `${internName.data.last_name} ${internName.data.first_name} ${internName.data?.patronymic ?? ""}`} </Link>
                 <Role idIntern={intern.id_intern} idTeam={intern.id_team} idRole={intern.role}/>
             </div>
             

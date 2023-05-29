@@ -4,11 +4,13 @@ import Navigation from './Navigation';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { logOut } from '../redux/authSlice';
+import { reset } from '../redux/authApi';
 
 function Header() {
 
     const [open, setOpen] = useState(false);
     const {user} = useSelector(state => state.auth);
+
     const navigate = useNavigate();
     const dispatch = useDispatch();
     if(!user){
@@ -22,6 +24,10 @@ function Header() {
     </header>)
     }
 
+    const out = () =>{
+        dispatch(reset());
+        dispatch(logOut());
+    }
     return (
         <div>
             <header className={classes["main-header"]}>
@@ -52,7 +58,7 @@ function Header() {
                 alt="Логотип"
             />
             
-            <div className={classes["exit"]} onClick={() => dispatch(logOut())}>
+            <div className={classes["exit"]} onClick={() =>out()}>
                 <img src={require("../images/exit.svg").default} width="24" height="24" alt="Выйти"/>
                 <p>Выйти</p>
             </div>

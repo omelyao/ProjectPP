@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { logOut, setCredentials } from "./authSlice";
 import { Mutex } from "async-mutex";
 
-export const domen = "http://127.0.0.1:8000";
+export const domen = "https://lkural.pythonanywhere.com";
 //http://studprzi.beget.tech
 //http://127.0.0.1:8000
 
@@ -40,9 +40,12 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
                     extraOptions
                 );
                 if (refreshResult.data) {
-                    api.dispatch(setCredentials(refreshResult.data));
+                    await api.dispatch(setCredentials(refreshResult.data));
                     // retry the initial query
                     result = await baseQuery(args, api, extraOptions);
+                    if (result?.error?.status === 401) {
+                        api.dispatch(logOut());
+                    }
                 } else {
                     api.dispatch(logOut());
                 }
@@ -335,4 +338,7 @@ export const {
     useGetTeamsInProjectQuery,
     useLazyGetTeamsInProjectQuery,
 } = uralInernApi;
+
 export const { useLoginMutation, useRegisterMutation } = AuthApi;
+
+export const reset = uralInernApi.util.resetApiState;

@@ -97,6 +97,9 @@ function AssessmentPage() {
             setEstimations({...result});
             setTeam(tm.data);
             setStages(st.data);
+            if (st.data.length === 0){
+                return;
+            }
             setCurrentStage({...st.data[0]})
             setCurrentEstimation({...result[st.data[0].id][tm.data.interns[0].id_intern]})
         }
@@ -105,6 +108,12 @@ function AssessmentPage() {
 
     if(!stages || !team || !estimations ){
         return<div></div>;
+    }
+    if (stages.length===0){
+        return <h1>в этой команде нет этапов для оценки</h1>
+    }
+    if (team.interns.length === 0){
+        return <h1>в этой команде нет участников</h1>
     }
 
     return (

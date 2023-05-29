@@ -44,11 +44,13 @@ function ProjectInterns() {
                         "name": `${internName.data.last_name} ${internName.data.first_name} ${internName.data?.patronymic ?? ""}`,
                         "image": internName.data.image
                         })
+
                 }
             }
-            setRoles([...rolesRes.data])
             setSelectedInterns([...result])
             setInterns([...result]);
+            setRoles([...rolesRes.data])
+
             //console.log(result);
         }
         getTeams()

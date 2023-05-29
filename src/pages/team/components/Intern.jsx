@@ -3,6 +3,7 @@ import classes from "../css/Team.module.css"
 import { domen, useGetListRolesQuery, useGetUserInfoQuery, useGetUserQuery } from '../../../redux/authApi';
 import { useSelector } from 'react-redux';
 import Role from './Role';
+import { Link } from 'react-router-dom';
 
 function Intern({intern}) {
     
@@ -17,7 +18,8 @@ function Intern({intern}) {
     return (
         <li key={intern.id} className={classes['command-info-person']}>
         <div className={classes["photo"]}>
-            <img 
+            <img
+                style={{borderRadius:"10px"}}
                 src={ internName.data.image 
                     ? domen+ internName.data.image  
                     : require("../../../images/profile.svg").default
@@ -27,7 +29,7 @@ function Intern({intern}) {
             />
         </div>
         <div className={`${classes["text"]} ${classes["fio"]}`}>
-            { `${internName.data.last_name} ${internName.data.first_name} ${internName.data?.patronymic ?? ""}`}
+            <Link to={`/user/${intern.id_intern}`}>{ `${internName.data.last_name} ${internName.data.first_name} ${internName.data?.patronymic ?? ""}`}</Link>
             <Role idIntern={intern.id_intern} idTeam={intern.id_team} idRole={intern.role}/>
         </div>                            
         <div className={`${classes["text"]} ${classes["contacts"]}`}>

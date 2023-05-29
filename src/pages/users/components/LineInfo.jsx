@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import classes from '../css/ChangeUser.module.css'
 import { useChangeUserInfoMutation } from '../../../redux/authApi';
 import { useSelector } from 'react-redux';
+import alertify from 'alertifyjs';
 
 
 function LineInfo({title, values, name}) {
@@ -20,8 +21,11 @@ function LineInfo({title, values, name}) {
         const body = {...values, [name]:inp.length > 0? inp:null};
         const res = await changeInfo({id: user.user_id, body});
         if (!res.error){
+            alertify.notify("поле успешно изменено", "success")
             cancel();
-        }        
+        }else{
+            res.error.data[name].forEach(error => alertify.error(error));
+        }
     }
 
     if (isEdit){

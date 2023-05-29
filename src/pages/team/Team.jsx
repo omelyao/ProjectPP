@@ -15,7 +15,7 @@ function Team(props) {
     //console.log(team);
    //можно заметить, что в обоих компонентах требуется проект, а в проекте есть id руководителя, и поэтому 
    // id можно рассматривать -> project.id_director === user.user_id тип такого
-    if (!!user.groups.find(group => group ==="руководитель") || team.data.id_tutor === user.user_id){
+    if (!!user?.groups?.find(group => group ==="руководитель") || team.data.id_tutor === user.user_id){
         return <TeamForTutor team={team.data}/>
      }
 
