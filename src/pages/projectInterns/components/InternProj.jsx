@@ -16,11 +16,13 @@ function InternProj({intern}) {
         <div>
         <li className={classes['command-info-person']}>
             <div style={{paddingLeft:"5px"}} className={classes["photo"]}>
-                <img
+                <Link to={`/user/${intern.id_intern}`}>
+                    <img
                     style={{borderRadius:"10px"}}
-                 src={ intern.image ? domen + intern.image  : require("../../../images/profile.svg").default} width="60" height="72" alt="123"/>
+                    src={ intern.image ? domen + intern.image  : require("../../../images/profile.svg").default} width="60" height="72" alt="123"/>
+                </Link>
             </div>
-            <div className={`${classes["text"]} ${classes["fio"]}`}><Link to={`/user/${intern.id_intern}`}>{intern.name}</Link></div>
+            <div className={`${classes["text"]} ${classes["fio"]}`}>{intern.name}</div>
             <div className={`${classes["text"]} ${classes["role"]}`}>{intern.roleTitle}</div>
             <div className={`${classes["text"]} ${classes["team"]}`}>{intern.teamTitle}</div>
             <div className={`${classes["text"]} ${classes["criteria"]}` } onClick={() => setOpen(!open)}>Просмотреть

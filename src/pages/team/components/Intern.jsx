@@ -18,18 +18,20 @@ function Intern({intern}) {
     return (
         <li key={intern.id} className={classes['command-info-person']}>
         <div className={classes["photo"]}>
-            <img
+            <Link to={`/user/${intern.id_intern}`}>
+                <img
                 style={{borderRadius:"10px"}}
-                src={ internName.data.image 
-                    ? domen+ internName.data.image  
+                src={ internName.data.image
+                    ? domen+ internName.data.image
                     : require("../../../images/profile.svg").default
                 }
                 width="97" height="110"
                 alt="123"
-            />
+            /></Link>
+
         </div>
         <div className={`${classes["text"]} ${classes["fio"]}`}>
-            <Link to={`/user/${intern.id_intern}`}>{ `${internName.data.last_name} ${internName.data.first_name} ${internName.data?.patronymic ?? ""}`}</Link>
+            а
             <Role idIntern={intern.id_intern} idTeam={intern.id_team} idRole={intern.role}/>
         </div>                            
         <div className={`${classes["text"]} ${classes["contacts"]}`}>

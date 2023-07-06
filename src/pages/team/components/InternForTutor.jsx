@@ -20,14 +20,17 @@ function InternForTutor({intern}) {
     <div>
         <li className={classes['command-info-person']}>
             <div className={classes["photo"]}>
-                <img
-                    style={{borderRadius:"10px"}}
-                 src={ internName.data.image 
-                    ? domen + internName.data.image  
-                    : require("../../../images/profile.svg").default
-                } width="40" height="44" alt="123"/></div>
+                <Link to={`/user/${intern.id_intern}`}>
+                    <img
+                        style={{borderRadius:"10px"}}
+                        src={ internName.data.image
+                            ? domen + internName.data.image
+                            : require("../../../images/profile.svg").default
+                        } width="40" height="44" alt="123"/>
+                </Link>
+            </div>
             <div className={`${classes["text"]} ${classes["fio"]}`}>
-                <Link to={`/user/${intern.id_intern}`}>{ `${internName.data.last_name} ${internName.data.first_name} ${internName.data?.patronymic ?? ""}`} </Link>
+                { `${internName.data.last_name} ${internName.data.first_name} ${internName.data?.patronymic ?? ""}`}
                 <Role idIntern={intern.id_intern} idTeam={intern.id_team} idRole={intern.role}/>
             </div>
             
