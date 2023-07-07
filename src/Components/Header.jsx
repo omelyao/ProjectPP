@@ -6,17 +6,17 @@ import { useNavigate } from 'react-router-dom';
 import { logOut } from '../redux/authSlice';
 import { reset } from '../redux/authApi';
 
-function Header() {
+function Header({ modalIsOpen }) {
 
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(true);
     const {user} = useSelector(state => state.auth);
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
     if(!user){
-        return (            
-        <header className={classes["main-header"]}>        
-        <img className={classes['small-logo']} 
+        return (
+        <header className={classes["main-header"]}>
+        <img className={classes['small-logo']}
             src={require("../images/logo_small.svg").default}
             width="48" height="48.18"
             alt="Логотип"
@@ -30,21 +30,21 @@ function Header() {
     }
     return (
         <div>
-            <header className={classes["main-header"]}>
+            <header className={`${classes["main-header"]}`}>
             <img className={classes['nav-icon']}
                 onClick={() => setOpen(!open)}
                 src={require("../images/nav-icon.svg").default}
                 width="24" height="24"
                 alt="Иконка навигации"
             />
-            
-            <img className={classes['small-logo']} 
+
+            <img className={classes['small-logo']}
                 src={require("../images/logo_small.svg").default}
                 width="48" height="48.18"
                 alt="Логотип"
             />
             <div className={classes["profile"]} onClick={() => navigate(`/user/${user.user_id}`)}>
-                <img 
+                <img
                     src={require("../images/profile.svg").default}
                     width="24" height="24" alt="Мой профиль"
                  />
@@ -57,13 +57,13 @@ function Header() {
                 width="32" height="32"
                 alt="Логотип"
             />
-            
+
             <div className={classes["exit"]} onClick={() =>out()}>
                 <img src={require("../images/exit.svg").default} width="24" height="24" alt="Выйти"/>
                 <p>Выйти</p>
             </div>
         </header>
-        <Navigation open={open} onClose={() => setOpen(false)}/>
+        <Navigation open={open} onClose={() => setOpen(false)} modalIsOpen={modalIsOpen}/>
     </div>
     );
 }

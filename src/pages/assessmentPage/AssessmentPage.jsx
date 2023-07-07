@@ -5,9 +5,10 @@ import { useParams } from 'react-router-dom';
 import { useEstimateMutation, useLazyGetEstimationForFormQuery, useLazyGetProjectQuery, useLazyGetStagesQuery, useLazyGetTeamQuery, useLazyGetUserQuery } from '../../redux/authApi';
 import { useSelector } from 'react-redux';
 import alertify from 'alertifyjs';
+import CriterionDescription from "./components/CriterionDestription";
 
 
-function AssessmentPage() {
+function AssessmentPage({ setModalIsOpen }) {
     const {teamId} = useParams();
     const {user_id:appraiserId} = useSelector((state) => state.auth.user);
     const [getUser] = useLazyGetUserQuery();
@@ -23,7 +24,9 @@ function AssessmentPage() {
     const [currentEstimation, setCurrentEstimation] = useState({});
     const [project, setProject] = useState();
     const [names, setNames] = useState({});
-    const sendEstimation = async () => { 
+    const [descriptionIsOpened, setDescriptionIsOpened] = useState(false);
+    const [descriptionTitle, setDescriptionTitle] = useState(null)
+    const sendEstimation = async () => {
         for (let est in currentEstimation){
             await estimate({body: currentEstimation[est]});
         }
@@ -39,6 +42,14 @@ function AssessmentPage() {
     };
     const swapAssessedPerson = (id) =>{
         setCurrentEstimation({...estimations[currentStage.id][id]})
+    }
+
+    const closeCriteriaDescription = (evt) => {
+        if (evt.key === 'Escape') {
+            console.log('jopa')
+            setDescriptionIsOpened(false);
+            setModalIsOpen(false);
+        }
     }
 
 
@@ -69,7 +80,7 @@ function AssessmentPage() {
                                     id_team:teamId,
                                     estimation: estm.estimation,
                                     id_evaluation_criteria:estm.id_evaluation_criteria,
-                                    
+
                                  }
                         }
                         result[stage.id][intern.id_intern] = value;
@@ -77,7 +88,7 @@ function AssessmentPage() {
                     .catch(e => {result[stage.id][intern.id_intern] = {}})
                     .finally(() =>{
                         for(let criterion of stage.evaluation_criteria){
-                            
+
                             if(!(criterion.id in result[stage.id][intern.id_intern])){
                                 result[stage.id][intern.id_intern][criterion.id] = {
                                     id_intern: intern.id_intern,
@@ -104,6 +115,8 @@ function AssessmentPage() {
             setCurrentEstimation({...result[st.data[0].id][tm.data.interns[0].id_intern]})
         }
         getEstimations();
+        document.addEventListener('keydown', closeCriteriaDescription);
+        return () => document.removeEventListener('keydown', closeCriteriaDescription);
     },[teamId])
 
     if(!stages || !team || !estimations ){
@@ -141,28 +154,34 @@ function AssessmentPage() {
                         className={classes["form-selector"]}
                         name="form-selector"
                         defaultValue={currentEstimation.id_intern}>
-                        {team.interns.map(intern => 
+                        {team.interns.map(intern =>
                         <option value={intern.id_intern}>
                             {names[intern.id_intern]}
                         </option> )}
 
                     </select>
                 </label>
-                
-                {currentStage.evaluation_criteria.map(criterion =>  
-                <Criterion
-                    nameCriterion={criterion.title}
-                    onChange={(id, value) => {
-                        currentEstimation[id].estimation = value
-                        setCurrentEstimation({...currentEstimation});
-                    }}
-                    id={criterion.id}
-                    value={currentEstimation[criterion.id]?.estimation}
-                />)}
+
+                {currentStage.evaluation_criteria.map(criterion =>
+                    <Criterion
+                        nameCriterion={criterion.title}
+                        onChange={(id, value) => {
+                            currentEstimation[id].estimation = value
+                            setCurrentEstimation({...currentEstimation});
+                        }}
+                        id={criterion.id}
+                        value={currentEstimation[criterion.id]?.estimation}
+                        questionOnClick={(title) => {
+                            setDescriptionIsOpened(true);
+                            setDescriptionTitle(title);
+                            setModalIsOpen(true);
+                        }}
+                    />)}
 
 
                 <input type="submit" className={classes['give-a-mark']} value="Оценить"/>
             </form>
+            <CriterionDescription title={descriptionTitle} isOpened={descriptionIsOpened}/>
         </div>
     );
 }

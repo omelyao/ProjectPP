@@ -1,5 +1,5 @@
-.main-header{
-    background: #303030;  
+.main-header {
+    position: relative;
     color:#FFFFFF;
     font-size: 16px;
     line-height: 18px;
@@ -7,7 +7,10 @@
     height:60px;
     width:100%;
     display:flex;
+    background: #303030;
+    z-index: 1000000000;
 }
+
 .nav-icon{
     padding: 18px;
 }
@@ -25,7 +28,7 @@
 .small-logo{
     margin-left:11px;
     margin-top:7px;
-    
+
 }
 .profile{
     display:flex;

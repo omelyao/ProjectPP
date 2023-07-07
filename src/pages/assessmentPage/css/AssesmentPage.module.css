@@ -2,6 +2,7 @@
     width:391px;
     margin: 0 auto;
     margin-top:53px;
+    position: relative;
 }
 
 .forms h2{
@@ -18,7 +19,7 @@
     font-weight: 500;
     font-size: 20px;
     line-height: 18px;
-    
+
 }
 
 
@@ -69,7 +70,7 @@
     display:block;
     margin:0 auto;
     margin-bottom:18px;
-    
+
 
 }
 .criteria-group{
@@ -120,8 +121,7 @@
     font-weight: 700;
     line-height: 18px;
     display:block;
-    margin:0 auto;
-    margin-top:40px;
+    margin: 40px auto 0;
 }
 
 .question:hover{
@@ -136,4 +136,64 @@
 
 .give-a-mark:active{
     background-color: #E86A00;
+}
+
+.criteria-description {
+    position: fixed;
+    min-height: 326px;
+    width: 640px;
+    background-color: #F5F5F5;
+    /*top: 0;*/
+    /*left: -130px;*/
+    top: 30vh;
+    left: 50vw;
+    transform: translate(-50%,-50%);
+    border-radius: 10px;
+    box-shadow: 1px 5px 10px 3px rgba(0, 0, 0, 0.25);
+    margin: 0;
+    padding: 0;
+    display: none;
+    z-index: 1000;
+}
+
+.criteria-description-header {
+    height: 58px;
+    background-color: #F57C00;
+    border-radius: 10px 10px 0 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.criteria-description-header h3 {
+    color: #fff;
+    text-align: center;
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+
+    line-height: 18px;
+    font-weight: 500;
+    font-size: 24px;
+}
+
+.wrapper {
+    margin: 26px 28px 47px;
+}
+
+.wrapper h4 {
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 18px;
+    text-transform: uppercase;
+}
+
+.wrapper p {
+    margin-left: 12px;
+}
+
+.is-opened {
+    display: block;
 }

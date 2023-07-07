@@ -12,10 +12,15 @@ import Stages from "./pages/stages/Stages";
 import Project from "./pages/project/Project";
 import ProjectInterns from "./pages/projectInterns/ProjectInterns";
 import ChangeUser from "./pages/users/ChangeUser";
+import styles from './App.module.css';
+import {useState} from "react";
+
 function App() {
+    const [modalIsOpen, setModalIsOpen] = useState(false)
     return (
         <div>
-            <Header />
+            <div className={modalIsOpen ? styles.overlay : ''}></div>
+            <Header modalIsOpen={modalIsOpen}/>
             <Routes>
                 <Route path="/" element={<Navigate to={"/login"} replace />} />
                 {/* <PrivateRoute path="/main" element={HomePage} /> */}
@@ -77,7 +82,7 @@ function App() {
                     path="/form/:teamId"
                     element={
                         <PrivateRoute>
-                            <AssessmentPage />
+                            <AssessmentPage setModalIsOpen={setModalIsOpen}/>
                         </PrivateRoute>
                     }
                 />
