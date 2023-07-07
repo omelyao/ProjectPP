@@ -3,17 +3,22 @@
     width:224px;
     padding-top:53px;
     font-size: 22px;
-    line-height: 30px; 
+    line-height: 30px;
     font-weight: 300;
     align-items: center;
     left: -225px;
 	transition: all 0.2s ease;
     z-index: 1;
+    pointer-events: none;
 }
-
 
 .active{
     left: 0px;
+}
+
+.modal-is-open {
+    pointer-events: all;
+    background-color: transparent;
 }
 
 .navigation h2{
@@ -23,7 +28,7 @@
     padding-top:29px;
     padding-left:16px;
     font-weight: 400;
-    
+
 }
 
 .name-role{
