@@ -30,6 +30,7 @@ const CreateForm = ({parentId, setShowModal}) => {
     const [deadline, setDeadline] = useState('')
     const [stages, setStages] = useState([])
     const [performers, setPerformers] = useState([]);
+    const tasks = useRecoilValue(tasksState);
     const setTasks = useSetRecoilState(tasksState);
 
     const options = [
@@ -164,11 +165,10 @@ const CreateForm = ({parentId, setShowModal}) => {
             startDate,
             finalDate,
             deadline: deadline ? deadline : finalDate,
-            executorId
         }
         const stagesList = stages.map((stage) => (stage.description));
         try {
-            await createTask(taskList, stagesList)
+            await createTask(taskList, stagesList, executorId)
             setShowModal(false)
             const updatedTasks = await getAllTask();
             setTasks(updatedTasks);
@@ -204,9 +204,11 @@ const CreateForm = ({parentId, setShowModal}) => {
                     <div className={s.project}>
                         <Select
                             label="Проект"
-                            // icon={<Project/>}
+                            dis={tasks[0].title_project}
+                            icon={<Project/>}
                             options={options.map(opt => ({value: opt.id, name: opt.name}))}
                             onChange={(event) => setProjectId(event.target.value)}
+                            disabled
                         />
                     </div>
                     <div className={s.element}>
@@ -215,6 +217,7 @@ const CreateForm = ({parentId, setShowModal}) => {
                         icon={<Project/>}
                         options={options.map(opt => ({value: opt.id, name: opt.name}))}
                         onChange={(event) => setTeamId(event.target.value)}
+                        dis={"Тег команды"}
                         />
                     </div>
                     <div className={s.element}>
@@ -267,6 +270,7 @@ const CreateForm = ({parentId, setShowModal}) => {
                         icon={<Project/>}
                         options={options.map(opt => ({value: opt.id, name: opt.name}))}
                         onChange={(e) => console.log(e.target.value)}
+                        disabled
                     />
                     <Select
                         label="Ответственный"

@@ -4,13 +4,13 @@ import {ReactComponent as Path} from '../../../../assets/img/path.svg'
 import {ReactComponent as Vector} from '../../../../assets/img/vector.svg'
 import Modal from "../../../GanttTaskForm/Modal/Modal";
 import {kanbanView} from "../../../../services/task";
-import {useRecoilState, useRecoilValue} from "recoil";
+import {useRecoilState} from "recoil";
 import {tasksState} from "../../../../store/atom";
 import {StyledTaskRow} from "./UI/StyledTaskRow";
 import {Title} from "./UI/Title";
-import {CollapseButton} from "./UI/CollapseButton";
 import {Right} from "./UI/Right";
-import {Buttons} from './UI/Buttons';
+import {CollapseButton} from "./UI/CollapseButton";
+import {Buttons} from "./UI/Buttons";
 
 const TaskRow = ({
                      task,

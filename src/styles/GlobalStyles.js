@@ -83,6 +83,8 @@ const GlobalStyles = createGlobalStyle`
     font-size: 16px;
     font-family: Roboto;
     font-weight: 400;
+    height: 100%;
+    width: 100%;
   }
 
   ::-webkit-calendar-picker-indicator { 

@@ -1,6 +1,7 @@
 import api from "./api";
+import {store} from "../redux/store";
 
-const token = localStorage.getItem("access")
+let token = store.getState().auth.access;
 
 export const getAllTask = async (type) => {
     try {
@@ -9,6 +10,7 @@ export const getAllTask = async (type) => {
                 Authorization: `Bearer ${token}`
             }
         });
+        console.log(token)
         return response.data;
     } catch (e) {
         console.log(e);
@@ -28,17 +30,15 @@ export const getAllTaskFilter = async (id) => {
     }
 };
 
-export const createTask = async (task, stages) => {
+export const createTask = async (task, stages, executor) => {
     const createTask = {
         parent_id: task.parent || null,
         project_id: task.projectId,
-        team_id: task.teamId,
         name: task.name,
         description: task.description,
         planned_start_date: task.startDate,
         planned_final_date: task.finalDate,
         deadline: task.deadline,
-        executor_id: task.executorId,
     };
 
     let stagesList = [];
@@ -49,7 +49,8 @@ export const createTask = async (task, stages) => {
 
     const data = {
         task: createTask,
-        stages: stagesList,
+        task_stages: stagesList,
+        responsible_users: [executor]
     };
 
     try {
@@ -68,7 +69,7 @@ export const getIdTask = async (id) => {
     try {
         const response = await api.get(`/scheduler/api/v1/task/${id}`, {
             headers: {
-                Authorization: 'Bearer token'
+                Authorization: `Bearer ${token}`
             }
         })
         return response.data

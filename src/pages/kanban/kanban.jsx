@@ -10,7 +10,6 @@ import {ToastContainer} from "react-toastify";
 
 const Kanban = () => {
     return (
-        <RecoilRoot>
             <ThemeProvider theme={theme}>
                 <GlobalStyles/>
                 <div className={s.container}>
@@ -21,7 +20,6 @@ const Kanban = () => {
                 </div>
                 <ToastContainer/>
             </ThemeProvider>
-        </RecoilRoot>
     );
 };
 

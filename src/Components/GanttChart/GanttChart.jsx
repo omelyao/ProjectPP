@@ -31,14 +31,14 @@ const GanttChart = () => {
         );
     };
 
-    if (tasks.length === 0) {
+    if (tasks?.length === 0) {
         return <TasksZero />
     }
 
     return (
         <div className={s.container}>
             <GanttTable
-                tasks={tasks}
+                tasks={tasks[0].tasks}
                 collapsedTasks={collapsedTasks}
                 toggleTaskCollapse={toggleTaskCollapse}
             />

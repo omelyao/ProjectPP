@@ -20,7 +20,7 @@ import Kanban from "./pages/kanban/kanban";
 function App() {
     const [modalIsOpen, setModalIsOpen] = useState(false)
     return (
-        <div>
+        <div className={styles.container}>
             <div className={modalIsOpen ? styles.overlay : ''}></div>
             <Header modalIsOpen={modalIsOpen}/>
             <Routes>
@@ -43,7 +43,7 @@ function App() {
                     }
                 />
                 <Route
-                    path="/kanban"
+                    path="/user/:userId/kanban"
                     element={
                         <PrivateRoute>
                             <Kanban />
@@ -51,7 +51,7 @@ function App() {
                     }
                 />
                 <Route
-                    path="/gantt"
+                    path="/user/:userId/gantt"
                     element={
                         <PrivateRoute>
                             <Gantt />
