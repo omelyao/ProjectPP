@@ -1,16 +1,27 @@
 import api from "./api";
-export const getAllTask = async () => {
+
+const token = localStorage.getItem("access")
+
+export const getAllTask = async (type) => {
     try {
-        const response = await api.get('/api/v1/gant/tasks')
-        return response.data
+        const response = await api.get(`/scheduler/api/v1/tasks?view_type=${type}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        return response.data;
     } catch (e) {
-        console.log(e)
+        console.log(e);
     }
-}
+};
 
 export const getAllTaskFilter = async (id) => {
     try {
-        const response = await api.get(`/api/v1/gant/tasks?project_id=${id}`);
+        const response = await api.get(`/scheduler/api/v1/tasks?project_id=${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
         return response.data;
     } catch (e) {
         console.log(e);
@@ -42,7 +53,11 @@ export const createTask = async (task, stages) => {
     };
 
     try {
-        await api.post('/api/v1/gant/task/create', data);
+        await api.post('/scheduler/api/v1/tasks', data, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
     } catch (e) {
         console.log(e);
     }
@@ -51,7 +66,11 @@ export const createTask = async (task, stages) => {
 
 export const getIdTask = async (id) => {
     try {
-        const response = await api.get(`/api/v1/gant/task/${id}`)
+        const response = await api.get(`/scheduler/api/v1/task/${id}`, {
+            headers: {
+                Authorization: 'Bearer token'
+            }
+        })
         return response.data
     } catch (e) {
         console.log(e)
@@ -82,7 +101,11 @@ export const updateIdTask = async (id, task, stages) => {
         stages: stagesList,
     };
     try {
-        await api.post(`/api/v1/gant/task/${id}/edit`, data)
+        await api.put(`/scheduler/api/v1/task/${id}`, data, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
         console.log(data)
     }catch (e){
         console.log(e)
@@ -91,7 +114,11 @@ export const updateIdTask = async (id, task, stages) => {
 
 export const deleteIdTask = async (id) => {
     try {
-        await api.delete(`/api/v1/gant/task/${id}/del`)
+        await api.delete(`/scheduler/api/v1/task/${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
     }catch (e){
         console.log(e)
     }
@@ -100,7 +127,11 @@ export const deleteIdTask = async (id) => {
 
 export const kanbanView = async (id) => {
     try {
-        await api.post(`/api/v1/gant/task/${id}/kanban_view`)
+        await api.post(`/scheduler/api/v1/task/${id}/is_on_kanban `, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
     }catch (e){
         console.log(e)
     }
@@ -114,7 +145,11 @@ export const editDates = async (id, task) => {
         deadline: task.deadline,
     };
     try {
-        await api.post(`http://127.0.0.1:8000/api/v1/gant/task/${id}/edit_dates`, data);
+        await api.post(`/scheduler/api/v1/task/${id}/dates`, data, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
     } catch (e) {
         console.log(e);
         throw e

@@ -13,7 +13,7 @@ const GanttChart = () => {
     const setTasks = useSetRecoilState(tasksState);
 
     useEffect(() => {
-        getAllTask()
+        getAllTask("gantt")
             .then((response) => {
                 setTasks(response);
                 console.log(response)

@@ -22,25 +22,26 @@ const GanttHeader = () => {
 
     const setTasks = useSetRecoilState(tasksState);
 
-    useEffect(() => {
-        if (projectId === 1) {
-            getAllTask()
-                .then((response) => {
-                    setTasks(response);
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-        } else {
-            getAllTaskFilter(projectId)
-                .then((response) => {
-                    setTasks(response);
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-        }
-    }, [projectId, setTasks]);
+    // useEffect(() => {
+    //     if (projectId === 1) {
+    //         getAllTask()
+    //             .then((response) => {
+    //                 setTasks(response);
+    //             })
+    //             .catch((error) => {
+    //                 console.log(error);
+    //             });
+    //     } else {
+    //         getAllTaskFilter(projectId)
+    //             .then((response) => {
+    //                 setTasks(response);
+    //             })
+    //             .catch((error) => {
+    //                 console.log(error);
+    //             });
+    //     }
+    // }, [projectId, setTasks]);
+
 
     const openForm = (type) => {
         setFormType(type);

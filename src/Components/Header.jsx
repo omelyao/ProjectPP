@@ -43,40 +43,43 @@ function Header({ modalIsOpen }) {
                 width="48" height="48.18"
                 alt="Логотип"
             />
-            <div className={classes["profile"]} onClick={() => navigate(`/user/${user.user_id}`)}>
-                <img
-                    src={require("../images/profile.svg").default}
-                    width="24" height="24" alt="Мой профиль"
-                 />
-                <p>Мой Профиль</p>
-            </div>
-                <div className={classes["profile"]} onClick={() => navigate(`/kanban`)}>
-                    <img
-                        onClick={() => setOpen(open)}
-                        src={require("../images/profile.svg").default}
-                        width="24" height="24" alt="Мой профиль"
-                    />
-                    <p>Канбан</p>
+                <div className={classes['navigates']}>
+                    <div className={classes["profile"]} onClick={() => navigate(`/user/${user.user_id}`)}>
+                        <img
+                            src={require("../images/profile.svg").default}
+                            width="24" height="24" alt="Мой профиль"
+                        />
+                        <p>Мой Профиль</p>
+                    </div>
+                    <div className={classes["kanban"]} onClick={() => navigate(`/kanban`)}>
+                        <img
+                            onClick={() => setOpen(open)}
+                            src={require("../assets/img/KanbanHeader.svg").default}
+                            width="24" height="24" alt="Мой профиль"
+                        />
+                        <p>Канбан</p>
+                    </div>
+                    <div className={classes["gantt"]} onClick={() => navigate(`/gantt`)}>
+                        <img
+                            src={require("../assets/img/GanttHeader.svg.svg").default}
+                            width="24" height="24" alt="Мой профиль"
+                        />
+                        <p>Гант</p>
+                    </div>
                 </div>
-                <div className={classes["profile"]} onClick={() => navigate(`/gantt`)}>
-                    <img
-                        src={require("../images/profile.svg").default}
-                        width="24" height="24" alt="Мой профиль"
+                <div className={classes['right']}>
+                    <img className={classes['settings-icon']}
+                         onClick={() => navigate("/change-info")}
+                         src={require("../images/settings-icon.svg").default}
+                         width="32" height="32"
+                         alt="Логотип"
                     />
-                    <p>Гант</p>
+
+                    <div className={classes["exit"]} onClick={() =>out()}>
+                        <img src={require("../images/exit.svg").default} width="24" height="24" alt="Выйти"/>
+                        <p>Выйти</p>
+                    </div>
                 </div>
-
-            <img className={classes['settings-icon']}
-                onClick={() => navigate("/change-info")}
-                src={require("../images/settings-icon.svg").default}
-                width="32" height="32"
-                alt="Логотип"
-            />
-
-            <div className={classes["exit"]} onClick={() =>out()}>
-                <img src={require("../images/exit.svg").default} width="24" height="24" alt="Выйти"/>
-                <p>Выйти</p>
-            </div>
         </header>
         <Navigation open={open} onClose={() => setOpen(false)} modalIsOpen={modalIsOpen}/>
     </div>

@@ -15,7 +15,7 @@
     padding: 18px;
 }
 
-.nav-icon:hover, .profile:hover, .settings-icon:hover, .exit:hover{
+.nav-icon:hover, .profile:hover, .gantt:hover, .kanban:hover, .settings-icon:hover, .exit:hover{
     cursor: pointer;
     background-color: #4F4F4F;
 }
@@ -30,37 +30,66 @@
     margin-top:7px;
 
 }
+
+.navigates{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    width: 30%;
+}
+
 .profile{
     display:flex;
-    margin-right:auto;
-    margin-left: 47px;
-    padding-left: 20px;
-    padding-right: 19px;
+    align-items: center;
+    justify-content: center;
+    width: 33%;
+    gap: 8px;
 }
 
-.profile img{
-    margin-top:19px;
+.gantt{
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    width: 33%;
+    gap: 8px;
 }
 
-.profile p{
-    margin-left:15px;
-    margin-top:22px;
+.kanban{
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    width: 33%;
+    gap: 8px;
 }
+
+.right{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    width: 70%;
+    gap: 16px;
+    margin-right: 16px;
+}
+
 .settings-icon{
-    margin:0px;
-    padding:14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .exit{
-    display:flex;
-    padding-right:17px;
-    padding-left:17px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
 }
 
-.exit img{
-    margin-top:19px;
-    margin-right: 9px;
-}
+/*.exit img{*/
+/*    margin-top:19px;*/
+/*    margin-right: 9px;*/
+/*}*/
 
-.exit p{
-    margin-top:22px;
-}
+/*.exit p{*/
+/*    margin-top:22px;*/
+/*}*/
