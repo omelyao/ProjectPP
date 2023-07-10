@@ -14,6 +14,8 @@ import ProjectInterns from "./pages/projectInterns/ProjectInterns";
 import ChangeUser from "./pages/users/ChangeUser";
 import styles from './App.module.css';
 import {useState} from "react";
+import Gantt from "./pages/gantt/gantt";
+import Kanban from "./pages/kanban/kanban";
 
 function App() {
     const [modalIsOpen, setModalIsOpen] = useState(false)
@@ -37,6 +39,22 @@ function App() {
                     element={
                         <PrivateRoute>
                             <Project />
+                        </PrivateRoute>
+                    }
+                />
+                <Route
+                    path="/kanban"
+                    element={
+                        <PrivateRoute>
+                            <Kanban />
+                        </PrivateRoute>
+                    }
+                />
+                <Route
+                    path="/gantt"
+                    element={
+                        <PrivateRoute>
+                            <Gantt />
                         </PrivateRoute>
                     }
                 />

@@ -50,6 +50,21 @@ function Header({ modalIsOpen }) {
                  />
                 <p>Мой Профиль</p>
             </div>
+                <div className={classes["profile"]} onClick={() => navigate(`/kanban`)}>
+                    <img
+                        onClick={() => setOpen(open)}
+                        src={require("../images/profile.svg").default}
+                        width="24" height="24" alt="Мой профиль"
+                    />
+                    <p>Канбан</p>
+                </div>
+                <div className={classes["profile"]} onClick={() => navigate(`/gantt`)}>
+                    <img
+                        src={require("../images/profile.svg").default}
+                        width="24" height="24" alt="Мой профиль"
+                    />
+                    <p>Гант</p>
+                </div>
 
             <img className={classes['settings-icon']}
                 onClick={() => navigate("/change-info")}
