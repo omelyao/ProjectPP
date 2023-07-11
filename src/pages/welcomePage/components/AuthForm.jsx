@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import jwtDecode from 'jwt-decode';
 import alertify from 'alertifyjs';
 
-function AuthForm() {
+function AuthForm({setIsPasswordForgotten}) {
 
     const [password, setPassword] = useState("");
     const [email, setEmail] = useState("");
@@ -34,6 +34,12 @@ function AuthForm() {
         <div className={classes["fields"]}>
             <input type="email" className={classes["inp"]} value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Почта"/>
             <input type="password" className={classes["inp"]}  value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Пароль"/>
+            <a href={'#'} className={classes["forgot-password"]}
+               onClick={(evt) => {
+                   evt.preventDefault();
+                   setIsPasswordForgotten(true);
+               }
+            }>Забыли пароль?</a>
         </div>
         <div className={classes["button"]}>
             <button className={classes["enter-button"]} onClick={handle}>Войти</button>

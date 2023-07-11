@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import classes from '../css/Form.module.css'
-import { useRegisterMutation } from '../../../redux/authApi';
+import {useRegisterMutation} from '../../../redux/authApi';
 import { async } from 'validate.js';
 import alertify from 'alertifyjs';
 
@@ -20,7 +20,7 @@ function RegistrationForm({onChange}) {
 
     const register = async () =>{
         const abc = await reg(registerForm);
-
+        console.log(useRegisterMutation)
         if (!abc.error){
             alertify.notify("регистрация прошла успешно!",  "success");
             onChange(1);
@@ -29,13 +29,13 @@ function RegistrationForm({onChange}) {
             for(let key in abc.error.data){
                 if (key === "email"){
                     alertify.error("такая почта занята");
-                }else{
+                } else {
                     for (let er of abc.error.data[key])
                         alertify.error(`${er}`);
                 }
             }
         }
-    }  
+    }
 
     return (
         <div>

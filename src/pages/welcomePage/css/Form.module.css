@@ -16,7 +16,7 @@
 
 .enter{
     margin-top: 25px;
-    margin-left: 41px;  
+    margin-left: 41px;
     font-size: 24px;
 }
 
@@ -28,12 +28,12 @@
 
 
 .enter:hover, .registr:hover{
-    cursor: pointer;    
+    cursor: pointer;
 }
 
 .enter:active, .registr:active{
     font-weight: 700;
-    
+
 }
 
 .cross{
@@ -109,4 +109,19 @@
     width:100%;
 
     display:flex;
+}
+
+.forgot-password {
+    text-decoration: none;
+    color: #303030;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 18px;
+}
+
+.reset {
+    margin-top: 25px;
+    margin-left: 41px;
+    font-size: 24px;
 }
