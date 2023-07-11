@@ -46,7 +46,7 @@ export const getAllTask = async (type, id) => {
 };
 
 
-export const createTask = async (task, stages, executor) => {
+export const createTask = async (task, stages, responsibleUsers) => {
     const createTask = {
         parent_id: task.parent || null,
         project_id: task.projectId,
@@ -63,10 +63,12 @@ export const createTask = async (task, stages, executor) => {
         stagesList = stages.map((stage) => ({ description: stage }));
     }
 
+    console.log(stagesList)
+
     const data = {
         task: createTask,
         task_stages: stagesList,
-        responsible_users: [executor]
+        responsible_users: responsibleUsers
     };
 
     try {

@@ -80,14 +80,8 @@ const GanttHeader = () => {
                     <Select
                         options={projectList}
                         onChange={changeId}
-                        defaultValue={projectList[0]?.title}
+                        defaultValue={projectList[0]?.id}
                     />
-
-                    {/*<Select*/}
-                    {/*    options={options.map(opt => ({value: opt.id, name: opt.name}))}*/}
-                    {/*    onChange={(event) => setProjectId(event.target.value)}*/}
-                    {/*/>*/}
-                    {/*<Select options={teamList} dis={"Команда"}/>*/}
                 </div>
                 <div className={s.buttons}>
                     <Button children={"Создать задачу"} onClick={()=>openForm('create')}/>
