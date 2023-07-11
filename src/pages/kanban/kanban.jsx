@@ -18,7 +18,6 @@ const Kanban = () => {
                         <KanbanChart/>
                     </div>
                 </div>
-                <ToastContainer/>
             </ThemeProvider>
     );
 };

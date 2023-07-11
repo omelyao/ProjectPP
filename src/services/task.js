@@ -3,9 +3,37 @@ import {store} from "../redux/store";
 
 let token = store.getState().auth.access;
 
-export const getAllTask = async (type) => {
+export const getUserInfo = async() =>{
     try {
-        const response = await api.get(`/scheduler/api/v1/tasks?view_type=${type}`, {
+        const response = await api.get(`/scheduler/api/v1/user_projects`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        return response.data;
+    }catch (e) {
+        console.log(e);
+    }
+}
+
+
+export const getProjectInterns = async (id) =>{
+    try {
+        const response = await api.get(`/scheduler/api/v1/project_interns?project_id=${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        return response.data;
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+
+export const getAllTask = async (type, id) => {
+    try {
+        const response = await api.get(`/scheduler/api/v1/tasks?view_type=${type}&project_id=${id}`, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
@@ -17,18 +45,6 @@ export const getAllTask = async (type) => {
     }
 };
 
-export const getAllTaskFilter = async (id) => {
-    try {
-        const response = await api.get(`/scheduler/api/v1/tasks?project_id=${id}`, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        });
-        return response.data;
-    } catch (e) {
-        console.log(e);
-    }
-};
 
 export const createTask = async (task, stages, executor) => {
     const createTask = {
@@ -80,27 +96,24 @@ export const getIdTask = async (id) => {
 
 export const updateIdTask = async (id, task, stages) => {
     const updateTask = {
-        parent_id: task.parent || null,
-        project_id: task.projectId,
-        team_id: task.teamId,
         name: task.name,
         description: task.description,
         planned_start_date: task.startDate,
         planned_final_date: task.finalDate,
         deadline: task.deadline,
-        executor_id: task.executorId,
     };
 
-    let stagesList = [];
-
-    if (Array.isArray(stages)) {
-        stagesList = stages.map((stage) => ({ description: stage }));
-    }
+    // let stagesList = [];
+    //
+    // if (Array.isArray(stages)) {
+    //     stagesList = stages.map((stage) => ({ description: stage }));
+    // }
 
     const data = {
         task: updateTask,
-        stages: stagesList,
+        // stages: stagesList,
     };
+
     try {
         await api.put(`/scheduler/api/v1/task/${id}`, data, {
             headers: {

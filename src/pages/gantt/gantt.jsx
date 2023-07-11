@@ -18,7 +18,6 @@ const Gantt = () => {
                         <GanttChart/>
                     </div>
                 </div>
-                <ToastContainer/>
             </ThemeProvider>
     );
 };

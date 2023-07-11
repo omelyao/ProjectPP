@@ -1,27 +1,14 @@
-import React, {useEffect, useState} from 'react';
+import React, { useState} from 'react';
 import s from './GanttChart.module.css';
 import GanttTable from './GanttTable/GanttTable';
 import {useRecoilValue, useSetRecoilState} from 'recoil';
-import {tasksState} from '../../store/atom';
-import {getAllTask} from '../../services/task';
+import { tasksState} from '../../store/atom';
 import TasksZero from "./TasksZero/TasksZero";
 
 const GanttChart = () => {
     const [collapsedTasks, setCollapsedTasks] = useState([]);
 
     const tasks = useRecoilValue(tasksState);
-    const setTasks = useSetRecoilState(tasksState);
-
-    useEffect(() => {
-        getAllTask("gantt")
-            .then((response) => {
-                setTasks(response);
-                console.log(response)
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }, [setTasks]);
 
     const toggleTaskCollapse = (taskId) => {
         setCollapsedTasks((prevCollapsedTasks) =>
@@ -38,7 +25,7 @@ const GanttChart = () => {
     return (
         <div className={s.container}>
             <GanttTable
-                tasks={tasks[0].tasks}
+                tasks={tasks.tasks}
                 collapsedTasks={collapsedTasks}
                 toggleTaskCollapse={toggleTaskCollapse}
             />

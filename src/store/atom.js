@@ -10,13 +10,6 @@ export const tasksState = atom({
     default: []
 })
 
-
-export const usersList = atom({
-    key: 'usersList',
-    default: []
-})
-
-
 export const projectsList = atom({
     key: 'usersList',
     default: []
@@ -30,14 +23,7 @@ export const teamsList = atom({
 
 export const timerState = atom({
     key: 'timerState',
-    default: {
-        time: 0,
-        isRunning: false,
-        timerId: null,
-        taskId: null,
-        taskName: '',
-        task: null
-    },
+    default: [],
 });
 
 export const commentsState = atom({
@@ -45,11 +31,19 @@ export const commentsState = atom({
     default: [],
 });
 
-// export const Token = atom({
-//     key: 'Token',
-//     default: {
-//         access: localStorage.getItem("access"),
-//         refresh: localStorage.getItem("refresh"),
-//     },
-// });
+export const projectInterns = atom({
+    key: 'projectInterns',
+    default: []
+})
+
+
+export const userState = atom({
+    key: 'userState',
+    default: null
+})
+
+export const projectsId = atom({
+    key: 'projectId',
+    default: 1
+})
 

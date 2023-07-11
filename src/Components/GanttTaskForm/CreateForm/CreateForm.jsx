@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import s from './CreateForm.module.css'
 import {useRecoilState, useRecoilValue, useSetRecoilState} from "recoil";
-import {projectsList, tasksState, teamsList, usersList} from "../../../store/atom";
+import {projectInterns, projectsList, tasksState, teamsList, usersList, userState} from "../../../store/atom";
 import {createTask, getAllTask, getIdTask} from "../../../services/task";
 import Text from "../UI/Text";
 import Select from "../UI/Select";
@@ -12,7 +12,6 @@ import InputDate1 from "../UI/InputDate1";
 import ButtonForm from "../UI/Button";
 import TextArea from "../UI/TextArea";
 import {toast} from "react-toastify";
-import {getAllProjects, getAllTeams, getAllUsers} from "../../../services/list";
 import { Right } from '../../GanttChart/GanttTable/TaskRow/UI/Right';
 import {ReactComponent as Clock} from  '../../../assets/img/clock.svg'
 
@@ -20,7 +19,9 @@ const CreateForm = ({parentId, setShowModal}) => {
     // const [projectId, setProjectId] = useRecoilState(projectsList)
     // const [teamId, setTeamId] = useRecoilState(teamsList)
     // const [userId, setUserId] = useRecoilState(usersList)
-    const [projectId, setProjectId] = useState(0)
+    const interns = useRecoilState(projectInterns)
+    const User = useSetRecoilState(userState)
+
     const [teamId, setTeamId] = useState(0)
     const [executorId, setExecutorId] = useState(0)
     const [name, setName] = useState('')
@@ -30,42 +31,16 @@ const CreateForm = ({parentId, setShowModal}) => {
     const [deadline, setDeadline] = useState('')
     const [stages, setStages] = useState([])
     const [performers, setPerformers] = useState([]);
-    const tasks = useRecoilValue(tasksState);
     const setTasks = useSetRecoilState(tasksState);
 
     const options = [
         { id: 1, name: 'Название проекта' },
+        { id: 4, name: 'ЛК оценка' },
         { id: 21, name: 'ЛК оценка' },
         { id: 22, name: 'ЛК Гант' },
         { id: 23, name: 'ЛК Канбан' },
         { id: 24, name: 'ЛК Канбан fefe hththt  htht' }
     ];
-
-    // useEffect(() => {
-    //     getAllUsers()
-    //         .then((response) => {
-    //             setUserId(response)
-    //         })
-    //         .catch((error) => {
-    //             console.log(error)
-    //         })
-    //
-    //     getAllProjects()
-    //         .then((response) => {
-    //             setProjectId(response)
-    //         })
-    //         .catch((error) => {
-    //             console.log(error)
-    //         })
-    //
-    //     getAllTeams()
-    //         .then((response) => {
-    //             setTeamId(response)
-    //         })
-    //         .catch((error) => {
-    //             console.log(error)
-    //         })
-    // }, [])
 
     const handleAddPerformer = () => {
         const newPerformer = {
@@ -123,12 +98,12 @@ const CreateForm = ({parentId, setShowModal}) => {
         if (!name) {
             missingData.push('Название задачи');
         }
-        if (!projectId) {
-            missingData.push('Проект');
-        }
-        if (!teamId) {
-            missingData.push('Тег команды');
-        }
+        // if (!projectId) {
+        //     missingData.push('Проект');
+        // }
+        // if (!teamId) {
+        //     missingData.push('Тег команды');
+        // }
         if (!startDate) {
             missingData.push('Дата начала');
         }
@@ -158,8 +133,7 @@ const CreateForm = ({parentId, setShowModal}) => {
         const parent = parentId ? parentId.id : null;
         const taskList = {
             parent,
-            projectId,
-            teamId,
+            projectId: User.id,
             name,
             description,
             startDate,
@@ -170,18 +144,18 @@ const CreateForm = ({parentId, setShowModal}) => {
         try {
             await createTask(taskList, stagesList, executorId)
             setShowModal(false)
-            const updatedTasks = await getAllTask();
+            const updatedTasks = await getAllTask("gantt", 1);
             setTasks(updatedTasks);
-            toast.success('Задача создана!', {
-                position: "top-right",
-                autoClose: 1000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-            });
+            // toast.success('Задача создана!', {
+            //     position: "top-right",
+            //     autoClose: 1000,
+            //     hideProgressBar: false,
+            //     closeOnClick: true,
+            //     pauseOnHover: true,
+            //     draggable: true,
+            //     progress: undefined,
+            //     theme: "light",
+            // });
         } catch (e) {
             console.log(e);
         }
@@ -204,18 +178,18 @@ const CreateForm = ({parentId, setShowModal}) => {
                     <div className={s.project}>
                         <Select
                             label="Проект"
-                            dis={tasks[0].title_project}
                             icon={<Project/>}
-                            options={options.map(opt => ({value: opt.id, name: opt.name}))}
-                            onChange={(event) => setProjectId(event.target.value)}
                             disabled
+                            value={User.id}
+                            dis={User.title}
                         />
                     </div>
                     <div className={s.element}>
                         <Select
                         label="Тег команды"
+                        value={teamId}
                         icon={<Project/>}
-                        options={options.map(opt => ({value: opt.id, name: opt.name}))}
+                        options={interns.teams.map(opt => ({value: opt.id, name: opt.title}))}
                         onChange={(event) => setTeamId(event.target.value)}
                         dis={"Тег команды"}
                         />
@@ -228,7 +202,6 @@ const CreateForm = ({parentId, setShowModal}) => {
                         />
                     </div>
                 </div>
-
                 <div className={s.elements}>
                     <div className={`${s.element} ${s.deadlines}`}>
                         <span>Планируемые сроки выполнения</span>
@@ -268,14 +241,14 @@ const CreateForm = ({parentId, setShowModal}) => {
                     <Select
                         label="Постановщик"
                         icon={<Project/>}
-                        options={options.map(opt => ({value: opt.id, name: opt.name}))}
-                        onChange={(e) => console.log(e.target.value)}
+                        value={User.id}
+                        dis={User.title}
                         disabled
                     />
                     <Select
                         label="Ответственный"
                         icon={<Project/>}
-                        options={options.map(opt => ({value: opt.id, name: opt.name}))}
+                        options={interns.interns.map(opt => ({value: opt.id, name: opt.title}))}
                         onChange={(event) => setExecutorId(event.target.value)}
                     />
                 </div>

@@ -117,34 +117,34 @@ const ViewForm = ({id, setFormType, setShowModal}) => {
 
             const taskChild = findTaskById(tasks, taskId.task.id);
 
-            if (taskChild.children.length !== 0 && taskChild.children.length > 0) {
-                toast.error('Невозможно удалить задачу с подзадачами!', {
-                    position: "top-right",
-                    autoClose: 1000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "light",
-                });
-                return
-            }
+            // if (taskChild.children.length !== 0 && taskChild.children.length > 0) {
+            //     toast.error('Невозможно удалить задачу с подзадачами!', {
+            //         position: "top-right",
+            //         autoClose: 1000,
+            //         hideProgressBar: false,
+            //         closeOnClick: true,
+            //         pauseOnHover: true,
+            //         draggable: true,
+            //         progress: undefined,
+            //         theme: "light",
+            //     });
+            //     return
+            // }
 
             await deleteIdTask(taskId.task.id);
             setShowModal(false);
-            const updatedTasks = await getAllTask();
+            const updatedTasks = await getAllTask("gantt", 1);
             setTasks(updatedTasks);
-            toast.success('Задача удалена!', {
-                position: "top-right",
-                autoClose: 1000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-            });
+            // toast.success('Задача удалена!', {
+            //     position: "top-right",
+            //     autoClose: 1000,
+            //     hideProgressBar: false,
+            //     closeOnClick: true,
+            //     pauseOnHover: true,
+            //     draggable: true,
+            //     progress: undefined,
+            //     theme: "light",
+            // });
         } catch (e) {
             console.log(e);
         }

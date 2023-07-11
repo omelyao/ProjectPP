@@ -100,9 +100,6 @@ const EditForm = ({id, setFormType, setShowModal}) => {
         }
 
         const taskList = {
-            parent: taskId.task.parent_id !== null ? taskId.task.parent_id : null,
-            projectId: projectId !== 0 ? projectId : taskId.task.project_id,
-            teamId: teamId !== 0 ? teamId : taskId.task.team_id,
             name: name !== '' ? name : taskId.task.name,
             description: description !== '' ? description : taskId.task.description,
             startDate: startDate !== '' ? startDate : taskId.task.planned_start_date,
@@ -114,25 +111,25 @@ const EditForm = ({id, setFormType, setShowModal}) => {
         const stagesList = taskId.stages.map((stage) => stage.description);
 
         try {
-            await updateIdTask(id.id, taskList, stagesList);
+            await updateIdTask(id.id, taskList);
             setShowModal(false);
-            getAllTask()
+            getAllTask("gantt", 1)
                 .then((response) => {
                     setTasks(response);
                 })
                 .catch((error) => {
                     console.log(error);
                 });
-            toast.success('Задача изменена!', {
-                position: "top-right",
-                autoClose: 1000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-            });
+            // toast.success('Задача изменена!', {
+            //     position: "top-right",
+            //     autoClose: 1000,
+            //     hideProgressBar: false,
+            //     closeOnClick: true,
+            //     pauseOnHover: true,
+            //     draggable: true,
+            //     progress: undefined,
+            //     theme: "light",
+            // });
         } catch (e) {
             console.log(e);
         }
@@ -144,16 +141,16 @@ const EditForm = ({id, setFormType, setShowModal}) => {
             const taskChild = findTaskById(tasks, taskId.task.id);
 
             if (taskChild.children.length !== 0 && taskChild.children.length > 0) {
-                toast.error('Невозможно удалить задачу с подзадачами!', {
-                    position: "top-right",
-                    autoClose: 1000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "light",
-                });
+                // toast.error('Невозможно удалить задачу с подзадачами!', {
+                //     position: "top-right",
+                //     autoClose: 1000,
+                //     hideProgressBar: false,
+                //     closeOnClick: true,
+                //     pauseOnHover: true,
+                //     draggable: true,
+                //     progress: undefined,
+                //     theme: "light",
+                // });
                 return
             }
 
