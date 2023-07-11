@@ -23,12 +23,29 @@ const GanttHeader = () => {
         setShowModal(true);
     };
 
+    const changeId = (event) => {
+        setProjectId(event.target.value)
+    }
+
+    useEffect(() =>{
+        if(changeId){
+            getAllTask("gantt", projectId)
+                .then((response) => {
+                    setTasks(response);
+                    console.log(response)
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
+    })
+
     useEffect(() => {
         getUserInfo()
             .then((response) => {
                 setUser(response);
-                setProjectId(user[0]?.id)
-                console.log(projectsId)
+                setProjectList(response)
+                setProjectId(response[0]?.id)
             })
             .catch((error) => {
                 console.log(error);
@@ -60,10 +77,12 @@ const GanttHeader = () => {
         <div className={s.container}>
             <div className={s.elements}>
                 <div className={s.selects}>
-                    <Select options={projectList}
-                            dis={"Мои задачи"}
-                            onChange={(event) => setProjectId(event.target.value)}
+                    <Select
+                        options={projectList}
+                        onChange={changeId}
+                        defaultValue={projectList[0]?.title}
                     />
+
                     {/*<Select*/}
                     {/*    options={options.map(opt => ({value: opt.id, name: opt.name}))}*/}
                     {/*    onChange={(event) => setProjectId(event.target.value)}*/}

@@ -12,7 +12,7 @@ export const tasksState = atom({
 
 export const projectsList = atom({
     key: 'usersList',
-    default: []
+    default: null
 })
 
 

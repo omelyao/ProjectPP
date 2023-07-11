@@ -15,12 +15,11 @@ const StyledSelect = styled.select`
 `;
 
 
-const Select = ({ options = [], onChange , onClick, dis}) => (
-    <StyledSelect onChange={onChange} onClick={onClick}>
-        <option selected disabled>{dis}</option>
+const Select = ({ options, onChange ,defaultValue}) => (
+    <StyledSelect onChange={onChange} defaultValue={defaultValue}>
         {options.map((option) => (
             <option key={option.id} value={option.id}>
-                {option.name}
+                {option.title}
             </option>
         ))}
     </StyledSelect>
