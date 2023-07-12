@@ -14,19 +14,6 @@ const Modal = ({id, parentId, showModal, setShowModal, formType, setFormType}) =
         setShowModal(false)
     }
 
-    // const setTaskId = useSetRecoilState(taskIdState)
-    //
-    // useEffect(() => {
-    //     getIdTask(id.id)
-    //         .then((response) => {
-    //             setTaskId(response)
-    //             console.log(response)
-    //         })
-    //         .catch((error) => {
-    //             console.log(error)
-    //         })
-    // }, [setTaskId])
-
     return (
         <>
             {showModal ? (
