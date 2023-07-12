@@ -7,6 +7,7 @@ import {logOut} from '../redux/authSlice';
 import {reset} from '../redux/authApi';
 import {useRecoilState, useRecoilValue} from "recoil";
 import {taskIdState, timerState} from "../store/atom";
+import Modal from "./GanttTaskForm/Modal/Modal";
 
 function Header({modalIsOpen}) {
 
@@ -205,6 +206,7 @@ function Header({modalIsOpen}) {
                     </div>
                 </div>
             </header>
+            <Modal id={timer.task} showModal={showModal} setShowModal={setShowModal} formType={formType} setFormType={setFormType}/>
             <Navigation open={open} onClose={() => setOpen(false)} modalIsOpen={modalIsOpen}/>
         </div>
     );

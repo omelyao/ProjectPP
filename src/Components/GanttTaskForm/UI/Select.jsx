@@ -40,14 +40,14 @@ const Option = styled.option`
   font-size: 1rem;
 `;
 
-const Select = ({label, defaultValue, options, value, onChange, disabled = false, dis}) => {
+const Select = ({label, defaultValue, options, value, onChange, disabled = false, perf, dis}) => {
     const internsList = useRecoilValue(projectInterns)
     const {userId} = useParams();
     const user = useGetUserQuery({id: userId});
     return (
         <Wrapper>
             {label && <Label>{label}</Label>}
-            {options === internsList.interns ?
+            {options === internsList.interns && !perf && value !== user?
                 <SelectItem value={value} defaultValue={defaultValue} onChange={onChange} disabled={disabled}>
                     <option selected disabled>{dis}</option>
                     {options.map((option) => (
@@ -57,22 +57,32 @@ const Select = ({label, defaultValue, options, value, onChange, disabled = false
                     ))}
                 </SelectItem>
                 :
-                value === user ?
-                    <SelectItem value={value} defaultValue={defaultValue} onChange={onChange} disabled={disabled}>
+                options === internsList.interns && perf ?
+                    <SelectItem value={value} disabled={disabled}>
+                        {/*<option selected disabled>{dis}</option>*/}
                         {options.map((option) => (
-                            <Option key={option.id} value={user.id}>
+                            <Option key={option.id} value={perf}>
                                 {option.last_name} {option.first_name}
                             </Option>
                         ))}
                     </SelectItem>
                     :
-                    <SelectItem value={value} defaultValue={defaultValue} onChange={onChange} disabled={disabled}>
-                        {options.map((option) => (
-                            <Option key={option.id} value={option.id}>
-                                {option.title}
-                            </Option>
-                        ))}
-                    </SelectItem>
+                    value === user ?
+                        <SelectItem value={value} defaultValue={defaultValue} onChange={onChange} disabled={disabled}>
+                            {options.map((option) => (
+                                <Option key={option.id} value={user.id}>
+                                    {option.last_name} {option.first_name}
+                                </Option>
+                            ))}
+                        </SelectItem>
+                        :
+                        <SelectItem value={value} defaultValue={defaultValue} onChange={onChange} disabled={disabled}>
+                            {options.map((option) => (
+                                <Option key={option.id} value={option.id}>
+                                    {option.title}
+                                </Option>
+                            ))}
+                        </SelectItem>
             }
         </Wrapper>
     );

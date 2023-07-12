@@ -23,8 +23,17 @@ export const teamsList = atom({
 
 export const timerState = atom({
     key: 'timerState',
-    default: [],
+    default: {
+        time: 0,
+        isRunning: false,
+        timerId: null,
+        taskId: null,
+        taskName: '',
+        task: null,
+        completedAt: null
+    },
 });
+
 
 export const commentsState = atom({
     key: 'commentsState',

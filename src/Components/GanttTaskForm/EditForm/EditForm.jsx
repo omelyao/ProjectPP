@@ -284,7 +284,7 @@ const EditForm = ({id, setFormType, setShowModal}) => {
                             label="Ответственный"
                             icon={<Project/>}
                             disabled
-                            defaultValue={taskId.executor && taskId.executor[0].user_id}
+                            defaultValue={taskId.executor && taskId.executor.user_id}
                             options={options.map(opt => ({value: opt.id, name: opt.name}))}
                             onChange={(event) => setExecutorId(event.target.value)}
                         />

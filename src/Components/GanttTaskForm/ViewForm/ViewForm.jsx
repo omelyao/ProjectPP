@@ -1,8 +1,17 @@
 import React, {useEffect, useState} from 'react';
 import s from './ViewForm.module.css'
 import {useRecoilState, useRecoilValue, useSetRecoilState} from "recoil";
-import {commentsState, projectsList, taskIdState, tasksState, teamsList, timer, timerState} from "../../../store/atom";
-import {createTask, deleteIdTask, getAllTask, getIdTask} from "../../../services/task";
+import {
+    commentsState,
+    projectInterns, projectsId,
+    projectsList,
+    taskIdState,
+    tasksState,
+    teamsList,
+    timer,
+    timerState
+} from "../../../store/atom";
+import {editStages, deleteIdTask, getAllTask, getIdTask, timeSpent} from "../../../services/task";
 import Text from "../UI/Text";
 import Select from "../UI/Select";
 import {ReactComponent as Project} from '../../../assets/img/projects.svg'
@@ -16,9 +25,16 @@ import {ReactComponent as Timer} from  '../../../assets/img/timer.svg';
 import {ReactComponent as StartTimerButton} from  '../../../assets/img/startTimerButton.svg';
 import {ReactComponent as TrashTimerButton} from  '../../../assets/img/trashButton.svg';
 import {ReactComponent as PauseTimerButton} from  '../../../assets/img/pauseTimerButton.svg';
+import {useParams} from "react-router-dom";
+import {useGetUserQuery} from "../../../redux/authApi";
 
 
 const ViewForm = ({id, setFormType, setShowModal}) => {
+    const projectList = useRecoilValue(projectsList)
+    const internsList = useRecoilValue(projectInterns)
+    const projectId= useRecoilValue(projectsId);
+    const {userId} = useParams();
+    const user = useGetUserQuery({id:userId});
     const taskId = useRecoilValue(taskIdState)
     const setTaskId = useSetRecoilState(taskIdState)
     const setTasks = useSetRecoilState(tasksState)
@@ -27,12 +43,6 @@ const ViewForm = ({id, setFormType, setShowModal}) => {
     const [comment, setComment] = useState('')
     const [comments, setComments] = useRecoilState(commentsState)
 
-    const options = [
-        {id: 1, name: 'Название проекта'},
-        {id: 21, name: 'ЛК оценка'},
-        {id: 22, name: 'ЛК Гант'},
-        {id: 23, name: 'ЛК Канбан'}
-    ];
     const addComments = () => {
         const newComment = {
             name: 'Имя пользователя',
@@ -44,6 +54,7 @@ const ViewForm = ({id, setFormType, setShowModal}) => {
         setComment('');
     };
 
+
     const formatTime = (totalSeconds) => {
         const hours = Math.floor(totalSeconds / 3600).toString().padStart(2, '0');
         const minutes = Math.floor((totalSeconds % 3600) / 60).toString().padStart(2, '0');
@@ -51,13 +62,23 @@ const ViewForm = ({id, setFormType, setShowModal}) => {
         return `${hours}:${minutes}:${seconds}`;
     };
 
+    const getCurrentDateTime = () => {
+        const now = new Date();
+        return now.toISOString(); // Convert to ISO string format (e.g., "2023-07-12T12:08:06.650Z")
+    };
+
     const startTimer = () => {
-        if (!timer.isRunning && timer.taskId === null || !timer.isRunning && timer.taskId === id.id || !timer.isRunning && timer.taskId !== id.id && timer.timerId === null) {
+        if (
+            (!timer.isRunning && timer.taskId === null) ||
+            (!timer.isRunning && timer.taskId === id.id) ||
+            (!timer.isRunning && timer.taskId !== id.id && timer.timerId === null)
+        ) {
             const timerId = setInterval(() => {
                 setTimer((prevTimer) => ({
                     ...prevTimer,
                     time: prevTimer.time + 1,
-                    taskId: id.id
+                    taskId: id.id,
+                    completedAt: getCurrentDateTime() // Save current date and time
                 }));
             }, 1000);
 
@@ -72,7 +93,6 @@ const ViewForm = ({id, setFormType, setShowModal}) => {
         }
     };
 
-
     const stopTimer = () => {
         if (timer.isRunning && timer.taskId === id.id) {
             clearInterval(timer.timerId);
@@ -80,27 +100,40 @@ const ViewForm = ({id, setFormType, setShowModal}) => {
                 ...prevTimer,
                 isRunning: false,
                 taskId: id.id,
-                taskName: id.name
+                taskName: id.name,
+                completedAt: getCurrentDateTime() // Save current date and time
             }));
         }
     };
 
     const resetTimer = () => {
-        if (!timer.isRunning && timer.taskId === id.id){
+        if (!timer.isRunning && timer.taskId === id.id) {
             clearInterval(timer.timerId);
             setTimer((prevTimer) => ({
                 ...prevTimer,
                 time: 0,
                 isRunning: false,
                 timerId: null,
+                completedAt: null // Reset completed date and time
             }));
         }
     };
 
-    const saveTimer = () =>{
+    const saveTimer = async () => {
+        await timeSpent(id.id, timer.completedAt); // Send completed date and time to timeSpent function
+    };
 
-    }
 
+
+    const handleCheckboxChange = async (stage) => {
+        try {
+            await editStages(stage);
+            const updatedTaskId = await getIdTask(taskId.task.id);
+            setTaskId(updatedTaskId);
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     useEffect(() => {
         getIdTask(id.id)
@@ -176,7 +209,7 @@ const ViewForm = ({id, setFormType, setShowModal}) => {
                         <span>&nbsp;</span>
                         <span style={{textDecoration: 'underline'}}>
                         {taskId.task && taskId.task.parent_id !== null ?
-                            findTaskById(tasks, taskId.task.parent_id)?.name : "Отсутствует"}
+                            findTaskById(tasks.tasks, taskId.task.parent_id)?.name : "Отсутствует"}
                         </span>
                     </span>
                 </div>
@@ -186,7 +219,7 @@ const ViewForm = ({id, setFormType, setShowModal}) => {
                             <Select
                                 label="Проект"
                                 // icon={<Project/>}
-                                options={options.map(opt => ({value: opt.id, name: opt.name}))}
+                                options={projectList}
                                 value={taskId.task && taskId.task.project_id}
                                 disabled
                             />
@@ -195,7 +228,7 @@ const ViewForm = ({id, setFormType, setShowModal}) => {
                             <Select
                                 label="Тег команды"
                                 // icon={<Project/>}
-                                options={options.map(opt => ({value: opt.id, name: opt.name}))}
+                                options={internsList.teams}
                                 value={taskId.task && taskId.task.team_id}
                                 disabled
                             />
@@ -253,14 +286,15 @@ const ViewForm = ({id, setFormType, setShowModal}) => {
                         <Select
                             label="Постановщик"
                             icon={<Project/>}
-                            options={options}
+                            options={internsList.interns}
+                            value={taskId.executors && taskId.executors[0]?.user_id}
                             disabled
                         />
                         <Select
                             label="Ответственный"
                             icon={<Project/>}
-                            options={options.map(opt => ({value: opt.id, name: opt.name}))}
-                            value={taskId.executor && taskId.executor[0].user_id}
+                            options={internsList.interns}
+                            value={taskId.executors && taskId.executors[1]?.user_id}
                             disabled
                         />
                     </div>
@@ -269,12 +303,18 @@ const ViewForm = ({id, setFormType, setShowModal}) => {
                             <span className={s.label}>Исполнители</span>
                         </div>
                         <div className={s.unimportantLists}>
-                            {/*{taskId.executor.map((performer, index) => (*/}
-                            {/*    <div className={s.unimportantList} key={index}>*/}
-                            {/*        <Select disabled options={options} selectedValue={'1'} onChange={() => {*/}
-                            {/*        }}/>*/}
-                            {/*    </div>*/}
-                            {/*))}*/}
+                            {taskId.executors &&
+                                taskId.executors.map((performer, index) => (
+                                    index > 1 && (
+                                        <div className={s.unimportantList} key={index}>
+                                            <Select
+                                                disabled
+                                                options={internsList.interns}
+                                                value={taskId.executors && taskId.executors[index]?.user_id}
+                                            />
+                                        </div>
+                                    )
+                                ))}
                         </div>
                     </div>
                     {taskId.stages?.length === 0 ? null :
@@ -286,7 +326,10 @@ const ViewForm = ({id, setFormType, setShowModal}) => {
                                 {taskId.stages && taskId.stages.map((stage, index) => (
                                     <div className={s.checkList} key={index}>
                                         <Right>
-                                            <input type="checkbox" checked={stage.is_ready}/>
+                                            <input type="checkbox"
+                                                   checked={stage.is_ready}
+                                                   onChange={() => handleCheckboxChange(stage)}
+                                            />
                                         </Right>
                                         <Text
                                         width={"60%"}
@@ -301,7 +344,7 @@ const ViewForm = ({id, setFormType, setShowModal}) => {
                     }
                     <div className={s.time}>
                         <div className={s.timer}>
-                        <span className={s.label}>Таймер</span>
+                            <span className={s.label}>Таймер</span>
                             <div className={s.timerElements}>
                                 <div className={s.timeElements}>
                                     <div className={s.timeContainer}>
@@ -312,7 +355,7 @@ const ViewForm = ({id, setFormType, setShowModal}) => {
                                         <ButtonForm onClick={timer.isRunning ? stopTimer : startTimer} padding={'0 8px'} width={'32px'}>
                                             {timer.isRunning && timer.taskId === id.id  ? <PauseTimerButton/> : <StartTimerButton/>}
                                         </ButtonForm>
-                                        <ButtonForm>Сохранить</ButtonForm>
+                                        <ButtonForm onClick={saveTimer}>Сохранить</ButtonForm>
                                         <ButtonForm onClick={resetTimer} status='notActive' padding={'0 8px'}><TrashTimerButton/></ButtonForm>
                                     </div>
                                 </div>

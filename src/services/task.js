@@ -1,5 +1,6 @@
 import api from "./api";
 import {store} from "../redux/store";
+import {async} from "validate.js";
 
 let token = store.getState().auth.access;
 
@@ -143,7 +144,7 @@ export const deleteIdTask = async (id) => {
 
 export const kanbanView = async (id) => {
     try {
-        await api.post(`/scheduler/api/v1/task/${id}/is_on_kanban `, {
+        await api.put(`/scheduler/api/v1/task/${id}/is_on_kanban `, {}, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
@@ -171,3 +172,36 @@ export const editDates = async (id, task) => {
         throw e
     }
 };
+
+export const editStages = async(stage) => {
+    const data = {
+        stage_id: stage.id,
+        description: stage.description,
+        is_ready: !stage.is_ready,
+    };
+    try {
+        await api.put(`/scheduler/api/v1/stage`, data, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+
+export const timeSpent = async(id, time) => {
+    const data = {
+        time_spent: time
+    };
+    try {
+        await api.put(`/scheduler/api/v1/task/${id}/status/complete`, data, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+    } catch (e) {
+        console.log(e);
+    }
+}

@@ -3,7 +3,7 @@ import {ReactComponent as Add} from '../../../../assets/img/addButton.svg'
 import {ReactComponent as Path} from '../../../../assets/img/path.svg'
 import {ReactComponent as Vector} from '../../../../assets/img/vector.svg'
 import Modal from "../../../GanttTaskForm/Modal/Modal";
-import {kanbanView} from "../../../../services/task";
+import {getAllTask, kanbanView} from "../../../../services/task";
 import {useRecoilState} from "recoil";
 import {tasksState} from "../../../../store/atom";
 import {StyledTaskRow} from "./UI/StyledTaskRow";
@@ -34,31 +34,8 @@ const TaskRow = ({
     const toggleKanbanView = async (id, isOnKanban) => {
         try {
             await kanbanView(id);
-            const updatedTasks = tasks.map((task) =>
-                task.id === id ? {...task, is_on_kanban: !isOnKanban} : task
-            );
-            setTasks(updatedTasks)
-
-            const updateChildTasks = (parentTask) => {
-                if (parentTask.children && parentTask.children.length > 0) {
-                    const updatedChildTasks = parentTask.children.map((childTask) =>
-                        childTask.id === id ? {...childTask, is_on_kanban: !isOnKanban} : childTask
-                    ).map(childTask => updateChildTasks(childTask));
-                    return {...parentTask, children: updatedChildTasks};
-                } else {
-                    return parentTask;
-                }
-            };
-
-            const updatedTasksWithChildren = updatedTasks.map((task) => {
-                if (task.id === id) {
-                    return task;
-                } else {
-                    return updateChildTasks(task);
-                }
-            });
-
-            setTasks(updatedTasksWithChildren);
+            const updatedTasks = await getAllTask("gantt", 1);
+            setTasks(updatedTasks);
         } catch (error) {
             console.log(error);
         }

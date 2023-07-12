@@ -24,10 +24,8 @@ import {useGetUserQuery} from "../../../redux/authApi";
 import {useParams} from "react-router-dom";
 
 const CreateForm = ({parentId, setShowModal}) => {
-    const [users, setUser] = useRecoilState(userState);
     const projectList = useRecoilValue(projectsList)
     const internsList = useRecoilValue(projectInterns)
-    const tasks = useRecoilState(tasksState);
     const projectId= useRecoilValue(projectsId);
 
     const {userId} = useParams();
@@ -36,6 +34,7 @@ const CreateForm = ({parentId, setShowModal}) => {
 
     const [teamId, setTeamId] = useState(0)
     const [executorId, setExecutorId] = useState(0)
+    let executor
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
     const [startDate, setStartDate] = useState('')
@@ -55,8 +54,8 @@ const CreateForm = ({parentId, setShowModal}) => {
 
     const handleAddExecutor = (event) =>{
         event.preventDefault()
-        setExecutorId(parseInt(event.target.value))
-        console.log(executorId)
+        executor = parseInt(event.target.value)
+        setExecutorId(executor)
     }
 
 
@@ -116,7 +115,7 @@ const CreateForm = ({parentId, setShowModal}) => {
         if (!finalDate) {
             missingData.push('Дата окончания');
         }
-        if (!executorId) {
+        if (executorId === null) {
             missingData.push('Ответственный');
         }
 
@@ -148,7 +147,7 @@ const CreateForm = ({parentId, setShowModal}) => {
         }
         const stagesList = stages.map((stage) => (stage.description));
 
-        const responsibleUsers = [user.data.id];
+        const responsibleUsers = [];
 
         if (executorId !== 0) {
             responsibleUsers.push(executorId);
@@ -259,7 +258,7 @@ const CreateForm = ({parentId, setShowModal}) => {
                         label="Постановщик"
                         icon={<Project/>}
                         options={internsList.interns}
-                        defaultValue={user}
+                        value={user}
                         disabled
                     />
                     <Select
@@ -287,6 +286,7 @@ const CreateForm = ({parentId, setShowModal}) => {
                                         const newData = [...performers];
                                         newData[index].id_intern = parseInt(event.target.value);
                                         setPerformers(newData);
+                                        console.log(performers)
                                     }}
                                     dis={"Выберите"}
                                 />
