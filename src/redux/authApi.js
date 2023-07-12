@@ -86,7 +86,14 @@ export const AuthApi = createApi({
                 method: "POST",
                 body: { ...credentials },
             }),
-        })
+        }),
+        changePassword: builder.mutation({
+            query: (credentials) => ({
+                url: "password_reset/confirm",
+                method: "POST",
+                body: { ...credentials }
+            }),
+        }),
     }),
 });
 

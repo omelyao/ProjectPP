@@ -5,11 +5,11 @@ import Footer from '../../Components/Footer';
 
 function WelcomePage(props) {
     const [state1, setState1] = useState(0);
-    
+
     return (
     <div>
         <Form onChange={setState1} form={state1}/>
-        <main className={classes["main"]}>    
+        <main className={classes["main"]}>
             <h2 className={classes["welcome-phrase"]}>Добро пожаловать!</h2>
             <div className={classes["content"]}>
                 <div className={classes["welcome-content"]}>
@@ -21,8 +21,16 @@ function WelcomePage(props) {
                 </div>
             </div>
             <div className={classes["buttons"]}>
-                <button className={classes["reg"]} onClick={() =>setState1(2)}>Регистрация</button>
-                <button className={classes["aut"]} onClick={() =>setState1(1)}>Войти</button>
+                <button className={classes["reg"]}
+                        onClick={() => {
+                            setState1(2);
+                        }
+                }>Регистрация</button>
+                <button className={classes["aut"]}
+                        onClick={() => {
+                            setState1(1);
+                        }
+                }>Войти</button>
             </div>
         </main>
         <Footer/>

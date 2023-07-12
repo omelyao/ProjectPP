@@ -125,3 +125,17 @@
     margin-left: 41px;
     font-size: 24px;
 }
+
+.reset-description {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 18px;
+    margin: 23px auto 10px;
+    max-width: 338px;
+}
+
+.wing {
+    display: block;
+    margin: 37px auto 56px;
+}
