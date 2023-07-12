@@ -10,6 +10,12 @@ export const tasksState = atom({
     default: []
 })
 
+export const tasksKanbanState = atom({
+    key: 'tasksState',
+    default: []
+})
+
+
 export const projectsList = atom({
     key: 'usersList',
     default: null

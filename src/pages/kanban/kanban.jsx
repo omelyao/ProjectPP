@@ -7,14 +7,14 @@ import theme from "../../styles/theme";
 import {RecoilRoot, useRecoilState, useSetRecoilState} from "recoil";
 import {ThemeProvider} from "@mui/material";
 import {ToastContainer} from "react-toastify";
-import {projectInterns, projectsId, projectsList, tasksState, userState} from "../../store/atom";
+import {projectInterns, projectsId, projectsList, tasksKanbanState, tasksState, userState} from "../../store/atom";
 import {getAllTask, getProjectInterns, getUserInfo} from "../../services/task";
 
 const Kanban = () => {
     const setUser = useSetRecoilState(userState);
     const [projectId, setProjectId] = useRecoilState(projectsId);
     const setProjectList = useSetRecoilState(projectsList)
-    const setTasks = useSetRecoilState(tasksState);
+    const setTasks = useSetRecoilState(tasksKanbanState);
     const setInterns = useSetRecoilState(projectInterns)
 
     useEffect(() => {

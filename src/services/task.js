@@ -204,3 +204,18 @@ export const timeSpent = async(id, time) => {
         console.log(e);
     }
 }
+
+export const editStatus = async(id, status) => {
+    const data = {
+        status: status
+    };
+    try {
+        await api.put(`/scheduler/api/v1/task/${id}/status`, data, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+    } catch (e) {
+        console.log(e);
+    }
+}

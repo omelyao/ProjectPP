@@ -6,7 +6,8 @@ import { ReactComponent as Play } from "../../../assets/img/CardButtons.svg";
 import { ReactComponent as Stop } from "../../../assets/img/StopCardButton.svg";
 import { ReactComponent as Delete } from "../../../assets/img/DeleteCardButtons.svg";
 import {useRecoilState} from "recoil";
-import {timerState} from "../../../store/atom";
+import {tasksState, timerState} from "../../../store/atom";
+import Modal from "../../GanttTaskForm/Modal/Modal";
 
 const Card = ({
                   items,
@@ -18,6 +19,13 @@ const Card = ({
                   tasks
               }) => {
     const [isHovered, setIsHovered] = useState(false);
+    const [formType, setFormType] = useState('')
+    const [showModal, setShowModal] = useState(false)
+
+    const openForm = (type) => {
+        setFormType(type);
+        setShowModal(true);
+    };
 
     const handleMouseEnter = () => {
         setIsHovered(true);
@@ -77,7 +85,7 @@ const Card = ({
                 onMouseLeave={handleMouseLeave}
             >
                 <div className={s.title}>
-                    <span>{items.task_id__name}</span>
+                    <span onClick={()=>openForm('view')}>{items.task_id__name}</span>
                 </div>
                 <div className={s.project}>
                     <span>{tasks.title_project}</span>
@@ -85,10 +93,10 @@ const Card = ({
                 <div className={s.team}>
                     <span>#{items.task_id__team_id__teg}</span>
                 </div>
-                {/*<div className={s.user}>*/}
-                {/*    <User style={{width:"16px", height:"16px"}} />*/}
-                {/*    <span>{items.user}</span>*/}
-                {/*</div>*/}
+                <div className={s.user}>
+                    <User style={{width:"16px", height:"16px"}} />
+                    <span>ФИО</span>
+                </div>
                 <div className={s.bottom}>
                     <div className={s.deadline}>
                         <Cal style={{width:"16px", height:"16px"}}/>
@@ -107,6 +115,7 @@ const Card = ({
                     )}
                 </div>
             </div>
+            <Modal id={items.task_id} showModal={showModal} setShowModal={setShowModal} formType={formType} setFormType={setFormType}/>
         </>
     );
 };
