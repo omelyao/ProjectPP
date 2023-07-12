@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import s from './Column.module.css';
 import Card from "../Card/Card";
 
-const Column = ({ boards, setBoards }) => {
+const Column = ({ boards, setBoards, tasks }) => {
     const [currentBoard, setCurrentBoard] = useState(null);
     const [currentItem, setCurrentItem] = useState(null);
 
@@ -61,6 +61,7 @@ const Column = ({ boards, setBoards }) => {
                         <div className={s.itemsWrapper}>
                             {board.items.map(item => (
                                 <Card
+                                    tasks={tasks}
                                     items={item}
                                     key={item.id}
                                     board={board}

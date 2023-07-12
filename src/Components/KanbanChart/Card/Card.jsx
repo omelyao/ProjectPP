@@ -14,7 +14,8 @@ const Card = ({
                   board,
                   dragOverHandler,
                   dragStartHandler,
-                  className
+                  className,
+                  tasks
               }) => {
     const [isHovered, setIsHovered] = useState(false);
 
@@ -76,22 +77,22 @@ const Card = ({
                 onMouseLeave={handleMouseLeave}
             >
                 <div className={s.title}>
-                    <span>{items.name}</span>
+                    <span>{items.task_id__name}</span>
                 </div>
                 <div className={s.project}>
-                    <span>{items.project}</span>
+                    <span>{tasks.title_project}</span>
                 </div>
                 <div className={s.team}>
-                    <span>#{items.team}</span>
+                    <span>#{items.task_id__team_id__teg}</span>
                 </div>
-                <div className={s.user}>
-                    <User style={{width:"16px", height:"16px"}} />
-                    <span>{items.user}</span>
-                </div>
+                {/*<div className={s.user}>*/}
+                {/*    <User style={{width:"16px", height:"16px"}} />*/}
+                {/*    <span>{items.user}</span>*/}
+                {/*</div>*/}
                 <div className={s.bottom}>
                     <div className={s.deadline}>
                         <Cal style={{width:"16px", height:"16px"}}/>
-                        <span>{items.deadline}</span>
+                        <span>{items.task_id__planned_final_date}</span>
                     </div>
                     {isHovered && (
                         <div className={s.buttons}>

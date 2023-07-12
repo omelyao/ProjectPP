@@ -30,20 +30,12 @@ const GanttHeader = () => {
             getAllTask("gantt", projectId)
                 .then((response) => {
                     setTasks(response);
-                    console.log(response)
                 })
                 .catch((error) => {
                     console.log(error);
                 });
         }
     })
-
-    const options = [
-        { id: '', name: 'Название проекта' },
-        { id: 21, name: 'ЛК оценка' },
-        { id: 22, name: 'ЛК Гант' },
-        { id: 23, name: 'ЛК Канбан' },
-    ];
 
     return (
         <div className={s.container}>

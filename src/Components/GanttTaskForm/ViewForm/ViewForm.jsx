@@ -40,6 +40,8 @@ const ViewForm = ({id, setFormType, setShowModal}) => {
     const setTasks = useSetRecoilState(tasksState)
     const tasks = useRecoilValue(tasksState)
     const [timer, setTimer] = useRecoilState(timerState)
+    const [completedAt, setCompletedAt] = useState(null);
+
     const [comment, setComment] = useState('')
     const [comments, setComments] = useRecoilState(commentsState)
 
@@ -68,18 +70,20 @@ const ViewForm = ({id, setFormType, setShowModal}) => {
     };
 
     const startTimer = () => {
-        if (
-            (!timer.isRunning && timer.taskId === null) ||
-            (!timer.isRunning && timer.taskId === id.id) ||
-            (!timer.isRunning && timer.taskId !== id.id && timer.timerId === null)
-        ) {
+        if (!timer.isRunning || timer.taskId === id.id) {
             const timerId = setInterval(() => {
-                setTimer((prevTimer) => ({
-                    ...prevTimer,
-                    time: prevTimer.time + 1,
-                    taskId: id.id,
-                    completedAt: getCurrentDateTime() // Save current date and time
-                }));
+                setTimer((prevTimer) => {
+                    const currentDateTime = getCurrentDateTime();
+                    const completedDateTime = completedAt || currentDateTime;
+                    const totalSeconds = prevTimer.time + 1;
+
+                    return {
+                        ...prevTimer,
+                        time: taskId.task.completed_at !== null ? formatTime(totalSeconds) : totalSeconds,
+                        taskId: id.id,
+                        completedAt: completedDateTime,
+                    };
+                });
             }, 1000);
 
             setTimer((prevTimer) => ({
@@ -96,31 +100,38 @@ const ViewForm = ({id, setFormType, setShowModal}) => {
     const stopTimer = () => {
         if (timer.isRunning && timer.taskId === id.id) {
             clearInterval(timer.timerId);
-            setTimer((prevTimer) => ({
-                ...prevTimer,
-                isRunning: false,
-                taskId: id.id,
-                taskName: id.name,
-                completedAt: getCurrentDateTime() // Save current date and time
-            }));
+            setTimer((prevTimer) => {
+                const currentDateTime = getCurrentDateTime();
+                const completedDateTime = taskId.task.completed_at || currentDateTime;
+
+                return {
+                    ...prevTimer,
+                    isRunning: false,
+                    taskId: id.id,
+                    taskName: id.name,
+                    completedAt: completedDateTime,
+                };
+            });
         }
     };
 
     const resetTimer = () => {
-        if (!timer.isRunning && timer.taskId === id.id) {
-            clearInterval(timer.timerId);
-            setTimer((prevTimer) => ({
-                ...prevTimer,
-                time: 0,
-                isRunning: false,
-                timerId: null,
-                completedAt: null // Reset completed date and time
-            }));
-        }
+        clearInterval(timer.timerId);
+        setTimer((prevTimer) => ({
+            ...prevTimer,
+            time: 0,
+            isRunning: false,
+            timerId: null,
+            completedAt: null, // Reset completed date and time
+        }));
+        setCompletedAt(taskId.task.completed_at); // Reset completedAt to initial value
     };
 
     const saveTimer = async () => {
-        await timeSpent(id.id, timer.completedAt); // Send completed date and time to timeSpent function
+        const timeToSave = taskId.task.completed_at !== null ? taskId.task.completed_at : timer.completedAt;
+        await timeSpent(id.id, timeToSave);
+        const updatedTaskId = await getIdTask(taskId.task.id);
+        setTaskId(updatedTaskId);
     };
 
 
@@ -258,19 +269,6 @@ const ViewForm = ({id, setFormType, setShowModal}) => {
                                     icon={<Clock/>}
                                 />
                         </div>
-                        {/* <div className={s.date}>
-                            <input
-                                disabled
-                                type="date"
-                                value={taskId.task && taskId.task.planned_start_date}
-                            />
-                            <span> - </span>
-                            <input
-                                disabled
-                                type="date"
-                                value={taskId.task && taskId.task.planned_final_date}
-                            />
-                        </div> */}
                     </div>
                 </div>
                     <div className={s.description}>
