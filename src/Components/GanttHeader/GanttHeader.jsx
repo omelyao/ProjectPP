@@ -8,22 +8,20 @@ import Modal from "../GanttTaskForm/Modal/Modal";
 import { getAllTask, getProjectInterns, getUserInfo} from "../../services/task";
 
 const GanttHeader = () => {
-    const [user, setUser] = useRecoilState(userState);
     const [projectId, setProjectId] = useRecoilState(projectsId);
     const [formType, setFormType] = useState('')
     const [showModal, setShowModal] = useState(false)
     const parentId = null
     const projectList = useRecoilValue(projectsList)
-    const setProjectList = useSetRecoilState(projectsList)
     const setTasks = useSetRecoilState(tasksState);
-    const setInterns = useSetRecoilState(projectInterns)
 
     const openForm = (type) => {
         setFormType(type);
         setShowModal(true);
     };
 
-    const changeId = (event) => {
+    const changeId = async (event) => {
+        event.preventDefault()
         setProjectId(event.target.value)
     }
 
@@ -39,32 +37,6 @@ const GanttHeader = () => {
                 });
         }
     })
-
-    useEffect(() => {
-        getUserInfo()
-            .then((response) => {
-                setUser(response);
-                setProjectList(response)
-                setProjectId(response[0]?.id)
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-        getAllTask("gantt", projectId)
-            .then((response) => {
-                setTasks(response);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-        getProjectInterns(projectId)
-            .then((response) => {
-                setInterns(response);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }, [setTasks, setProjectList, setInterns, setUser]);
 
     const options = [
         { id: '', name: 'Название проекта' },

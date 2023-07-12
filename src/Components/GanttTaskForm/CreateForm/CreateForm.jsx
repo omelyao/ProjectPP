@@ -27,7 +27,7 @@ const CreateForm = ({parentId, setShowModal}) => {
     const [users, setUser] = useRecoilState(userState);
     const projectList = useRecoilValue(projectsList)
     const internsList = useRecoilValue(projectInterns)
-    const tasks = useRecoilValue(tasksState);
+    const tasks = useRecoilState(tasksState);
     const projectId= useRecoilValue(projectsId);
 
     const {userId} = useParams();
@@ -48,9 +48,16 @@ const CreateForm = ({parentId, setShowModal}) => {
     const handleAddPerformer = () => {
         const newPerformer = {
             id: performers.length > 0 ? performers[performers.length - 1].id + 1 : 1,
+            id_performers: 0
         };
         setPerformers([...performers, newPerformer]);
     };
+
+    const handleAddExecutor = (event) =>{
+        event.preventDefault()
+        setExecutorId(parseInt(event.target.value))
+        console.log(executorId)
+    }
 
 
     const handleDeletePerformer = (id) => {
@@ -148,7 +155,7 @@ const CreateForm = ({parentId, setShowModal}) => {
         }
 
         if (performers.length > 0) {
-            const performerIds = performers.map((performer) => performer.id);
+            const performerIds = performers.map((performer) => performer.id_intern);
             responsibleUsers.push(...performerIds);
         }
 
@@ -190,7 +197,7 @@ const CreateForm = ({parentId, setShowModal}) => {
                         <Select
                             label="Проект"
                             icon={<Project/>}
-                            defaultValue={tasks.title_project}
+                            value={projectId}
                             options={projectList}
                             disabled
                         />
@@ -259,8 +266,7 @@ const CreateForm = ({parentId, setShowModal}) => {
                         label="Ответственный"
                         icon={<Project/>}
                         options={internsList.interns}
-                        value={executorId}
-                        onChange={(event) => setExecutorId(event.target.value)}
+                        onChange={handleAddExecutor}
                         dis={"Выберите"}
                     />
                 </div>
@@ -276,10 +282,10 @@ const CreateForm = ({parentId, setShowModal}) => {
                             <div className={s.unimportantList} key={index}>
                                 <Select
                                     options={internsList.interns}
-                                    value={performer.name}
+                                    value={performer.id_intern}
                                     onChange={(event) => {
                                         const newData = [...performers];
-                                        newData[index].name = event.target.value;
+                                        newData[index].id_intern = parseInt(event.target.value);
                                         setPerformers(newData);
                                     }}
                                     dis={"Выберите"}
