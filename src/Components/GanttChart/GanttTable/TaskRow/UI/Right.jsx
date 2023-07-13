@@ -34,7 +34,7 @@ export const Right = styled.div`
 
   input[type="checkbox"] {
     appearance: none;
-    width: 18px;
+    width: 19px;
     height: 18px;
     border: 2px solid #AFBAC3;
     border-radius: 5px;

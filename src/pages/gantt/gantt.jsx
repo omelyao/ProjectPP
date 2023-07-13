@@ -44,16 +44,16 @@ const Gantt = () => {
     }, [setTasks, setProjectList, setInterns, setUser]);
 
     return (
-            <ThemeProvider theme={theme}>
-                <GlobalStyles/>
-                <div className={s.container}>
-                    <GanttHeader/>
-                    <div className={s.gant}>
-                        <GanttChart/>
-                    </div>
-                    <ToastContainer/>
+        <ThemeProvider theme={theme}>
+            <GlobalStyles/>
+            <div className={s.container}>
+                <GanttHeader/>
+                <div className={s.gant}>
+                    <GanttChart/>
                 </div>
-            </ThemeProvider>
+                <ToastContainer/>
+            </div>
+        </ThemeProvider>
     );
 };
 

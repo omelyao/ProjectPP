@@ -8,6 +8,9 @@ import {reset} from '../redux/authApi';
 import {useRecoilState, useRecoilValue} from "recoil";
 import {taskIdState, timerState} from "../store/atom";
 import Modal from "./GanttTaskForm/Modal/Modal";
+import {ReactComponent as StartTimerButton} from  '../assets/img/startTimerButton.svg';
+import {ReactComponent as PauseTimerButton} from  '../assets/img/pauseTimerButton.svg';
+import {ReactComponent as TrashTimerButton} from  '../assets/img/trashButton.svg';
 
 function Header({modalIsOpen}) {
 
@@ -169,7 +172,7 @@ function Header({modalIsOpen}) {
                                             <span>
                                                 {timer.taskName}
                                             </span>
-                                            <p onClick={() => openForm('view')}>Информация о задаче</p>
+                                            <p>Информация о задаче</p>
                                         </div>
                                         <div className={classes.taskInfo_right}>
                                             <span>
@@ -178,11 +181,11 @@ function Header({modalIsOpen}) {
                                             <div className={classes.taskInfo_time}>
                                                 <span onClick={timer.isRunning ? stopTimer : startTimer}
                                                         className={classes.play}>
-                                                    {timer.isRunning ? 'О' : 'В'}
+                                                    {timer.isRunning ? <PauseTimerButton/> : <StartTimerButton/> }
                                                 </span>
                                                 <span className={classes.save}>Сохранить</span>
                                                 <span onClick={resetTimer} className={classes.trash}>
-                                                    С
+                                                   <TrashTimerButton/>
                                                 </span>
                                             </div>
                                         </div>
@@ -209,7 +212,7 @@ function Header({modalIsOpen}) {
                     </div>
                 </div>
             </header>
-            <Modal id={timer.task} showModal={showModal} setShowModal={setShowModal} formType={formType} setFormType={setFormType}/>
+            {/*<Modal id={timer.taskId} showModal={showModal} setShowModal={setShowModal} formType={formType} setFormType={setFormType}/>*/}
             <Navigation open={open} onClose={() => setOpen(false)} modalIsOpen={modalIsOpen}/>
         </div>
     );

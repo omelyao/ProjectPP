@@ -8,7 +8,7 @@ import {
     tasksState,
     userState
 } from "../../../store/atom";
-import {createTask, getAllTask, getIdTask} from "../../../services/task";
+import {createTask, getAllTask, getIdTask, getProjectInterns, getUserInfo} from "../../../services/task";
 import Text from "../UI/Text";
 import Select from "../UI/Select";
 import {ReactComponent as Project} from  '../../../assets/img/projects.svg'
@@ -22,6 +22,7 @@ import { Right } from '../../GanttChart/GanttTable/TaskRow/UI/Right';
 import {ReactComponent as Clock} from  '../../../assets/img/clock.svg'
 import {useGetUserQuery} from "../../../redux/authApi";
 import {useParams} from "react-router-dom";
+import SelectUser from "../UI/SelectUser";
 
 const CreateForm = ({parentId, setShowModal}) => {
     const projectList = useRecoilValue(projectsList)
@@ -43,6 +44,17 @@ const CreateForm = ({parentId, setShowModal}) => {
     const [stages, setStages] = useState([])
     const [performers, setPerformers] = useState([]);
     const setTasks = useSetRecoilState(tasksState);
+    const setInterns = useSetRecoilState(projectInterns)
+
+    useEffect(() => {
+        getProjectInterns(projectId)
+            .then((response) => {
+                setInterns(response);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    },[setInterns])
 
     const handleAddPerformer = () => {
         const newPerformer = {
@@ -151,26 +163,11 @@ const CreateForm = ({parentId, setShowModal}) => {
             responsibleUsers.push(executorId);
         }
 
-        // if (performers.length > 0) {
-        //     const performerIds = performers.map((performer) => performer.id_intern);
-        //     responsibleUsers.push(...performerIds);
-        // }
-
         try {
             await createTask(taskList, stagesList, responsibleUsers)
             setShowModal(false)
             const updatedTasks = await getAllTask("gantt", projectId);
             setTasks(updatedTasks);
-            // toast.success('Задача создана!', {
-            //     position: "top-right",
-            //     autoClose: 1000,
-            //     hideProgressBar: false,
-            //     closeOnClick: true,
-            //     pauseOnHover: true,
-            //     draggable: true,
-            //     progress: undefined,
-            //     theme: "light",
-            // });
         } catch (e) {
             console.log(e);
         }
@@ -204,8 +201,7 @@ const CreateForm = ({parentId, setShowModal}) => {
                         label="Тег команды"
                         icon={<Project/>}
                         options={internsList.teams}
-                        onChange={(event) => setTeamId(event.target.value)}
-                        disabled
+                        value={internsList[0]?.title}
                         />
                     </div>
                     <div className={s.element}>
@@ -232,15 +228,6 @@ const CreateForm = ({parentId, setShowModal}) => {
                                     icon={<Clock/>}
                                 />
                         </div>
-                        {/* <div className={s.date}>
-                            <input type="date"
-                                   value={startDate}
-                                   onChange={(event) => setStartDate(event.target.value)} />
-                            <span> - </span>
-                            <input type="date"
-                                   value={finalDate}
-                                   onChange={(event) => setFinalDate(event.target.value)} />
-                        </div> */}
                     </div>
                 </div>
                 <div className={s.description}>
@@ -252,12 +239,8 @@ const CreateForm = ({parentId, setShowModal}) => {
                     />
                 </div>
                 <div className={s.important}>
-                    <Select
+                    <SelectUser
                         label="Постановщик"
-                        icon={<Project/>}
-                        options={internsList.interns}
-                        value={user}
-                        // disabled
                     />
                     <Select
                         label="Ответственный"

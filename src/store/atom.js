@@ -1,4 +1,12 @@
 import {atom} from "recoil";
+import {store} from "../redux/store";
+
+const { access } = store.getState().auth
+
+export const token = atom({
+    key: 'token',
+    default: access
+})
 
 export const taskIdState = atom({
     key: 'taskIdState',

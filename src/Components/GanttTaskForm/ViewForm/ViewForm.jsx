@@ -424,14 +424,14 @@ const ViewForm = ({id, setFormType, setShowModal}) => {
                                                         value={newComments}
                                                         onChange={(event) => setNewComments(event.target.value)}
                                                         height={'auto'}
-                                                        width={'550px'}
+                                                        width={'450px'}
                                                     />
                                                     <ButtonForm
                                                         height={'40px'}
-                                                        width={'40px'}
+                                                        width={'100px'}
                                                         onClick={() => editComment(comment.id, newComments)}
                                                     >
-                                                        С
+                                                        Сохранить
                                                     </ButtonForm>
                                                 </>
                                             ) : (
@@ -440,21 +440,21 @@ const ViewForm = ({id, setFormType, setShowModal}) => {
                                                         value={comment.message}
                                                         readOnly
                                                         height={'auto'}
-                                                        width={'550px'}
+                                                        width={'450px'}
                                                     />
                                                     <ButtonForm
                                                         height={'40px'}
-                                                        width={'40px'}
+                                                        width={'100px'}
                                                         onClick={() => setEditingCommentId(comment.id)}
                                                     >
-                                                        И
+                                                        Изменить
                                                     </ButtonForm>
                                                     <ButtonForm
                                                         height={'40px'}
-                                                        width={'40px'}
+                                                        width={'100px'}
                                                         onClick={() => deleteComment(comment.id)}
                                                     >
-                                                        У
+                                                        Удалить
                                                     </ButtonForm>
                                                 </>
                                             )}

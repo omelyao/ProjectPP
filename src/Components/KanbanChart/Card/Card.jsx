@@ -132,7 +132,6 @@ const Card = ({
                     )}
                 </div>
             </div>
-            <Modal id={items.task_id} showModal={showModal} setShowModal={setShowModal} formType={formType} setFormType={setFormType}/>
         </>
     );
 };

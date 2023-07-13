@@ -4,11 +4,11 @@ import s from './kanban.module.css'
 import KanbanChart from "../../Components/KanbanChart/KanbanChart";
 import GlobalStyles from "../../styles/GlobalStyles";
 import theme from "../../styles/theme";
-import {RecoilRoot, useRecoilState, useSetRecoilState} from "recoil";
+import {useRecoilState, useSetRecoilState} from "recoil";
 import {ThemeProvider} from "@mui/material";
-import {ToastContainer} from "react-toastify";
 import {projectInterns, projectsId, projectsList, tasksKanbanState, tasksState, userState} from "../../store/atom";
 import {getAllTask, getProjectInterns, getUserInfo} from "../../services/task";
+i
 
 const Kanban = () => {
     const setUser = useSetRecoilState(userState);
@@ -41,18 +41,20 @@ const Kanban = () => {
             .catch((error) => {
                 console.log(error);
             });
-    }, [setTasks, setProjectList, setInterns, setUser]);
+    }, [ setTasks, setProjectList, setInterns, setUser]);
+
+
     return (
 
-            <ThemeProvider theme={theme}>
-                <GlobalStyles/>
-                <div className={s.container}>
-                    <KanbanHeader/>
-                    <div className={s.kanban}>
-                        <KanbanChart/>
-                    </div>
+        <ThemeProvider theme={theme}>
+            <GlobalStyles/>
+            <div className={s.container}>
+                <KanbanHeader/>
+                <div className={s.kanban}>
+                    <KanbanChart/>
                 </div>
-            </ThemeProvider>
+            </div>
+        </ThemeProvider>
     );
 };
 
