@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import s from './GanttTaskRow.module.css';
 import {editDates, getAllTask} from "../../../../services/task";
 import {useRecoilValue, useSetRecoilState} from "recoil";
-import {tasksState} from "../../../../store/atom";
+import {projectsId, tasksState} from "../../../../store/atom";
 import {toast} from "react-toastify";
 
 const GanttTaskRow = ({
@@ -24,6 +24,7 @@ const GanttTaskRow = ({
 
     const isCollapsed = collapsedTasks.includes(id);
     const currentIndentLevel = indentLevel;
+    const projectId= useRecoilValue(projectsId);
 
     const setTasks = useSetRecoilState(tasksState);
 
@@ -56,18 +57,18 @@ const GanttTaskRow = ({
             await editDates(id, updatedTask);
             setNewStartIndex(0)
             setNewEndIndex(0)
-            const updatedTasks = await getAllTask();
+            const updatedTasks = await getAllTask("gantt",projectId);
             setTasks(updatedTasks);
-            toast.success('Дата изменена!', {
-                position: "top-right",
-                autoClose: 1000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-            });
+            // toast.success('Дата изменена!', {
+            //     position: "top-right",
+            //     autoClose: 1000,
+            //     hideProgressBar: false,
+            //     closeOnClick: true,
+            //     pauseOnHover: true,
+            //     draggable: true,
+            //     progress: undefined,
+            //     theme: "light",
+            // });
         } catch (error) {
             console.log(error);
             setStartIndex(
@@ -78,16 +79,16 @@ const GanttTaskRow = ({
             );
             setNewStartIndex(0)
             setNewEndIndex(0)
-            toast.error('Дата не изменилась!', {
-                position: "top-right",
-                autoClose: 1000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-            });
+            // toast.error('Дата не изменилась!', {
+            //     position: "top-right",
+            //     autoClose: 1000,
+            //     hideProgressBar: false,
+            //     closeOnClick: true,
+            //     pauseOnHover: true,
+            //     draggable: true,
+            //     progress: undefined,
+            //     theme: "light",
+            // });
         }
     };
 

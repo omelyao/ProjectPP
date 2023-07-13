@@ -106,16 +106,14 @@ const CreateForm = ({parentId, setShowModal}) => {
         if (!name) {
             missingData.push('Название задачи');
         }
-        // if (!teamId) {
-        //     missingData.push('Тег команды');
-        // }
+
         if (!startDate) {
             missingData.push('Дата начала');
         }
         if (!finalDate) {
             missingData.push('Дата окончания');
         }
-        if (executorId === null) {
+        if (!executorId) {
             missingData.push('Ответственный');
         }
 
@@ -153,10 +151,10 @@ const CreateForm = ({parentId, setShowModal}) => {
             responsibleUsers.push(executorId);
         }
 
-        if (performers.length > 0) {
-            const performerIds = performers.map((performer) => performer.id_intern);
-            responsibleUsers.push(...performerIds);
-        }
+        // if (performers.length > 0) {
+        //     const performerIds = performers.map((performer) => performer.id_intern);
+        //     responsibleUsers.push(...performerIds);
+        // }
 
         try {
             await createTask(taskList, stagesList, responsibleUsers)
@@ -207,7 +205,7 @@ const CreateForm = ({parentId, setShowModal}) => {
                         icon={<Project/>}
                         options={internsList.teams}
                         onChange={(event) => setTeamId(event.target.value)}
-                        dis={"Тег команды"}
+                        disabled
                         />
                     </div>
                     <div className={s.element}>
@@ -259,7 +257,7 @@ const CreateForm = ({parentId, setShowModal}) => {
                         icon={<Project/>}
                         options={internsList.interns}
                         value={user}
-                        disabled
+                        // disabled
                     />
                     <Select
                         label="Ответственный"

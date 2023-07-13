@@ -294,7 +294,7 @@
     align-items: center;
     justify-content: flex-start;
     width: fit-content;
-    height:32px; 
+    height:32px;
     border-radius: 5px;
     border: 1px solid var(--basic-grey, #AFBAC3);
     background: #FFF;
@@ -345,6 +345,11 @@
     height: 100%;
 }
 
-.commentsOutputTitle{}
+.commentsOutputComment{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+}
 
-.commentsOutputName{}

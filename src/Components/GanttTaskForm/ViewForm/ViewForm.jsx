@@ -11,7 +11,15 @@ import {
     timer,
     timerState
 } from "../../../store/atom";
-import {editStages, deleteIdTask, getAllTask, getIdTask, timeSpent} from "../../../services/task";
+import {
+    editStages,
+    deleteIdTask,
+    getAllTask,
+    getIdTask,
+    timeSpent,
+    createComment,
+    editComment, deleteComment, editComments, deleteComments
+} from "../../../services/task";
 import Text from "../UI/Text";
 import Select from "../UI/Select";
 import {ReactComponent as Project} from '../../../assets/img/projects.svg'
@@ -42,19 +50,52 @@ const ViewForm = ({id, setFormType, setShowModal}) => {
     const [timer, setTimer] = useRecoilState(timerState)
     const [completedAt, setCompletedAt] = useState(null);
 
-    const [comment, setComment] = useState('')
-    const [comments, setComments] = useRecoilState(commentsState)
+    const [comments, setComments] = useState('')
+    const [newComments, setNewComments] = useState('')
+    const [editingCommentId, setEditingCommentId] = useState(null);
 
-    const addComments = () => {
-        const newComment = {
-            name: 'Имя пользователя',
-            text: comment,
-        };
-
-        setComments((prevComments) => [...prevComments, newComment]);
-
-        setComment('');
+    const addComments = async () => {
+        try {
+            await createComment(taskId.task.id, comments);
+            setComments('')
+            const updatedTaskId = await getIdTask(taskId.task.id);
+            setTaskId(updatedTaskId);
+        }catch (e) {
+            console.log(e)
+        }
     };
+
+    const editComment = async (id, comm) => {
+        try {
+            await editComments(id, comm);
+            setEditingCommentId(null);
+            const updatedTaskId = await getIdTask(taskId.task.id);
+            setTaskId(updatedTaskId);
+        } catch (e) {
+            console.log(e);
+        }
+    };
+
+    const deleteComment = async (id) => {
+        try {
+            await deleteComments(id);
+            const updatedTaskId = await getIdTask(taskId.task.id);
+            setTaskId(updatedTaskId);
+        } catch (e) {
+            console.log(e);
+        }
+    };
+
+    useEffect(() => {
+        getIdTask(id.id)
+            .then((response) => {
+                setTaskId(response);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }, [id.id]);
+
 
 
     const formatTime = (totalSeconds) => {
@@ -146,38 +187,11 @@ const ViewForm = ({id, setFormType, setShowModal}) => {
         }
     };
 
-    useEffect(() => {
-        getIdTask(id.id)
-            .then((response) => {
-                setTaskId(response)
-            })
-            .catch((error) => {
-                console.log(error)
-            })
-    }, [setTaskId])
-
     const Delete = async () => {
         try {
-
-            const taskChild = findTaskById(tasks, taskId.task.id);
-
-            // if (taskChild.children.length !== 0 && taskChild.children.length > 0) {
-            //     toast.error('Невозможно удалить задачу с подзадачами!', {
-            //         position: "top-right",
-            //         autoClose: 1000,
-            //         hideProgressBar: false,
-            //         closeOnClick: true,
-            //         pauseOnHover: true,
-            //         draggable: true,
-            //         progress: undefined,
-            //         theme: "light",
-            //     });
-            //     return
-            // }
-
             await deleteIdTask(taskId.task.id);
             setShowModal(false);
-            const updatedTasks = await getAllTask("gantt", 1);
+            const updatedTasks = await getAllTask("gantt", projectId);
             setTasks(updatedTasks);
             // toast.success('Задача удалена!', {
             //     position: "top-right",
@@ -386,8 +400,8 @@ const ViewForm = ({id, setFormType, setShowModal}) => {
                             <span className={s.label}>Комментарии</span>
                             <div className={s.commentsInputElements}>
                                 <TextArea
-                                    value={comment}
-                                    onChange={(event) => setComment(event.target.value)}
+                                    value={comments}
+                                    onChange={(event) => setComments(event.target.value)}
                                     placeholder="Введите комментарий..."
                                     height={"40px"}
                                 />
@@ -395,20 +409,58 @@ const ViewForm = ({id, setFormType, setShowModal}) => {
                             </div>
                         </div>
                         <div className={s.commentsOutput}>
-                            {comments.map((comment, index) => (
-                                <div className={s.commentsOutputItem} key={index}>
-                                    <div className={s.commentsOutputTitle}>
-                                        <p className={s.commentsOutputName}>{comment.name}</p>
+                            {taskId.comments &&
+                                taskId.comments.map((comment, index) => (
+                                    <div className={s.commentsOutputItem} key={index}>
+                                        <div className={s.commentsOutputTitle}>
+                                            <p className={s.commentsOutputName}>
+                                                {comment.user_id__last_name} {comment.user_id__first_name}
+                                            </p>
+                                        </div>
+                                        <div className={s.commentsOutputComment}>
+                                            {editingCommentId === comment.id ? (
+                                                <>
+                                                    <TextArea
+                                                        value={newComments}
+                                                        onChange={(event) => setNewComments(event.target.value)}
+                                                        height={'auto'}
+                                                        width={'550px'}
+                                                    />
+                                                    <ButtonForm
+                                                        height={'40px'}
+                                                        width={'40px'}
+                                                        onClick={() => editComment(comment.id, newComments)}
+                                                    >
+                                                        С
+                                                    </ButtonForm>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <TextArea
+                                                        value={comment.message}
+                                                        readOnly
+                                                        height={'auto'}
+                                                        width={'550px'}
+                                                    />
+                                                    <ButtonForm
+                                                        height={'40px'}
+                                                        width={'40px'}
+                                                        onClick={() => setEditingCommentId(comment.id)}
+                                                    >
+                                                        И
+                                                    </ButtonForm>
+                                                    <ButtonForm
+                                                        height={'40px'}
+                                                        width={'40px'}
+                                                        onClick={() => deleteComment(comment.id)}
+                                                    >
+                                                        У
+                                                    </ButtonForm>
+                                                </>
+                                            )}
+                                        </div>
                                     </div>
-                                    {/*<p className={s.commentsOutputText}>{comment.text}</p>*/}
-                                    <TextArea
-                                        value={comment.text}
-                                        onChange={(event) => setComment(event.target.value)}
-                                        height={"auto"}
-                                        disabled
-                                    />
-                                </div>
-                            ))}
+                                ))}
                         </div>
                     </div>
                 </div>

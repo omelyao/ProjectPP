@@ -8,6 +8,7 @@ import { ReactComponent as Delete } from "../../../assets/img/DeleteCardButtons.
 import {useRecoilState} from "recoil";
 import {tasksState, timerState} from "../../../store/atom";
 import Modal from "../../GanttTaskForm/Modal/Modal";
+import {deleteIdTask, getAllTask} from "../../../services/task";
 
 const Card = ({
                   items,
@@ -16,7 +17,7 @@ const Card = ({
                   dragOverHandler,
                   dragStartHandler,
                   className,
-                  tasks
+                  tasks,
               }) => {
     const [isHovered, setIsHovered] = useState(false);
     const [formType, setFormType] = useState('')
@@ -35,41 +36,56 @@ const Card = ({
         setIsHovered(false);
     };
 
-    const [showTaskInfo, setShowTaskInfo] = useState(false);
-    const [activeCategory, setActiveCategory] = useState('kanban');
-    const [timer, setTimer] = useRecoilState(timerState);
+    const [timer, setTimer] = useRecoilState(timerState)
+    const [completedAt, setCompletedAt] = useState(null);
 
-    const formatTime = (totalSeconds) => {
-        const hours = Math.floor(totalSeconds / 3600).toString().padStart(2, '0');
-        const minutes = Math.floor((totalSeconds % 3600) / 60).toString().padStart(2, '0');
-        const seconds = (totalSeconds % 60).toString().padStart(2, '0');
-        return `${hours}:${minutes}:${seconds}`;
+    const getCurrentDateTime = () => {
+        const now = new Date();
+        return now.toISOString();
     };
 
     const startTimer = () => {
-        if (!timer.isRunning) {
+        if (!timer.isRunning || timer.taskId === items.task_id) {
             const timerId = setInterval(() => {
-                setTimer((prevTimer) => ({
-                    ...prevTimer,
-                    time: prevTimer.time + 1,
-                }));
+                setTimer((prevTimer) => {
+                    const currentDateTime = getCurrentDateTime();
+                    const completedDateTime = completedAt || currentDateTime;
+                    const totalSeconds = prevTimer.time + 1;
+
+                    return {
+                        ...prevTimer,
+                        time: totalSeconds,
+                        taskId: items.task_id,
+                        completedAt: completedDateTime,
+                    };
+                });
             }, 1000);
 
             setTimer((prevTimer) => ({
                 ...prevTimer,
                 isRunning: true,
                 timerId,
+                taskId: items.task_id,
+                taskName: items.name,
+                task: items,
             }));
         }
     };
 
     const stopTimer = () => {
-        if (timer.isRunning) {
+        if (timer.isRunning && timer.taskId === items.task_id) {
             clearInterval(timer.timerId);
-            setTimer((prevTimer) => ({
-                ...prevTimer,
-                isRunning: false,
-            }));
+            setTimer((prevTimer) => {
+                const currentDateTime = getCurrentDateTime();
+
+                return {
+                    ...prevTimer,
+                    isRunning: false,
+                    taskId: items.task_id,
+                    taskName: items.name,
+                    completedAt: currentDateTime,
+                };
+            });
         }
     };
 
@@ -85,27 +101,28 @@ const Card = ({
                 onMouseLeave={handleMouseLeave}
             >
                 <div className={s.title}>
-                    <span onClick={()=>openForm('view')}>{items.task_id__name}</span>
+                    <span>{items.name}</span>
+                    {/*<span onClick={()=>openForm('view')}>{items.name}</span>*/}
                 </div>
                 <div className={s.project}>
                     <span>{tasks.title_project}</span>
                 </div>
                 <div className={s.team}>
-                    <span>#{items.task_id__team_id__teg}</span>
+                    <span>#{items.team__teg}</span>
                 </div>
                 <div className={s.user}>
                     <User style={{width:"16px", height:"16px"}} />
-                    <span>ФИО</span>
+                    <span>{items.user__last_name} {items.user__first_name}</span>
                 </div>
                 <div className={s.bottom}>
                     <div className={s.deadline}>
                         <Cal style={{width:"16px", height:"16px"}}/>
-                        <span>{items.task_id__planned_final_date}</span>
+                        <span>{items.planned_final_date}</span>
                     </div>
                     {isHovered && (
                         <div className={s.buttons}>
                             <button onClick={timer.isRunning ? stopTimer : startTimer}>
-                                {timer.isRunning ?
+                                {timer.isRunning && timer.taskId === items.task_id?
                                     <Stop style={{width:"24px", height:"24px"}}/> :
                                     <Play style={{width:"24px", height:"24px"}}/>
                                 }

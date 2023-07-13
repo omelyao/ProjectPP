@@ -3,7 +3,7 @@ import s from './KanbanChart.module.css';
 import Column from './Column/Column';
 import { useRecoilValue } from 'recoil';
 import {tasksKanbanState, tasksState} from '../../store/atom';
-import {editStatus} from "../../services/task";
+import {deleteIdTask, editStatus, getAllTask} from "../../services/task";
 
 const KanbanChart = () => {
     const tasks = useRecoilValue(tasksKanbanState);
@@ -17,19 +17,24 @@ const KanbanChart = () => {
     ]);
 
     useEffect(() => {
-        if (tasks && tasks.tasks) { // Add a check to ensure tasks and tasks.tasks are not undefined
-            const updatedBoards = boards.map(board => {
-                const filteredTasks = tasks.tasks.filter(task => task.task_id__status_id__name === board.idStatus);
-                return { ...board, items: filteredTasks };
+        if (tasks.tasks) {
+            const updatedBoards = boards.map(board => ({ ...board, items: [] }));
+
+            tasks.tasks.forEach(task => {
+                const boardIndex = updatedBoards.findIndex(board => board.idStatus === task.status_id__name);
+                if (boardIndex !== -1) {
+                    updatedBoards[boardIndex].items.push(task);
+                }
             });
 
             setBoards(updatedBoards);
         }
     }, [tasks]);
 
+
     const handleStatusChange = async (taskId, status) => {
         try {
-            await editStatus(taskId, status); // Call the API function to update the status
+            await editStatus(taskId, status);
         } catch (error) {
             console.log(error);
         }

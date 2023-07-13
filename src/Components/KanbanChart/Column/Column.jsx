@@ -33,7 +33,6 @@ const Column = ({ boards, setBoards, tasks, handleStatusChange }) => {
             })
         );
 
-        // Update the status of the dropped task
         handleStatusChange(currentItem.task_id, board.idStatus);
     }
 
@@ -53,7 +52,6 @@ const Column = ({ boards, setBoards, tasks, handleStatusChange }) => {
             })
         );
 
-        // Update the status of the dropped task
         handleStatusChange(currentItem.task_id, board.idStatus);
     }
 

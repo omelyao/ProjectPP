@@ -4,8 +4,8 @@ import {ReactComponent as Path} from '../../../../assets/img/path.svg'
 import {ReactComponent as Vector} from '../../../../assets/img/vector.svg'
 import Modal from "../../../GanttTaskForm/Modal/Modal";
 import {getAllTask, kanbanView} from "../../../../services/task";
-import {useRecoilState} from "recoil";
-import {tasksState} from "../../../../store/atom";
+import {useRecoilState, useRecoilValue} from "recoil";
+import {projectsId, tasksState} from "../../../../store/atom";
 import {StyledTaskRow} from "./UI/StyledTaskRow";
 import {Title} from "./UI/Title";
 import {Right} from "./UI/Right";
@@ -25,6 +25,7 @@ const TaskRow = ({
     const [showModal, setShowModal] = useState(false)
     const [tasks, setTasks] = useRecoilState(tasksState);
     const [isHovered, setIsHovered] = useState(false);
+    const projectId= useRecoilValue(projectsId);
 
     const openForm = (type) => {
         setFormType(type);
@@ -34,7 +35,7 @@ const TaskRow = ({
     const toggleKanbanView = async (id, isOnKanban) => {
         try {
             await kanbanView(id);
-            const updatedTasks = await getAllTask("gantt", 1);
+            const updatedTasks = await getAllTask("gantt", projectId);
             setTasks(updatedTasks);
         } catch (error) {
             console.log(error);

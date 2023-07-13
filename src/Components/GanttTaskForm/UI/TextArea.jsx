@@ -27,12 +27,12 @@ const TextAreaField = styled.textarea`
   // `}
 `;
 
-const TextArea = ({ placeholder, value, onChange, width, height, padding, disabled = false, ...rest }) => (
+const TextArea = ({ placeholder, value, onChange, width, height, padding, disabled = false, dis, ...rest }) => (
     <TextAreaField
         width={width}
         height={height}
         padding={padding}
-        disabled={disabled}
+        disabled={dis? dis :disabled}
         {...rest}
         placeholder={placeholder}
         value={value}

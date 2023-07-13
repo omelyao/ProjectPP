@@ -1,8 +1,16 @@
 import React, {useEffect, useState} from 'react';
 import s from './EditForm.module.css'
 import {useRecoilState, useRecoilValue, useSetRecoilState} from "recoil";
-import {projectsList, taskIdState, tasksState, teamsList} from "../../../store/atom";
-import {createTask, deleteIdTask, getAllTask, updateIdTask} from "../../../services/task";
+import {projectInterns, projectsId, projectsList, taskIdState, tasksState, teamsList} from "../../../store/atom";
+import {
+    createStages,
+    createTask,
+    deleteIdTask,
+    deleteStages, editsStages,
+    editStages,
+    getAllTask,
+    updateIdTask
+} from "../../../services/task";
 import Text from "../UI/Text";
 import Select from "../UI/Select";
 import {ReactComponent as Project} from  '../../../assets/img/projects.svg'
@@ -18,7 +26,10 @@ import { Right } from '../../GanttChart/GanttTable/TaskRow/UI/Right';
 
 const EditForm = ({id, setFormType, setShowModal}) => {
     // const [projectId, setProjectId] = useRecoilState(projectsList)
-    const [projectId, setProjectId] = useState(0)
+    const projectId= useRecoilValue(projectsId);
+    const projectList = useRecoilValue(projectsList)
+    const internsList = useRecoilValue(projectInterns)
+    // const [projectId, setProjectId] = useState(0)
     // const [teamId, setTeamId] = useRecoilState(teamsList)
     const [teamId, setTeamId] = useState(0)
     const [name, setName] = useState('')
@@ -44,25 +55,39 @@ const EditForm = ({id, setFormType, setShowModal}) => {
         setPerformers([...performers, options])
     };
 
-    const handleDeletePerformer = (index) => {
-        const newData = [...performers];
-        newData.splice(index, 1);
-        setPerformers(newData);
-    };
+    // const handleDeletePerformer = (index) => {
+    //     const newData = [...performers];
+    //     newData.splice(index, 1);
+    //     setPerformers(newData);
+    // };
 
-    const handleAddStages = () => {
+    const handleAddStages = async () => {
         const newStage = {
             id: taskId.stages.length > 0 ? taskId.stages[taskId.stages.length - 1].id + 1 : 1,
             checked: false,
-            description: ''
+            description: "Новая задача"
         };
         const updatedStages = [...(taskId.stages ?? []), newStage];
         setTaskId({ ...taskId, stages: updatedStages });
+        try {
+            await createStages(taskId.task.id, "Новая задача")
+            const updatedTasks = await getAllTask("gantt", projectId);
+            setTasks(updatedTasks);
+        }catch (e){
+            console.log(e)
+        }
     };
 
-    const handleDeleteStages = (id) => {
+    const handleDeleteStages = async (id) => {
         const newData = taskId.stages.filter(stage => stage.id !== id);
         setTaskId({ ...taskId, stages: newData });
+        try {
+            await deleteStages(id)
+            const updatedTasks = await getAllTask("gantt", projectId);
+            setTasks(updatedTasks);
+        }catch (e){
+            console.log(e)
+        }
     };
 
     const handleStageDescriptionChange = (index, description) => {
@@ -71,6 +96,12 @@ const EditForm = ({id, setFormType, setShowModal}) => {
             const updatedStage = { ...updatedStages[index], description };
             updatedStages[index] = updatedStage;
             setTaskId({ ...taskId, stages: updatedStages });
+        }
+    };
+
+    const handleEnterKeyPress = async (event, stage) => {
+        if (event.key === 'Enter') {
+            await editsStages(stage);
         }
     };
 
@@ -113,7 +144,7 @@ const EditForm = ({id, setFormType, setShowModal}) => {
         try {
             await updateIdTask(id.id, taskList);
             setShowModal(false);
-            getAllTask("gantt", 1)
+            getAllTask("gantt", projectId)
                 .then((response) => {
                     setTasks(response);
                 })
@@ -137,37 +168,20 @@ const EditForm = ({id, setFormType, setShowModal}) => {
 
     const Delete = async () => {
         try {
-
-            const taskChild = findTaskById(tasks, taskId.task.id);
-
-            if (taskChild.children.length !== 0 && taskChild.children.length > 0) {
-                // toast.error('Невозможно удалить задачу с подзадачами!', {
-                //     position: "top-right",
-                //     autoClose: 1000,
-                //     hideProgressBar: false,
-                //     closeOnClick: true,
-                //     pauseOnHover: true,
-                //     draggable: true,
-                //     progress: undefined,
-                //     theme: "light",
-                // });
-                return
-            }
-
             await deleteIdTask(taskId.task.id);
             setShowModal(false);
-            const updatedTasks = await getAllTask();
+            const updatedTasks = await getAllTask("gantt", projectId);
             setTasks(updatedTasks);
-            toast.success('Задача удалена!', {
-                position: "top-right",
-                autoClose: 1000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-            });
+            // toast.success('Задача удалена!', {
+            //     position: "top-right",
+            //     autoClose: 1000,
+            //     hideProgressBar: false,
+            //     closeOnClick: true,
+            //     pauseOnHover: true,
+            //     draggable: true,
+            //     progress: undefined,
+            //     theme: "light",
+            // });
         } catch (e) {
             console.log(e);
         }
@@ -209,19 +223,17 @@ const EditForm = ({id, setFormType, setShowModal}) => {
                         <div className={s.project}>
                             <Select
                                 label="Проект"
-                                // icon={<Project/>}
-                                defaultValue={taskId.task && taskId.task.project_id}
-                                options={options.map(opt => ({value: opt.id, name: opt.name}))}
-                                onChange={(event) => setProjectId(event.target.value)}
+                                options={projectList}
+                                value={taskId.task && taskId.task.project_id}
+                                disabled
                             />
                         </div>
                         <div className={s.element}>
                             <Select
                                 label="Тег команды"
-                                // icon={<Project/>}
-                                defaultValue={taskId.task && taskId.task.team_id}
-                                options={options.map(opt => ({value: opt.id, name: opt.name}))}
-                                onChange={(event) => setTeamId(event.target.value)}
+                                options={internsList.teams}
+                                value={taskId.task && taskId.task.team_id}
+                                disabled
                             />
                         </div>
                         <div className={s.element}>
@@ -249,19 +261,6 @@ const EditForm = ({id, setFormType, setShowModal}) => {
                                         icon={<Clock/>}
                                     />
                             </div>
-                            {/* <div className={s.date}>
-                                <input
-                                    type="date"
-                                    defaultValue={taskId.task && taskId.task.planned_start_date}
-                                    onChange={(event) => setStartDate(event.target.value)}
-                                />
-                                <span>- </span>
-                                <input
-                                    type="date"
-                                    defaultValue={taskId.task && taskId.task.planned_final_date}
-                                    onChange={(event) => setFinalDate(event.target.value)}
-                                />
-                            </div> */}
                         </div>
                     </div>
                     <div className={s.description}>
@@ -277,16 +276,16 @@ const EditForm = ({id, setFormType, setShowModal}) => {
                         <Select
                             label="Постановщик"
                             icon={<Project/>}
-                            options={options.map(opt => ({value: opt.id, name: opt.name}))}
-                            onChange={(e) => console.log(e.target.value)}
+                            options={internsList.interns}
+                            value={taskId.executors && taskId.executors[0]?.user_id}
+                            disabled
                         />
                         <Select
                             label="Ответственный"
                             icon={<Project/>}
+                            options={internsList.interns}
+                            value={taskId.executors && taskId.executors[1]?.user_id}
                             disabled
-                            defaultValue={taskId.executor && taskId.executor.user_id}
-                            options={options.map(opt => ({value: opt.id, name: opt.name}))}
-                            onChange={(event) => setExecutorId(event.target.value)}
                         />
                     </div>
                     <div className={s.unimportant}>
@@ -297,14 +296,21 @@ const EditForm = ({id, setFormType, setShowModal}) => {
                             </button>
                         </div>
                         <div className={s.unimportantLists}>
-                            {performers.map((performer, index) => (
-                                <div className={s.unimportantList} key={index}>
-                                    <Select  options={options.map(opt => ({value: opt.id, name: opt.name}))}/>
-                                    <button className={s.deleteButton}  onClick={() => handleDeletePerformer(index)}>
-                                        <Del style={{width: "16px", height: "16px"}} />
-                                    </button>
-                                </div>
-                            ))}
+                            {taskId.executors &&
+                                taskId.executors.map((performer, index) => (
+                                    index > 1 && (
+                                        <div className={s.unimportantList} key={index}>
+                                            <Select
+                                                disabled
+                                                options={internsList.interns}
+                                                value={taskId.executors && taskId.executors[index]?.user_id}
+                                            />
+                                            <button className={s.deleteButton}>
+                                                <Del style={{width: "16px", height: "16px"}} />
+                                            </button>
+                                        </div>
+                                    )
+                                ))}
                         </div>
                     </div>
                     <div className={s.checklist}>
@@ -318,7 +324,7 @@ const EditForm = ({id, setFormType, setShowModal}) => {
                             {taskId.stages && taskId.stages.map((stage, index) => (
                                 <div className={s.checkList} key={index}>
                                     <Right>
-                                        <input type="checkbox" defaultChecked={stage.is_ready}/>
+                                        <input type="checkbox" defaultChecked={stage.is_ready} />
                                     </Right>
                                     <Text
                                         width={"60%"}
@@ -328,14 +334,16 @@ const EditForm = ({id, setFormType, setShowModal}) => {
                                         background={"#FFFFFF"}
                                         value={stage.description}
                                         onChange={(event) =>
-                                            handleStageDescriptionChange(
-                                                index,
-                                                event.target.value
-                                            )
+                                            handleStageDescriptionChange(index, event.target.value)
                                         }
+                                        onKeyDown={(event) => handleEnterKeyPress(event, stage)}
                                     />
-                                    <button className={s.deleteButton} type="button" onClick={() => handleDeleteStages(stage.id)}>
-                                        <Del style={{width: "16px", height: "16px"}} />
+                                    <button
+                                        className={s.deleteButton}
+                                        type="button"
+                                        onClick={() => handleDeleteStages(stage.id)}
+                                    >
+                                        <Del style={{ width: "16px", height: "16px" }} />
                                     </button>
                                 </div>
                             ))}
