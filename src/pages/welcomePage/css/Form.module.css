@@ -86,10 +86,10 @@
     font-weight: 700;
     font-size: 16px;
     border:none;
+    cursor: pointer;
 }
 
 .enter-button:hover{
-    cursor: pointer;
     background-color: #F9A425;
 }
 
@@ -149,4 +149,24 @@
 .wing {
     display: block;
     margin: 37px auto 56px;
+}
+
+.reset-is-blocked {
+    color: #f33d3d;
+}
+
+.reset-button-disabled {
+    cursor: default;
+    opacity: .3;
+    pointer-events: none;
+}
+
+.password-reseted {
+    text-decoration: none;
+    color: #303030;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 18px;
+    margin-bottom: 9px;
 }

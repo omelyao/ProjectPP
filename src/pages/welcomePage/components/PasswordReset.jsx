@@ -1,44 +1,51 @@
 import React, {useState} from "react";
 import FormResetHeader from "./FormResetHeader";
 import classes from "../css/Form.module.css";
-import {NavLink} from "react-router-dom";
+import {NavLink, useLocation} from "react-router-dom";
+import {useChangePasswordMutation} from "../../../redux/authApi";
+import {useNavigate} from "react-router-dom";
 
 const PasswordReset = ({onChange, form}) => {
+    const [passwordsAreSimilar, setPasswordsAreSimilar] = useState(true);
+    const [passwordResetSucceeded, setPasswordResetSucceeded] = useState(true);
+
+    const navigate = useNavigate();
+
+    const url = useLocation();
+    const token = url.search.slice(7);
+
     const [resetPassword, setResetPassword] = useState({
         'password': '',
-        'password2': '',
-        'token': ''
+        token
     });
 
-    const resetPass = async () => {
+    const [resPass, {isError, isSuccess}] = useChangePasswordMutation();
 
+    const resetPass = async () => {
+        const abc = resPass(resetPassword);
+        if (!abc.error){
+            navigate("/login", {state: {passwordResetSucceeded}});
+            setPasswordResetSucceeded(true);
+        } else {
+            setPasswordResetSucceeded(false);
+        }
     }
 
     return (
-        <div className={classes["enter-form"]}>
-            <div className={classes["head-form"]}>
-                <FormResetHeader />
-                <NavLink to='/login'>
-                    <img className={classes["cross"]} src={require("../../../images/cross.svg").default} width="21.87" height="24" alt="крестик"/>
-                </NavLink>
-            </div>
+            <>
             <hr/>
-            <div className={classes["fields"]}>
-                <div className={classes["password-reset"]}>Введите новый пароль:</div>
-                <input type="password" value={resetPassword.password} onChange={e => setResetPassword({...resetPassword, password: e.target.value})} placeholder="Пароль"/>
-            </div>
-            <div className={classes["fields"]}>
-                <div className={classes["password-reset"]}>Введите новый пароль ещё раз:</div>
-                <input type="password" value={resetPassword.password2} onChange={e => setResetPassword({...resetPassword, password2: e.target.value})} placeholder="Подтверждение пароля"/>
-            </div>
-            <div className={classes["fields"]}>
-                <div className={classes["password-reset"]}>Введите ваш уникальный token:</div>
-                <input type="password" value={resetPassword.token} onChange={e => setResetPassword({...resetPassword, token: e.target.value})} placeholder="Введите token"/>
-            </div>
-            <div className={classes["button"]}>
-                <button className={classes["enter-button"]}>Подтвердить изменения</button>
-            </div>
-        </div>
+                <div className={classes["fields"]}>
+                    <div className={classes["password-reset"]}>Введите новый пароль:</div>
+                    <input type="password" value={resetPassword.password} onChange={e => setResetPassword({...resetPassword, password: e.target.value})} placeholder="Пароль"/>
+                    <div className={classes["password-reset"]}>Введите новый пароль ещё раз:</div>
+                    <input type="password" value={resetPassword.password2} onChange={e => setPasswordsAreSimilar(resetPassword.password === e.target.value)} placeholder="Подтверждение пароля"/>
+                    <div className={`${classes["password-reset"]} ${classes['reset-is-blocked']}`}>{!passwordsAreSimilar ? 'Пароли должны совпадать!' : ''}</div>
+                    <div className={`${classes["password-reset"]} ${classes['reset-is-blocked']}`}>{!passwordResetSucceeded ? 'Произошла ошибка, попробуйте снова!' : ''}</div>
+                </div>
+                <div className={`${classes["button"]}`}>
+                    <button className={`${classes["enter-button"]} ${!passwordsAreSimilar ? classes['reset-button-disabled'] : ''}`} onClick={resetPass} disabled={!passwordsAreSimilar}>Подтвердить изменения</button>
+                </div>
+            </>
     )
 }
 

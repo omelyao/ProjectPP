@@ -89,7 +89,7 @@ export const AuthApi = createApi({
         }),
         changePassword: builder.mutation({
             query: (credentials) => ({
-                url: "password_reset/confirm",
+                url: "password_reset/confirm/",
                 method: "POST",
                 body: { ...credentials }
             }),
@@ -353,6 +353,6 @@ export const {
     useLazyGetTeamsInProjectQuery,
 } = uralInernApi;
 
-export const { useLoginMutation, useRegisterMutation, useResetMutation } = AuthApi;
+export const { useLoginMutation, useRegisterMutation, useResetMutation, useChangePasswordMutation } = AuthApi;
 
 export const reset = uralInernApi.util.resetApiState;

@@ -23,6 +23,10 @@ function App() {
             <div className={modalIsOpen ? styles.overlay : ''}></div>
             <Header modalIsOpen={modalIsOpen}/>
             <Routes>
+                <Route
+                    path='/password_reset/confirm/'
+                    element={<WelcomePage form={3}/>}
+                />
                 <Route path="/" element={<Navigate to={"/login"} replace />} />
                 {/* <PrivateRoute path="/main" element={HomePage} /> */}
                 <Route
@@ -94,10 +98,6 @@ function App() {
                             <Report />
                         </PrivateRoute>
                     }
-                />
-                <Route
-                    path='/password_reset'
-                    element={<PasswordReset />}
                 />
                 <Route path="*" element={<Navigate to={"/login"} replace />} />
             </Routes>
