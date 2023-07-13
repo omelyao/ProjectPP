@@ -24,8 +24,11 @@ const Label = styled.label`
   color: #000000;
 `;
 
-const SelectItem = styled.select`
+const SelectItem = styled.span`
   //position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
   width: 184px;
   height: 32px;
   border: 1px solid #AFBAC3;
@@ -36,7 +39,7 @@ const SelectItem = styled.select`
   text-overflow: ellipsis;
 `;
 
-const Option = styled.option`
+const Option = styled.span`
   font-size: 1rem;
 `;
 
@@ -48,9 +51,7 @@ const SelectUser = ({label}) =>
         <Wrapper>
             {label && <Label>{label}</Label>}
             <SelectItem defaultValue={user.id} disabled>
-                <Option value={user.id}>
-                    {user.data.last_name} {user.data.first_name}
-                </Option>
+                {`${user.data.last_name} ${user.data.first_name}`}
             </SelectItem>
         </Wrapper>
     );
