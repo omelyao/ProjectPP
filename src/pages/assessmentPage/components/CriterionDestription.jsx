@@ -1,7 +1,7 @@
 import classes from "../css/AssesmentPage.module.css";
 import React from "react";
 
-const CriterionDescription = ({title, isOpened}) => {
+const CriterionDescription = ({title, description, isOpened}) => {
     const openedClass = isOpened ? classes['is-opened'] : '';
     return (
         <div className={`${classes['criteria-description']} ${openedClass}`}>
@@ -11,7 +11,7 @@ const CriterionDescription = ({title, isOpened}) => {
             <div className={classes['wrapper']}>
                 <div>
                     <h4>Описание</h4>
-                    <p>блаблаблаблаблалабалаб балабалаблабалабалабалбалаблаблаблаблаблабал ьбалалдывлажыва</p>
+                    <p>{description}</p>
                 </div>
             </div>
         </div>)

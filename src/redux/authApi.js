@@ -3,6 +3,7 @@ import { logOut, setCredentials } from "./authSlice";
 import { Mutex } from "async-mutex";
 
 export const domen = "http://studprzi.beget.tech";
+//https://lkural.pythonanywhere.com
 //http://studprzi.beget.tech
 //http://127.0.0.1:8000
 

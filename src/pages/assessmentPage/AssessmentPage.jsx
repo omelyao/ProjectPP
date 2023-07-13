@@ -25,7 +25,8 @@ function AssessmentPage({ setModalIsOpen }) {
     const [project, setProject] = useState();
     const [names, setNames] = useState({});
     const [descriptionIsOpened, setDescriptionIsOpened] = useState(false);
-    const [descriptionTitle, setDescriptionTitle] = useState(null)
+    const [descriptionTitle, setDescriptionTitle] = useState(null);
+    const [descriptionText, setDescriptionText] = useState(null);
     const sendEstimation = async () => {
         for (let est in currentEstimation){
             await estimate({body: currentEstimation[est]});
@@ -171,9 +172,11 @@ function AssessmentPage({ setModalIsOpen }) {
                         }}
                         id={criterion.id}
                         value={currentEstimation[criterion.id]?.estimation}
-                        questionOnClick={(title) => {
+                        description={criterion.description}
+                        questionOnClick={(title, description) => {
                             setDescriptionIsOpened(true);
                             setDescriptionTitle(title);
+                            setDescriptionText(description)
                             setModalIsOpen(true);
                         }}
                     />)}
@@ -181,7 +184,7 @@ function AssessmentPage({ setModalIsOpen }) {
 
                 <input type="submit" className={classes['give-a-mark']} value="Оценить"/>
             </form>
-            <CriterionDescription title={descriptionTitle} isOpened={descriptionIsOpened}/>
+            <CriterionDescription title={descriptionTitle} description={descriptionText} isOpened={descriptionIsOpened}/>
         </div>
     );
 }
