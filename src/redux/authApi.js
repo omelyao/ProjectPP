@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { logOut, setCredentials } from "./authSlice";
 import { Mutex } from "async-mutex";
 
-export const domen = "https://lkural.pythonanywhere.com";
+export const domen = "http://studprzi.beget.tech";
 //http://studprzi.beget.tech
 //http://127.0.0.1:8000
 
@@ -78,6 +78,20 @@ export const AuthApi = createApi({
                 url: "register/",
                 method: "POST",
                 body: { ...credentials },
+            }),
+        }),
+        reset: builder.mutation({
+            query: (credentials) => ({
+                url: "password_reset/",
+                method: "POST",
+                body: { ...credentials },
+            }),
+        }),
+        changePassword: builder.mutation({
+            query: (credentials) => ({
+                url: "password_reset/confirm/",
+                method: "POST",
+                body: { ...credentials }
             }),
         }),
     }),
@@ -339,6 +353,6 @@ export const {
     useLazyGetTeamsInProjectQuery,
 } = uralInernApi;
 
-export const { useLoginMutation, useRegisterMutation } = AuthApi;
+export const { useLoginMutation, useRegisterMutation, useResetMutation, useChangePasswordMutation } = AuthApi;
 
 export const reset = uralInernApi.util.resetApiState;

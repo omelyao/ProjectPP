@@ -14,6 +14,7 @@ import ProjectInterns from "./pages/projectInterns/ProjectInterns";
 import ChangeUser from "./pages/users/ChangeUser";
 import styles from './App.module.css';
 import {useState} from "react";
+import PasswordReset from "./pages/welcomePage/components/PasswordReset";
 
 function App() {
     const [modalIsOpen, setModalIsOpen] = useState(false)
@@ -22,6 +23,10 @@ function App() {
             <div className={modalIsOpen ? styles.overlay : ''}></div>
             <Header modalIsOpen={modalIsOpen}/>
             <Routes>
+                <Route
+                    path='/password_reset/confirm/'
+                    element={<WelcomePage form={3}/>}
+                />
                 <Route path="/" element={<Navigate to={"/login"} replace />} />
                 {/* <PrivateRoute path="/main" element={HomePage} /> */}
                 <Route
