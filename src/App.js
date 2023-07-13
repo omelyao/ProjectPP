@@ -14,6 +14,7 @@ import ProjectInterns from "./pages/projectInterns/ProjectInterns";
 import ChangeUser from "./pages/users/ChangeUser";
 import styles from './App.module.css';
 import {useState} from "react";
+import PasswordReset from "./pages/welcomePage/components/PasswordReset";
 
 function App() {
     const [modalIsOpen, setModalIsOpen] = useState(false)
@@ -93,6 +94,10 @@ function App() {
                             <Report />
                         </PrivateRoute>
                     }
+                />
+                <Route
+                    path='/password_reset'
+                    element={<PasswordReset />}
                 />
                 <Route path="*" element={<Navigate to={"/login"} replace />} />
             </Routes>
