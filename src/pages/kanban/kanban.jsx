@@ -8,7 +8,6 @@ import {useRecoilState, useSetRecoilState} from "recoil";
 import {ThemeProvider} from "@mui/material";
 import {projectInterns, projectsId, projectsList, tasksKanbanState, tasksState, userState} from "../../store/atom";
 import {getAllTask, getProjectInterns, getUserInfo} from "../../services/task";
-i
 
 const Kanban = () => {
     const setUser = useSetRecoilState(userState);
