@@ -13,8 +13,10 @@ import Project from "./pages/project/Project";
 import ProjectInterns from "./pages/projectInterns/ProjectInterns";
 import ChangeUser from "./pages/users/ChangeUser";
 import styles from './App.module.css';
-import {useState} from "react";
-import PasswordReset from "./pages/welcomePage/components/PasswordReset";
+import React, {useState} from "react";
+import Gantt from "./pages/gantt/gantt";
+import Kanban from "./pages/kanban/kanban";
+import {ToastContainer} from "react-toastify";
 
 function App() {
     const [modalIsOpen, setModalIsOpen] = useState(false)
