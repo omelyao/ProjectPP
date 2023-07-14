@@ -81,13 +81,10 @@ function Header({modalIsOpen}) {
         setActiveCategory(category);
         if (category === 'kanban') {
             navigate(`/user/${user.user_id}/kanban`);
-            localStorage.setItem("category",activeCategory)
         } else if (category === 'gantt') {
             navigate(`/user/${user.user_id}/gantt`);
-            localStorage.setItem("category",activeCategory)
         } else if (category === 'profile') {
             navigate(`/user/${user.user_id}/user`)
-            localStorage.setItem("category",activeCategory)
         }
     };
 

@@ -111,7 +111,7 @@ const ViewForm = ({id, setFormType, setShowModal}) => {
     };
 
     const startTimer = () => {
-        if (!timer.isRunning || timer.taskId === id.id) {
+        if (!timer.isRunning && timer.taskId === null || !timer.isRunning && timer.taskId === id.id || !timer.isRunning && timer.taskId !== id.id && timer.timerId === null) {
             const timerId = setInterval(() => {
                 setTimer((prevTimer) => {
                     const currentDateTime = getCurrentDateTime();
@@ -157,15 +157,16 @@ const ViewForm = ({id, setFormType, setShowModal}) => {
     };
 
     const resetTimer = () => {
-        clearInterval(timer.timerId);
-        setTimer((prevTimer) => ({
-            ...prevTimer,
-            time: 0,
-            isRunning: false,
-            timerId: null,
-            completedAt: null, // Reset completed date and time
-        }));
-        setCompletedAt(taskId.task.completed_at); // Reset completedAt to initial value
+        if (!timer.isRunning && timer.taskId === id.id){
+            clearInterval(timer.timerId);
+            setTimer((prevTimer) => ({
+                ...prevTimer,
+                time: 0,
+                isRunning: false,
+                timerId: null,
+            }));
+            setCompletedAt(taskId.task.completed_at);
+        }
     };
 
     const saveTimer = async () => {
@@ -297,7 +298,6 @@ const ViewForm = ({id, setFormType, setShowModal}) => {
                     <div className={s.important}>
                         <Select
                             label="Постановщик"
-                            icon={<Project/>}
                             options={internsList.interns}
                             value={taskId.executors && taskId.executors[0]?.user_id}
                             disabled

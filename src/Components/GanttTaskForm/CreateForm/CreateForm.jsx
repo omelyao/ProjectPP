@@ -22,7 +22,6 @@ import { Right } from '../../GanttChart/GanttTable/TaskRow/UI/Right';
 import {ReactComponent as Clock} from  '../../../assets/img/clock.svg'
 import {useGetUserQuery} from "../../../redux/authApi";
 import {useParams} from "react-router-dom";
-import SelectUser from "../UI/SelectUser";
 
 const CreateForm = ({parentId, setShowModal}) => {
     const projectList = useRecoilValue(projectsList)
@@ -239,8 +238,11 @@ const CreateForm = ({parentId, setShowModal}) => {
                     />
                 </div>
                 <div className={s.important}>
-                    <SelectUser
+                    <Select
                         label="Постановщик"
+                        options={internsList.interns}
+                        value={user}
+                        disabled
                     />
                     <Select
                         label="Ответственный"
