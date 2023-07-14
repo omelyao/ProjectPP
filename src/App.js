@@ -21,7 +21,7 @@ import {ToastContainer} from "react-toastify";
 function App() {
     const [modalIsOpen, setModalIsOpen] = useState(false)
     return (
-        <div>
+        <div className={styles.container}>
             <div className={modalIsOpen ? styles.overlay : ''}></div>
             <Header modalIsOpen={modalIsOpen}/>
             <Routes>
@@ -44,6 +44,22 @@ function App() {
                     element={
                         <PrivateRoute>
                             <Project />
+                        </PrivateRoute>
+                    }
+                />
+                <Route
+                    path="/user/:userId/kanban"
+                    element={
+                        <PrivateRoute>
+                            <Kanban />
+                        </PrivateRoute>
+                    }
+                />
+                <Route
+                    path="/user/:userId/gantt"
+                    element={
+                        <PrivateRoute>
+                            <Gantt />
                         </PrivateRoute>
                     }
                 />

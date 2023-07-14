@@ -9,11 +9,11 @@ const baseUrl = `${domen}/UralIntern/`;
 const baseQuery = fetchBaseQuery({
     baseUrl,
     prepareHeaders: (headers, { getState }) => {
-        const token = getState().auth.access;
+        const token = getState().auth.access
         if (token) {
             headers.set("authorization", `Bearer ${token}`);
         }
-        return headers;
+        return headers
     },
 });
 
