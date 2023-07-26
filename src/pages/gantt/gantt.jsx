@@ -7,7 +7,7 @@ import theme from "../../styles/theme";
 import {RecoilRoot, useRecoilState, useRecoilValue, useSetRecoilState} from "recoil";
 import {ThemeProvider} from "@mui/material";
 import {ToastContainer} from "react-toastify";
-import {getAllTask, getProjectInterns, getUserInfo} from "../../services/task";
+import {getAllTask, getProjectInterns, getUserInfo, refreshAccessToken} from "../../services/task";
 import {projectInterns, projectsId, projectsList, tasksState, userState} from "../../store/atom";
 
 const Gantt = () => {
@@ -18,30 +18,27 @@ const Gantt = () => {
     const setInterns = useSetRecoilState(projectInterns)
 
     useEffect(() => {
-        getUserInfo()
-            .then((response) => {
-                setUser(response);
-                setProjectList(response)
-                setProjectId(response[0]?.id)
-            })
-            .catch((error) => {
+        const fetchData = async () => {
+            try {
+                const [userInfo, tasks, interns] = await Promise.all([
+                    getUserInfo(),
+                    getAllTask('gantt', projectId),
+                    getProjectInterns(projectId)
+                ]);
+
+                setUser(userInfo);
+                setProjectList(userInfo);
+                setProjectId(userInfo[0]?.id);
+                setTasks(tasks);
+                setInterns(interns);
+            } catch (error) {
                 console.log(error);
-            });
-        getAllTask("gantt", projectId)
-            .then((response) => {
-                setTasks(response);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-        getProjectInterns(projectId)
-            .then((response) => {
-                setInterns(response);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }, [setTasks, setProjectList, setInterns, setUser]);
+            }
+        };
+
+        fetchData();
+    }, [setUser, setProjectList, setTasks, setInterns]);
+
 
     return (
         <ThemeProvider theme={theme}>

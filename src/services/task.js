@@ -1,8 +1,22 @@
 import api from "./api";
 import {store} from "../redux/store";
+import {setCredentials} from "../redux/authSlice";
 
 
-const { access } = store.getState().auth
+const { access, refresh } = store.getState().auth
+
+export const refreshAccessToken = async () => {
+    try {
+        const response = await api.post(
+            "/UralIntern/token/refresh/",
+            { refresh: refresh }
+        );
+
+        store.dispatch(setCredentials(response.data));
+    } catch (e) {
+        console.log(e);
+    }
+};
 
 export const getUserInfo = async() =>{
     try {
@@ -92,7 +106,7 @@ export const getIdTask = async (id) => {
         })
         return response.data
     } catch (e) {
-        console.log(e)
+        console.log(e);
     }
 }
 
@@ -111,9 +125,8 @@ export const updateIdTask = async (id, task) => {
                 Authorization: `Bearer ${access}`
             }
         })
-        console.log(data)
     }catch (e){
-        console.log(e)
+        console.log(e);
     }
 }
 
@@ -125,7 +138,7 @@ export const deleteIdTask = async (id) => {
             }
         })
     }catch (e){
-        console.log(e)
+        console.log(e);
     }
 }
 
@@ -138,7 +151,7 @@ export const kanbanView = async (id) => {
             }
         })
     }catch (e){
-        console.log(e)
+        console.log(e);
     }
 }
 
@@ -156,7 +169,6 @@ export const editDates = async (id, task) => {
         });
     } catch (e) {
         console.log(e);
-        throw e
     }
 };
 

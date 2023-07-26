@@ -58,6 +58,7 @@ const ViewForm = ({id, setFormType, setShowModal}) => {
         try {
             await createComment(taskId.task.id, comments);
             setComments('')
+            setNewComments('')
             const updatedTaskId = await getIdTask(taskId.task.id);
             setTaskId(updatedTaskId);
         }catch (e) {
@@ -68,7 +69,7 @@ const ViewForm = ({id, setFormType, setShowModal}) => {
     const editComment = async (id, comm) => {
         try {
             await editComments(id, comm);
-            setEditingCommentId(null);
+            setEditingCommentId('');
             const updatedTaskId = await getIdTask(taskId.task.id);
             setTaskId(updatedTaskId);
         } catch (e) {

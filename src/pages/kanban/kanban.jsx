@@ -7,7 +7,7 @@ import theme from "../../styles/theme";
 import {useRecoilState, useSetRecoilState} from "recoil";
 import {ThemeProvider} from "@mui/material";
 import {projectInterns, projectsId, projectsList, tasksKanbanState, tasksState, userState} from "../../store/atom";
-import {getAllTask, getProjectInterns, getUserInfo} from "../../services/task";
+import {getAllTask, getProjectInterns, getUserInfo, refreshAccessToken} from "../../services/task";
 
 const Kanban = () => {
     const setUser = useSetRecoilState(userState);
@@ -17,30 +17,26 @@ const Kanban = () => {
     const setInterns = useSetRecoilState(projectInterns)
 
     useEffect(() => {
-        getUserInfo()
-            .then((response) => {
-                setUser(response);
-                setProjectList(response)
-                setProjectId(response[0]?.id)
-            })
-            .catch((error) => {
+        const fetchData = async () => {
+            try {
+                const [userInfo, tasks, interns] = await Promise.all([
+                    getUserInfo(),
+                    getAllTask('kanban', projectId),
+                    getProjectInterns(projectId)
+                ]);
+
+                setUser(userInfo);
+                setProjectList(userInfo);
+                setProjectId(userInfo[0]?.id);
+                setTasks(tasks);
+                setInterns(interns);
+            } catch (error) {
                 console.log(error);
-            });
-        getAllTask("kanban", projectId)
-            .then((response) => {
-                setTasks(response);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-        getProjectInterns(projectId)
-            .then((response) => {
-                setInterns(response);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }, [ setTasks, setProjectList, setInterns, setUser]);
+            }
+        };
+
+        fetchData();
+    }, [setUser, setProjectList, setTasks, setInterns]);
 
 
     return (

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import classes from '../css/Header.module.css'
 import Navigation from './Navigation';
 import {useDispatch, useSelector} from 'react-redux';
@@ -11,6 +11,7 @@ import Modal from "./GanttTaskForm/Modal/Modal";
 import {ReactComponent as StartTimerButton} from  '../assets/img/startTimerButton.svg';
 import {ReactComponent as PauseTimerButton} from  '../assets/img/pauseTimerButton.svg';
 import {ReactComponent as TrashTimerButton} from  '../assets/img/trashButton.svg';
+import {refreshAccessToken} from "../services/task";
 
 function Header({modalIsOpen}) {
 
@@ -28,6 +29,11 @@ function Header({modalIsOpen}) {
         setFormType(type);
         setShowModal(true);
     };
+
+    useEffect(() => {
+        const refreshInterval = setInterval(refreshAccessToken,  60 * 1000);
+        return () => clearInterval(refreshInterval);
+    }, []);
 
     const formatTime = (totalSeconds) => {
         const hours = Math.floor(totalSeconds / 3600).toString().padStart(2, '0');

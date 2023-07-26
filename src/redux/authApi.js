@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { logOut, setCredentials } from "./authSlice";
 import { Mutex } from "async-mutex";
 
-export const domen = "http://studprzi.beget.tech";
+export const domen = "http://127.0.0.1:8000";
 //http://studprzi.beget.tech
 //http://127.0.0.1:8000
 //https://lkural.pythonanywhere.com
