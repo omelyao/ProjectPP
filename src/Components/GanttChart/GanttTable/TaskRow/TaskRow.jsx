@@ -87,7 +87,7 @@ const TaskRow = ({
                         onAddButtonClick={onAddButtonClick}
                     />
                 ))}
-            <Modal id={task} parentId={task} showModal={showModal} setShowModal={setShowModal} formType={formType} setFormType={setFormType}/>
+            <Modal id={task.id} parentId={task.parent_id} showModal={showModal} setShowModal={setShowModal} formType={formType} setFormType={setFormType}/>
         </>
     );
 };

@@ -2,17 +2,19 @@ import api from "./api";
 import {store} from "../redux/store";
 import {setCredentials} from "../redux/authSlice";
 
-
-const { access, refresh } = store.getState().auth
-
 export const refreshAccessToken = async () => {
     try {
         const response = await api.post(
             "/UralIntern/token/refresh/",
-            { refresh: refresh }
+            { refresh: store.getState()?.auth?.refresh},
+            {
+                headers: {
+                    Authorization: `Bearer ${store.getState()?.auth?.access}`
+                }
+            }
         );
 
-        store.dispatch(setCredentials(response.data));
+        return store.dispatch(setCredentials(response.data));
     } catch (e) {
         console.log(e);
     }
@@ -22,7 +24,7 @@ export const getUserInfo = async() =>{
     try {
         const response = await api.get(`/scheduler/api/v1/user_projects`, {
             headers: {
-                Authorization: `Bearer ${access}`
+                Authorization: `Bearer ${store.getState()?.auth?.access}`
             }
         });
         return response.data;
@@ -36,7 +38,7 @@ export const getProjectInterns = async (id) =>{
     try {
         const response = await api.get(`/scheduler/api/v1/project_interns?project_id=${id}`, {
             headers: {
-                Authorization: `Bearer ${access}`
+                Authorization: `Bearer ${store.getState()?.auth?.access}`
             }
         });
         return response.data;
@@ -50,7 +52,7 @@ export const getAllTask = async (type, id) => {
     try {
         const response = await api.get(`/scheduler/api/v1/tasks?view_type=${type}&project_id=${id}`, {
             headers: {
-                Authorization: `Bearer ${access}`
+                Authorization: `Bearer ${store.getState()?.auth?.access}`
             }
         });
         return response.data;
@@ -88,7 +90,7 @@ export const createTask = async (task, stages, responsibleUsers) => {
     try {
         await api.post('/scheduler/api/v1/tasks', data, {
             headers: {
-                Authorization: `Bearer ${access}`
+                Authorization: `Bearer ${store.getState()?.auth?.access}`
             }
         })
     } catch (e) {
@@ -101,7 +103,7 @@ export const getIdTask = async (id) => {
     try {
         const response = await api.get(`/scheduler/api/v1/task/${id}`, {
             headers: {
-                Authorization: `Bearer ${access}`
+                Authorization: `Bearer ${store.getState()?.auth?.access}`
             }
         })
         return response.data
@@ -122,7 +124,7 @@ export const updateIdTask = async (id, task) => {
     try {
         await api.put(`/scheduler/api/v1/task/${id}`, data, {
             headers: {
-                Authorization: `Bearer ${access}`
+                Authorization: `Bearer ${store.getState()?.auth?.access}`
             }
         })
     }catch (e){
@@ -134,7 +136,7 @@ export const deleteIdTask = async (id) => {
     try {
         await api.delete(`/scheduler/api/v1/task/${id}`, {
             headers: {
-                Authorization: `Bearer ${access}`
+                Authorization: `Bearer ${store.getState()?.auth?.access}`
             }
         })
     }catch (e){
@@ -147,7 +149,7 @@ export const kanbanView = async (id) => {
     try {
         await api.put(`/scheduler/api/v1/task/${id}/is_on_kanban `, {}, {
             headers: {
-                Authorization: `Bearer ${access}`
+                Authorization: `Bearer ${store.getState()?.auth?.access}`
             }
         })
     }catch (e){
@@ -164,7 +166,7 @@ export const editDates = async (id, task) => {
     try {
         await api.put(`/scheduler/api/v1/task/${id}/dates`, data, {
             headers: {
-                Authorization: `Bearer ${access}`
+                Authorization: `Bearer ${store.getState()?.auth?.access}`
             }
         });
     } catch (e) {
@@ -180,7 +182,7 @@ export const editStages = async(stage) => {
     try {
         await api.put(`/scheduler/api/v1/stage/${stage.id}`, data, {
             headers: {
-                Authorization: `Bearer ${access}`
+                Authorization: `Bearer ${store.getState()?.auth?.access}`
             }
         });
     } catch (e) {
@@ -196,7 +198,7 @@ export const editsStages = async(stage) => {
     try {
         await api.put(`/scheduler/api/v1/stage/${stage.id}`, data, {
             headers: {
-                Authorization: `Bearer ${access}`
+                Authorization: `Bearer ${store.getState()?.auth?.access}`
             }
         });
     } catch (e) {
@@ -212,7 +214,7 @@ export const createStages = async(id, description) => {
     try {
         await api.post(`/scheduler/api/v1/stage`, data, {
             headers: {
-                Authorization: `Bearer ${access}`
+                Authorization: `Bearer ${store.getState()?.auth?.access}`
             }
         });
     } catch (e) {
@@ -224,7 +226,7 @@ export const deleteStages = async(id) => {
     try {
         await api.delete(`/scheduler/api/v1/stage/${id}`, {
             headers: {
-                Authorization: `Bearer ${access}`
+                Authorization: `Bearer ${store.getState()?.auth?.access}`
             }
         });
     } catch (e) {
@@ -241,7 +243,7 @@ export const timeSpent = async(id, time) => {
     try {
         await api.put(`/scheduler/api/v1/task/${id}/save_timer`, data, {
             headers: {
-                Authorization: `Bearer ${access}`
+                Authorization: `Bearer ${store.getState()?.auth?.access}`
             }
         });
     } catch (e) {
@@ -256,7 +258,7 @@ export const editStatus = async(id, status) => {
     try {
         await api.put(`/scheduler/api/v1/task/${id}/status`, data, {
             headers: {
-                Authorization: `Bearer ${access}`
+                Authorization: `Bearer ${store.getState()?.auth?.access}`
             }
         });
     } catch (e) {
@@ -274,7 +276,7 @@ export const createComment = async(id, comment) => {
     try {
         await api.post(`http://127.0.0.1:8000/scheduler/api/v1/comment`, data, {
             headers: {
-                Authorization: `Bearer ${access}`
+                Authorization: `Bearer ${store.getState()?.auth?.access}`
             }
         });
     } catch (e) {
@@ -289,7 +291,7 @@ export const editComments = async(id, comment) => {
     try {
         await api.put(`http://127.0.0.1:8000/scheduler/api/v1/comment/${id}`, data, {
             headers: {
-                Authorization: `Bearer ${access}`
+                Authorization: `Bearer ${store.getState()?.auth?.access}`
             }
         });
     } catch (e) {
@@ -302,7 +304,7 @@ export const deleteComments = async(id) => {
     try {
         await api.delete(`http://127.0.0.1:8000/scheduler/api/v1/comment/${id}`, {
             headers: {
-                Authorization: `Bearer ${access}`
+                Authorization: `Bearer ${store.getState()?.auth?.access}`
             }
         });
     } catch (e) {

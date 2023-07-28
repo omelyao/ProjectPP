@@ -54,6 +54,16 @@ const ViewForm = ({id, setFormType, setShowModal}) => {
     const [newComments, setNewComments] = useState('')
     const [editingCommentId, setEditingCommentId] = useState(null);
 
+    useEffect(() => {
+        getIdTask(id)
+            .then((response) => {
+                setTaskId(response);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }, [id]);
+
     const addComments = async () => {
         try {
             await createComment(taskId.task.id, comments);
@@ -86,16 +96,6 @@ const ViewForm = ({id, setFormType, setShowModal}) => {
             console.log(e);
         }
     };
-
-    useEffect(() => {
-        getIdTask(id.id)
-            .then((response) => {
-                setTaskId(response);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }, [id.id]);
 
 
 

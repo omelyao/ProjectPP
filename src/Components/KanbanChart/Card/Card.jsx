@@ -101,8 +101,8 @@ const Card = ({
                 onMouseLeave={handleMouseLeave}
             >
                 <div className={s.title}>
-                    <span>{items.name}</span>
-                    {/*<span onClick={()=>openForm('view')}>{items.name}</span>*/}
+                    {/*<span>{items.name}</span>*/}
+                    <span onClick={()=>openForm('view')}>{items.name}</span>
                 </div>
                 <div className={s.project}>
                     <span>{tasks.title_project}</span>
@@ -132,6 +132,7 @@ const Card = ({
                     )}
                 </div>
             </div>
+            <Modal id={items.task_id} parentId={null} showModal={showModal} setShowModal={setShowModal} formType={formType} setFormType={setFormType}/>
         </>
     );
 };

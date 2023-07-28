@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import s from './Column.module.css';
 import Card from "../Card/Card";
+import Modal from "../../GanttTaskForm/Modal/Modal";
 
 const Column = ({ boards, setBoards, tasks, handleStatusChange }) => {
     const [currentBoard, setCurrentBoard] = useState(null);
