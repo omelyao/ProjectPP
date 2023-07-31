@@ -22,6 +22,7 @@ import { Right } from '../../GanttChart/GanttTable/TaskRow/UI/Right';
 import {ReactComponent as Clock} from  '../../../assets/img/clock.svg'
 import {useGetUserQuery} from "../../../redux/authApi";
 import {useParams} from "react-router-dom";
+import SelectUser from "../UI/SelectUser";
 
 const CreateForm = ({parentId, setShowModal}) => {
     const projectList = useRecoilValue(projectsList)
@@ -30,18 +31,16 @@ const CreateForm = ({parentId, setShowModal}) => {
 
     const {userId} = useParams();
     const user = useGetUserQuery({id:userId});
-
-
     const [teamId, setTeamId] = useState(0)
     const [executorId, setExecutorId] = useState(0)
     let executor
+    const [performers, setPerformers] = useState([]);
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
     const [startDate, setStartDate] = useState('')
     const [finalDate, setFinalDate] = useState('')
     const [deadline, setDeadline] = useState('')
     const [stages, setStages] = useState([])
-    const [performers, setPerformers] = useState([]);
     const setTasks = useSetRecoilState(tasksState);
     const setInterns = useSetRecoilState(projectInterns)
 
@@ -63,11 +62,11 @@ const CreateForm = ({parentId, setShowModal}) => {
         setPerformers([...performers, newPerformer]);
     };
 
-    const handleAddExecutor = (event) =>{
-        event.preventDefault()
-        executor = parseInt(event.target.value)
-        setExecutorId(executor)
-    }
+    // const handleAddExecutor = (event) =>{
+    //     event.preventDefault()
+    //     executor = parseInt(event.target.value)
+    //     setExecutorId(executor)
+    // }
 
 
     const handleDeletePerformer = (id) => {
@@ -124,9 +123,9 @@ const CreateForm = ({parentId, setShowModal}) => {
         if (!finalDate) {
             missingData.push('Дата окончания');
         }
-        if (!executorId) {
-            missingData.push('Ответственный');
-        }
+        // if (!executorId) {
+        //     missingData.push('Ответственный');
+        // }
 
         if (missingData.length > 0) {
             const message = `Вы не ввели следующие обязательные данные:\n${missingData.join('\n')}`;
@@ -157,10 +156,17 @@ const CreateForm = ({parentId, setShowModal}) => {
         const stagesList = stages.map((stage) => (stage.description));
 
         const responsibleUsers = [];
+        const performerIds = performers.map((performer) => performer.id_intern);
+        responsibleUsers.push(...performerIds);
 
-        if (executorId !== 0) {
-            responsibleUsers.push(executorId);
-        }
+        // if (executorId !== 0) {
+        //     responsibleUsers.push(executorId);
+        // }
+
+        // if (performers.length > 0) {
+        //     const performerIds = performers.map((performer) => performer.id_intern);
+        //     responsibleUsers.push(...performerIds);
+        // }
 
         try {
             await createTask(taskList, stagesList, responsibleUsers)
@@ -201,6 +207,7 @@ const CreateForm = ({parentId, setShowModal}) => {
                         icon={<Project/>}
                         options={internsList.teams}
                         value={internsList[0]?.title}
+                        disabled
                         />
                     </div>
                     <div className={s.element}>
@@ -238,19 +245,16 @@ const CreateForm = ({parentId, setShowModal}) => {
                     />
                 </div>
                 <div className={s.important}>
-                    <Select
+                    <SelectUser
                         label="Постановщик"
-                        options={internsList.interns}
-                        value={user}
-                        disabled
                     />
-                    <Select
-                        label="Ответственный"
-                        icon={<Project/>}
-                        options={internsList.interns}
-                        onChange={handleAddExecutor}
-                        dis={"Выберите"}
-                    />
+                    {/*<Select*/}
+                    {/*    label="Ответственный"*/}
+                    {/*    icon={<Project/>}*/}
+                    {/*    options={internsList.interns}*/}
+                    {/*    onChange={handleAddExecutor}*/}
+                    {/*    dis={"Выберите"}*/}
+                    {/*/>*/}
                 </div>
                 <div className={s.unimportant}>
                     <div className={s.unimportantTop}>

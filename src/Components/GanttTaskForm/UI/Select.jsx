@@ -68,9 +68,9 @@ const Select = ({label, defaultValue, options, value, onChange, disabled = false
                     </SelectItem>
                     :
                     value === user ?
-                        <SelectItem value={value} defaultValue={defaultValue} onChange={onChange} disabled={disabled}>
+                        <SelectItem value={user.id} defaultValue={defaultValue} onChange={onChange} disabled={disabled}>
                             {options.map((option) => (
-                                <Option key={option.id} value={user.id}>
+                                <Option key={option.id}>
                                     {option.last_name} {option.first_name}
                                 </Option>
                             ))}

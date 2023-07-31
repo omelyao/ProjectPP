@@ -303,13 +303,13 @@ const ViewForm = ({id, setFormType, setShowModal}) => {
                             value={taskId.executors && taskId.executors[0]?.user_id}
                             disabled
                         />
-                        <Select
-                            label="Ответственный"
-                            icon={<Project/>}
-                            options={internsList.interns}
-                            value={taskId.executors && taskId.executors[1]?.user_id}
-                            disabled
-                        />
+                        {/*<Select*/}
+                        {/*    label="Ответственный"*/}
+                        {/*    icon={<Project/>}*/}
+                        {/*    options={internsList.interns}*/}
+                        {/*    value={taskId.executors && taskId.executors[1]?.user_id}*/}
+                        {/*    disabled*/}
+                        {/*/>*/}
                     </div>
                     <div className={s.unimportant}>
                         <div className={s.unimportantTop}>
@@ -318,7 +318,7 @@ const ViewForm = ({id, setFormType, setShowModal}) => {
                         <div className={s.unimportantLists}>
                             {taskId.executors &&
                                 taskId.executors.map((performer, index) => (
-                                    index > 1 && (
+                                    index > 0 && (
                                         <div className={s.unimportantList} key={index}>
                                             <Select
                                                 disabled
@@ -443,20 +443,24 @@ const ViewForm = ({id, setFormType, setShowModal}) => {
                                                         height={'auto'}
                                                         width={'450px'}
                                                     />
-                                                    <ButtonForm
-                                                        height={'40px'}
-                                                        width={'100px'}
-                                                        onClick={() => setEditingCommentId(comment.id)}
-                                                    >
-                                                        Изменить
-                                                    </ButtonForm>
-                                                    <ButtonForm
-                                                        height={'40px'}
-                                                        width={'100px'}
-                                                        onClick={() => deleteComment(comment.id)}
-                                                    >
-                                                        Удалить
-                                                    </ButtonForm>
+                                                    {comment.user_id_id === user.data.id &&
+                                                        <>
+                                                            <ButtonForm
+                                                                height={'40px'}
+                                                                width={'100px'}
+                                                                onClick={() => setEditingCommentId(comment.id)}
+                                                            >
+                                                                Изменить
+                                                            </ButtonForm>
+                                                            <ButtonForm
+                                                                height={'40px'}
+                                                                width={'100px'}
+                                                                onClick={() => deleteComment(comment.id)}
+                                                            >
+                                                                Удалить
+                                                            </ButtonForm>
+                                                        </>
+                                                    }
                                                 </>
                                             )}
                                         </div>

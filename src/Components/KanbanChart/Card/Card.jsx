@@ -5,10 +5,10 @@ import { ReactComponent as Cal } from "../../../assets/img/calendar.svg";
 import { ReactComponent as Play } from "../../../assets/img/CardButtons.svg";
 import { ReactComponent as Stop } from "../../../assets/img/StopCardButton.svg";
 import { ReactComponent as Delete } from "../../../assets/img/DeleteCardButtons.svg";
-import {useRecoilState} from "recoil";
-import {tasksState, timerState} from "../../../store/atom";
+import {useRecoilState, useRecoilValue, useSetRecoilState} from "recoil";
+import {projectsId, taskIdState, tasksKanbanState, tasksState, timerState} from "../../../store/atom";
 import Modal from "../../GanttTaskForm/Modal/Modal";
-import {deleteIdTask, getAllTask} from "../../../services/task";
+import {deleteComments, deleteIdTask, getAllTask, getIdTask} from "../../../services/task";
 
 const Card = ({
                   items,
@@ -19,6 +19,8 @@ const Card = ({
                   className,
                   tasks,
               }) => {
+    const setTasks = useSetRecoilState(tasksKanbanState);
+    const [projectId, setProjectId] = useRecoilState(projectsId);
     const [isHovered, setIsHovered] = useState(false);
     const [formType, setFormType] = useState('')
     const [showModal, setShowModal] = useState(false)
@@ -34,6 +36,16 @@ const Card = ({
 
     const handleMouseLeave = () => {
         setIsHovered(false);
+    };
+
+    const DeleteTask = async (id) => {
+        try {
+            await deleteIdTask(id);
+            const updatedTaskId = await getAllTask('kanban', projectId)
+            setTasks(updatedTaskId)
+        } catch (e) {
+            console.log(e);
+        }
     };
 
     const [timer, setTimer] = useRecoilState(timerState)
@@ -127,7 +139,7 @@ const Card = ({
                                     <Play style={{width:"24px", height:"24px"}}/>
                                 }
                             </button>
-                            <button><Delete style={{width:"24px", height:"24px"}} /></button>
+                            <button onClick={() => DeleteTask(items.task_id)}><Delete style={{width:"24px", height:"24px"}} /></button>
                         </div>
                     )}
                 </div>

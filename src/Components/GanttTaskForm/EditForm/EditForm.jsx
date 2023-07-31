@@ -280,13 +280,13 @@ const EditForm = ({id, setFormType, setShowModal}) => {
                             value={taskId.executors && taskId.executors[0]?.user_id}
                             disabled
                         />
-                        <Select
-                            label="Ответственный"
-                            icon={<Project/>}
-                            options={internsList.interns}
-                            value={taskId.executors && taskId.executors[1]?.user_id}
-                            disabled
-                        />
+                        {/*<Select*/}
+                        {/*    label="Ответственный"*/}
+                        {/*    icon={<Project/>}*/}
+                        {/*    options={internsList.interns}*/}
+                        {/*    value={taskId.executors && taskId.executors[1]?.user_id}*/}
+                        {/*    disabled*/}
+                        {/*/>*/}
                     </div>
                     <div className={s.unimportant}>
                         <div className={s.unimportantTop}>
