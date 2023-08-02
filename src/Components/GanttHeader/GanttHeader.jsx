@@ -10,6 +10,7 @@ import { getAllTask, getProjectInterns, getUserInfo} from "../../services/task";
 const GanttHeader = () => {
     const [projectId, setProjectId] = useRecoilState(projectsId);
     const [formType, setFormType] = useState('')
+    const [typeTask, setTypeTask] = useState('')
     const [showModal, setShowModal] = useState(false)
     const parentId = null
     const projectList = useRecoilValue(projectsList)
@@ -18,6 +19,7 @@ const GanttHeader = () => {
     const openForm = (type) => {
         setFormType(type);
         setShowModal(true);
+        setTypeTask('gantt')
     };
 
     const changeId = async (event) => {
@@ -51,7 +53,7 @@ const GanttHeader = () => {
                     <Button children={"Создать задачу"} onClick={()=>openForm('create')}/>
                 </div>
             </div>
-            <Modal parentId={parentId} showModal={showModal} setShowModal={setShowModal} formType={formType} setFormType={setFormType}/>
+            <Modal typeTask={typeTask} parentId={parentId} showModal={showModal} setShowModal={setShowModal} formType={formType} setFormType={setFormType}/>
         </div>
     );
 };

@@ -13,20 +13,20 @@ import {
 } from "../../../services/task";
 import Text from "../UI/Text";
 import Select from "../UI/Select";
-import {ReactComponent as Project} from  '../../../assets/img/projects.svg'
-import {ReactComponent as Add} from  '../../../assets/img/addButtForm.svg'
-import {ReactComponent as Del} from  '../../../assets/img/delButtForm.svg'
-import {ReactComponent as Clock} from  '../../../assets/img/clock.svg'
+import {ReactComponent as Project} from '../../../assets/img/projects.svg'
+import {ReactComponent as Add} from '../../../assets/img/addButtForm.svg'
+import {ReactComponent as Del} from '../../../assets/img/delButtForm.svg'
+import {ReactComponent as Clock} from '../../../assets/img/clock.svg'
 import InputDate1 from "../UI/InputDate1";
 import ButtonForm from "../UI/Button";
 import TextArea from "../UI/TextArea";
 import {toast} from "react-toastify";
-import { Right } from '../../GanttChart/GanttTable/TaskRow/UI/Right';
+import {Right} from '../../GanttChart/GanttTable/TaskRow/UI/Right';
 
 
-const EditForm = ({id, setFormType, setShowModal}) => {
+const EditForm = ({id, setFormType, setShowModal, typeTask}) => {
     // const [projectId, setProjectId] = useRecoilState(projectsList)
-    const projectId= useRecoilValue(projectsId);
+    const projectId = useRecoilValue(projectsId);
     const projectList = useRecoilValue(projectsList)
     const internsList = useRecoilValue(projectInterns)
     // const [projectId, setProjectId] = useState(0)
@@ -45,10 +45,10 @@ const EditForm = ({id, setFormType, setShowModal}) => {
     const tasks = useRecoilValue(tasksState)
 
     const options = [
-        { id: 1, name: 'Название проекта' },
-        { id: 21, name: 'ЛК оценка' },
-        { id: 22, name: 'ЛК Гант' },
-        { id: 23, name: 'ЛК Канбан' }
+        {id: 1, name: 'Название проекта'},
+        {id: 21, name: 'ЛК оценка'},
+        {id: 22, name: 'ЛК Гант'},
+        {id: 23, name: 'ЛК Канбан'}
     ];
 
     const handleAddPerformer = () => {
@@ -68,40 +68,35 @@ const EditForm = ({id, setFormType, setShowModal}) => {
             description: "Новая задача"
         };
         const updatedStages = [...(taskId.stages ?? []), newStage];
-        setTaskId({ ...taskId, stages: updatedStages });
+        setTaskId({...taskId, stages: updatedStages});
         try {
             await createStages(taskId.task.id, "Новая задача")
-            const updatedTasks = await getAllTask("gantt", projectId);
+            const updatedTasks = await getAllTask(typeTask, projectId);
             setTasks(updatedTasks);
-        }catch (e){
+        } catch (e) {
             console.log(e)
         }
     };
 
     const handleDeleteStages = async (id) => {
         const newData = taskId.stages.filter(stage => stage.id !== id);
-        setTaskId({ ...taskId, stages: newData });
+        setTaskId({...taskId, stages: newData});
         try {
             await deleteStages(id)
-            const updatedTasks = await getAllTask("gantt", projectId);
+            const updatedTasks = await getAllTask(typeTask, projectId);
             setTasks(updatedTasks);
-        }catch (e){
+        } catch (e) {
             console.log(e)
         }
     };
 
-    const handleStageDescriptionChange = (index, description) => {
+    const handleStageDescriptionChange = async (index, description) => {
         const updatedStages = [...taskId.stages];
         if (updatedStages[index]) {
-            const updatedStage = { ...updatedStages[index], description };
+            const updatedStage = {...updatedStages[index], description};
             updatedStages[index] = updatedStage;
-            setTaskId({ ...taskId, stages: updatedStages });
-        }
-    };
-
-    const handleEnterKeyPress = async (event, stage) => {
-        if (event.key === 'Enter') {
-            await editsStages(stage);
+            setTaskId({...taskId, stages: updatedStages});
+            await editsStages(updatedStage); // Вызываем editsStages с обновленным этапом
         }
     };
 
@@ -142,9 +137,9 @@ const EditForm = ({id, setFormType, setShowModal}) => {
         const stagesList = taskId.stages.map((stage) => stage.description);
 
         try {
-            await updateIdTask(id.id, taskList);
+            await updateIdTask(taskId.task.id, taskList);
             setShowModal(false);
-            getAllTask("gantt", projectId)
+            getAllTask(typeTask, projectId)
                 .then((response) => {
                     setTasks(response);
                 })
@@ -170,7 +165,7 @@ const EditForm = ({id, setFormType, setShowModal}) => {
         try {
             await deleteIdTask(taskId.task.id);
             setShowModal(false);
-            const updatedTasks = await getAllTask("gantt", projectId);
+            const updatedTasks = await getAllTask(typeTask, projectId);
             setTasks(updatedTasks);
             // toast.success('Задача удалена!', {
             //     position: "top-right",
@@ -187,7 +182,7 @@ const EditForm = ({id, setFormType, setShowModal}) => {
         }
     }
 
-    const findTaskById = (tasks, taskId) =>{
+    const findTaskById = (tasks, taskId) => {
         for (let i = 0; i < tasks.length; i++) {
             const task = tasks[i];
             if (task.id === taskId) {
@@ -207,31 +202,32 @@ const EditForm = ({id, setFormType, setShowModal}) => {
         <div className={s.container}>
             <form className={s.form} onSubmit={handleSubmit}>
                 <div className={s.title}>
-                    <Text defaultValue={taskId.task && taskId.task.name}  optional={true} width={"606px"} height={"36px"} padding={"10px"} border={"1px solid #ccc"} background={"#FFFFFF"} fontSize={"20px"} fontWeight={"700"} onChange={(event) => setName(event.target.value)}/>
-                    <span style={{padding:'0px 4px'}}>
+                    <Text defaultValue={taskId.task && taskId.task.name} optional={true} width={"606px"} height={"36px"}
+                          padding={"10px"} border={"1px solid #ccc"} background={"#FFFFFF"} fontSize={"20px"}
+                          fontWeight={"700"} onChange={(event) => setName(event.target.value)}/>
+                    <span style={{padding: '0px 4px'}}>
                         Базовая задача:
                         <span>&nbsp;</span>
-                        <span style={{textDecoration:'underline'}}>
+                        <span style={{textDecoration: 'underline'}}>
                         {taskId.task && taskId.task.parent_id !== null ?
                             findTaskById(tasks, taskId.task.parent_id)?.name : "Отсутствует"}
                         </span>
                     </span>
-                    <span style={{padding:'0px 4px'}}>
+                    <span style={{padding: '0px 4px'}}>
                         Статус:
                         <span>&nbsp;</span>
-                        <span style={{textDecoration:'underline'}}>
-                        {taskId?.task?.status_id === 1? "В РАБОТУ" :
-                            taskId?.task?.status_id === 2? "ВЫПОЛНЯЕТСЯ" :
-                                taskId?.task?.status_id === 3? "ТЕСТИРОВАНИЕ" :
-                                    taskId?.task?.status_id === 4? "ПРОВЕРКА" :
-                                        taskId?.task?.status_id === 5? "ЗАВЕРШЕНА" :
-                                            taskId?.task?.status_id === 6? "ПРОСРОЧЕНА" : ''
+                        <span style={{textDecoration: 'underline'}}>
+                        {taskId?.task?.status_id === 1 ? "В РАБОТУ" :
+                            taskId?.task?.status_id === 2 ? "ВЫПОЛНЯЕТСЯ" :
+                                taskId?.task?.status_id === 3 ? "ТЕСТИРОВАНИЕ" :
+                                    taskId?.task?.status_id === 4 ? "ПРОВЕРКА" :
+                                        taskId?.task?.status_id === 5 ? "ЗАВЕРШЕНА" :
+                                            taskId?.task?.status_id === 6 ? "ПРОСРОЧЕНА" : ''
                         }
                         </span>
                     </span>
                 </div>
-                {/* <div className={s.info}> */}
-                <div className={s.info}>
+                {/*<div className={s.info}>*/}
                     <div className={s.elements}>
                         <div className={s.project}>
                             <Select
@@ -255,16 +251,16 @@ const EditForm = ({id, setFormType, setShowModal}) => {
                             <span>Планируемые сроки выполнения</span>
                             <div className={s.elements}>
                                 <InputDate1
-                                        defaultValue={taskId.task && taskId.task.planned_start_date}
-                                        onChange={(event) => setStartDate(event.target.value)}
-                                        icon={<Clock/>}
-                                    />
-                                    <span style={{alignSelf:'center'}}>-</span>
+                                    defaultValue={taskId.task && taskId.task.planned_start_date}
+                                    onChange={(event) => setStartDate(event.target.value)}
+                                    icon={<Clock/>}
+                                />
+                                <span style={{alignSelf: 'center'}}>-</span>
                                 <InputDate1
-                                        defaultValue={taskId.task && taskId.task.planned_final_date}
-                                        onChange={(event) => setFinalDate(event.target.value)}
-                                        icon={<Clock/>}
-                                    />
+                                    defaultValue={taskId.task && taskId.task.planned_final_date}
+                                    onChange={(event) => setFinalDate(event.target.value)}
+                                    icon={<Clock/>}
+                                />
                             </div>
                         </div>
                         <div className={s.element}>
@@ -329,15 +325,18 @@ const EditForm = ({id, setFormType, setShowModal}) => {
                     <div className={s.checklist}>
                         <div className={s.checklistTop}>
                             <span className={s.label}>Чек-лист</span>
-                            <button type="button"  onClick={() => handleAddStages('')}>
-                                <Add />
+                            <button type="button" onClick={() => handleAddStages('')}>
+                                <Add/>
                             </button>
                         </div>
                         <div className={s.checkLists}>
                             {taskId.stages && taskId.stages.map((stage, index) => (
                                 <div className={s.checkList} key={index}>
                                     <Right>
-                                        <input type="checkbox" defaultChecked={stage.is_ready} />
+                                        <input
+                                            type="checkbox"
+                                            defaultChecked={stage.is_ready}
+                                        />
                                     </Right>
                                     <Text
                                         width={"60%"}
@@ -349,18 +348,18 @@ const EditForm = ({id, setFormType, setShowModal}) => {
                                         onChange={(event) =>
                                             handleStageDescriptionChange(index, event.target.value)
                                         }
-                                        onKeyDown={(event) => handleEnterKeyPress(event, stage)}
                                     />
                                     <button
                                         className={s.deleteButton}
                                         type="button"
                                         onClick={() => handleDeleteStages(stage.id)}
                                     >
-                                        <Del style={{ width: "16px", height: "16px" }} />
+                                        <Del style={{width: "16px", height: "16px"}}/>
                                     </button>
                                 </div>
                             ))}
                         </div>
+
                     </div>
                     {/*<div className={s.timeSpent}>*/}
                     {/*    <span className={s.label}>Затраченное время</span>*/}
@@ -380,7 +379,7 @@ const EditForm = ({id, setFormType, setShowModal}) => {
                         <ButtonForm onClick={() => setFormType('create')}>Создать подзадачу</ButtonForm>
                         <ButtonForm status='deleteTask' onClick={Delete}>Удалить задачу</ButtonForm>
                     </div>
-                </div>
+                {/*</div>*/}
             </form>
         </div>
     );

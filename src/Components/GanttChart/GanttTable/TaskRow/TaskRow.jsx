@@ -5,7 +5,7 @@ import {ReactComponent as Vector} from '../../../../assets/img/vector.svg'
 import Modal from "../../../GanttTaskForm/Modal/Modal";
 import {getAllTask, kanbanView} from "../../../../services/task";
 import {useRecoilState, useRecoilValue} from "recoil";
-import {projectsId, tasksState} from "../../../../store/atom";
+import {projectsId, tasksState, timerState} from "../../../../store/atom";
 import {StyledTaskRow} from "./UI/StyledTaskRow";
 import {Title} from "./UI/Title";
 import {Right} from "./UI/Right";
@@ -22,14 +22,24 @@ const TaskRow = ({
     const hasChildren = task.children && task.children.length > 0;
     const isCollapsed = collapsedTasks.includes(task.id);
     const [formType, setFormType] = useState('')
+    const [typeTask, setTypeTask] = useState('')
     const [showModal, setShowModal] = useState(false)
     const [tasks, setTasks] = useRecoilState(tasksState);
     const [isHovered, setIsHovered] = useState(false);
     const projectId= useRecoilValue(projectsId);
+    const [timer, setTimer] = useRecoilState(timerState)
+
+    const formatTime = (totalSeconds) => {
+        const hours = Math.floor(totalSeconds / 3600).toString().padStart(2, '0');
+        const minutes = Math.floor((totalSeconds % 3600) / 60).toString().padStart(2, '0');
+        const seconds = (totalSeconds % 60).toString().padStart(2, '0');
+        return `${hours}:${minutes}:${seconds}`;
+    }
 
     const openForm = (type) => {
         setFormType(type);
         setShowModal(true);
+        setTypeTask('gantt')
     };
 
     const toggleKanbanView = async (id, isOnKanban) => {
@@ -56,6 +66,7 @@ const TaskRow = ({
                         <span style={{cursor: "pointer"}} onClick={()=>openForm('view')}>{task.name}</span>
                     </Title>
                     <Right place = 'flex-end' width = '200px'>
+                        <span>{timer.taskId === task.id ? formatTime(timer.time) : ''}</span>
                         {!hasChildren && (
                             <div style={{position: 'relative'}}>
                                 <input
@@ -87,7 +98,7 @@ const TaskRow = ({
                         onAddButtonClick={onAddButtonClick}
                     />
                 ))}
-            <Modal id={task.id} parentId={task} showModal={showModal} setShowModal={setShowModal} formType={formType} setFormType={setFormType}/>
+            <Modal typeTask={typeTask} id={task.id} parentId={task} showModal={showModal} setShowModal={setShowModal} formType={formType} setFormType={setFormType}/>
         </>
     );
 };

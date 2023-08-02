@@ -24,7 +24,7 @@ import {useGetUserQuery} from "../../../redux/authApi";
 import {useParams} from "react-router-dom";
 import SelectUser from "../UI/SelectUser";
 
-const CreateForm = ({parentId, setShowModal}) => {
+const CreateForm = ({parentId, setShowModal, typeTask}) => {
     const projectList = useRecoilValue(projectsList)
     const internsList = useRecoilValue(projectInterns)
     const projectId= useRecoilValue(projectsId);
@@ -59,6 +59,7 @@ const CreateForm = ({parentId, setShowModal}) => {
             id: performers.length > 0 ? performers[performers.length - 1].id + 1 : 1,
             id_performers: 0
         };
+        console.log(performers)
         setPerformers([...performers, newPerformer]);
     };
 
@@ -120,18 +121,15 @@ const CreateForm = ({parentId, setShowModal}) => {
         if (!startDate) {
             missingData.push('Дата начала');
         }
+
         if (!finalDate) {
             missingData.push('Дата окончания');
         }
-        // if (!performers) {
-        //     missingData.push('Исполнители');
-        // }
 
-        if (missingData.length > 0) {
-            const message = `Вы не ввели следующие обязательные данные:\n${missingData.join('\n')}`;
-            alert(message);
-            return;
-        }
+        // if (performers.length === 0 || performers.some((performer) => performer.id_intern === null)) {
+        //     alert("Исполнители не выбраны");
+        //     return;
+        // }
 
         if(startDate > finalDate ){
             alert("Дата начала не может быть больше Даты окончания");
@@ -175,7 +173,7 @@ const CreateForm = ({parentId, setShowModal}) => {
         try {
             await createTask(taskList, stagesList, responsibleUsers)
             setShowModal(false)
-            const updatedTasks = await getAllTask("gantt", projectId);
+            const updatedTasks = await getAllTask(typeTask, projectId);
             setTasks(updatedTasks);
         } catch (e) {
             console.log(e);

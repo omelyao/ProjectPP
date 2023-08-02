@@ -42,7 +42,19 @@
 }
 
 .itemsWrapper {
-    overflow-y: auto;
+    overflow-y: scroll;
+}
+
+.itemsWrapper::-webkit-scrollbar {
+    width: 0.5em;
+}
+
+.itemsWrapper::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+}
+
+.itemsWrapper::-webkit-scrollbar-track {
+    background-color: transparent;
 }
 
 .boardTitle.inwork {

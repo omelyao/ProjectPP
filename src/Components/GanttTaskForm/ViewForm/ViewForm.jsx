@@ -37,7 +37,7 @@ import {useParams} from "react-router-dom";
 import {useGetUserQuery} from "../../../redux/authApi";
 
 
-const ViewForm = ({id, setFormType, setShowModal, parentId, parentName}) => {
+const ViewForm = ({id, setFormType, setShowModal, typeTask , parentName}) => {
     const projectList = useRecoilValue(projectsList)
     const internsList = useRecoilValue(projectInterns)
     const projectId = useRecoilValue(projectsId);
@@ -121,7 +121,9 @@ const ViewForm = ({id, setFormType, setShowModal, parentId, parentName}) => {
                     timerId,
                     taskId: taskId.task.id,
                     taskName: taskId.task.name,
-                    time: taskId.executors.find((executor) => executor.user_id === user?.data?.id)?.time_spent !== null ?
+                    time: prevTimer.time !== null ?
+                        prevTimer.time :
+                        taskId.executors.find((executor) => executor.user_id === user?.data?.id)?.time_spent !== null ?
                         taskId.executors.find((executor) => executor.user_id === user?.data?.id)?.time_spent
                         : 0,
                 }));
@@ -132,14 +134,14 @@ const ViewForm = ({id, setFormType, setShowModal, parentId, parentName}) => {
 
     const stopTimer = () => {
         if (taskId.executors.find((executor) => executor.user_id === user?.data?.id)) {
-
             if (timer.isRunning && timer.taskId === taskId.task.id) {
                 clearInterval(timer.timerId);
                 setTimer((prevTimer) => ({
                     ...prevTimer,
                     isRunning: false,
                     taskId: taskId.task.id,
-                    taskName: taskId.task.name
+                    taskName: taskId.task.name,
+                    time: prevTimer.time, // Обновляем значение времени
                 }));
             }
         }
@@ -199,7 +201,7 @@ const ViewForm = ({id, setFormType, setShowModal, parentId, parentName}) => {
         try {
             await deleteIdTask(taskId.task.id);
             setShowModal(false);
-            const updatedTasks = await getAllTask("gantt", projectId);
+            const updatedTasks = await getAllTask(typeTask, projectId);
             setTasks(updatedTasks);
             // toast.success('Задача удалена!', {
             //     position: "top-right",
@@ -250,7 +252,7 @@ const ViewForm = ({id, setFormType, setShowModal, parentId, parentName}) => {
                     <span style={{padding:'0px 4px'}}>
                         Статус:
                         <span>&nbsp;</span>
-                        <span>
+                        <span style={{textDecoration: 'underline'}}>
                         {taskId?.task?.status_id === 1? "В РАБОТУ" :
                             taskId?.task?.status_id === 2? "ВЫПОЛНЯЕТСЯ" :
                                 taskId?.task?.status_id === 3? "ТЕСТИРОВАНИЕ" :
@@ -339,7 +341,7 @@ const ViewForm = ({id, setFormType, setShowModal, parentId, parentName}) => {
                         <div className={s.unimportantLists}>
                             {taskId.executors &&
                                 taskId.executors.map((performer, index) => (
-                                    index > 0 && (
+                                    performer?.role_id__name === "RESPONSIBLE" && (
                                         <div className={s.unimportantList} key={index}>
                                             <Select
                                                 disabled
@@ -378,26 +380,30 @@ const ViewForm = ({id, setFormType, setShowModal, parentId, parentName}) => {
                     }
                     <div className={s.time}>
                         <div className={s.timer}>
-                            <span className={s.label}>Таймер</span>
-                            <div className={s.timerElements}>
-                                <div className={s.timeElements}>
-                                    <div className={s.timeContainer}>
-                                        <span className={s.timerIcon}><Timer/></span>
-                                        <span
-                                            className={s.timeValue}>{timer.taskId === id ? formatTime(timer.time) : "00:00:00"}</span>
+                            {taskId?.executors?.find((executor) => executor.user_id === user?.data?.id) &&
+                                <>
+                                    <span className={s.label}>Таймер</span>
+                                    <div className={s.timerElements}>
+                                        <div className={s.timeElements}>
+                                            <div className={s.timeContainer}>
+                                                <span className={s.timerIcon}><Timer/></span>
+                                                <span
+                                                    className={s.timeValue}>{timer.taskId === id ? formatTime(timer.time) : "00:00:00"}</span>
+                                            </div>
+                                            <div className={s.timerButtonsContainer}>
+                                                <ButtonForm onClick={timer.isRunning ? stopTimer : startTimer} padding={'0 8px'}
+                                                            width={'32px'}>
+                                                    {timer.isRunning && timer.taskId === id ? <PauseTimerButton/> :
+                                                        <StartTimerButton/>}
+                                                </ButtonForm>
+                                                <ButtonForm onClick={saveTimer}>Сохранить</ButtonForm>
+                                                <ButtonForm onClick={resetTimer} status='notActive'
+                                                            padding={'0 8px'}><TrashTimerButton/></ButtonForm>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div className={s.timerButtonsContainer}>
-                                        <ButtonForm onClick={timer.isRunning ? stopTimer : startTimer} padding={'0 8px'}
-                                                    width={'32px'}>
-                                            {timer.isRunning && timer.taskId === id ? <PauseTimerButton/> :
-                                                <StartTimerButton/>}
-                                        </ButtonForm>
-                                        <ButtonForm onClick={saveTimer}>Сохранить</ButtonForm>
-                                        <ButtonForm onClick={resetTimer} status='notActive'
-                                                    padding={'0 8px'}><TrashTimerButton/></ButtonForm>
-                                    </div>
-                                </div>
-                            </div>
+                                </>
+                            }
                         </div>
                         <div className={s.timeSpent}>
                             <span className={s.label}>Затраченное время</span>
@@ -416,12 +422,20 @@ const ViewForm = ({id, setFormType, setShowModal, parentId, parentName}) => {
                         </div>
                     </div>
                     <div className={s.buttons}>
-                        <ButtonForm
-                            onClick={() => setFormType('edit')}>Редактировать</ButtonForm>
+                        {taskId?.executors?.find((executor) => executor.user_id === user?.data?.id)?.role_id__name === "AUTHOR" &&
+                        <>
+                            <ButtonForm
+                                onClick={() => setFormType('edit')}>Редактировать</ButtonForm>
+                        </>
+                        }
                         <ButtonForm onClick={() => setFormType('create')}>Создать
                             подзадачу</ButtonForm>
-                        <ButtonForm status='deleteTask' onClick={Delete}>Удалить
-                            задачу</ButtonForm>
+                        {taskId?.executors?.find((executor) => executor.user_id === user?.data?.id)?.role_id__name === "AUTHOR" &&
+                            <>
+                                <ButtonForm status='deleteTask' onClick={Delete}>Удалить
+                                    задачу</ButtonForm>
+                            </>
+                        }
                     </div>
                     <div className={s.comments}>
                         <div className={s.commentsInput}>
@@ -469,6 +483,7 @@ const ViewForm = ({id, setFormType, setShowModal, parentId, parentName}) => {
                                                         readOnly
                                                         height={'auto'}
                                                         width={'450px'}
+                                                        disabled
                                                     />
                                                     {comment.user_id_id === user?.data?.id &&
                                                         <>

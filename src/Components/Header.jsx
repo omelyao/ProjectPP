@@ -55,65 +55,66 @@ function Header({modalIsOpen}) {
         return `${hours}:${minutes}:${seconds}`;
     };
 
-    const startTimer = () => {
-        if (!timer.isRunning) {
-            const timerId = setInterval(() => {
-                setTimer((prevTimer) => ({
-                    ...prevTimer,
-                    time: prevTimer.time + 1,
-                }));
-            }, 1000);
+    // const startTimer = () => {
+    //     if (!timer.isRunning) {
+    //         const timerId = setInterval(() => {
+    //             setTimer((prevTimer) => ({
+    //                 ...prevTimer,
+    //                 time: prevTimer.time + 1,
+    //             }));
+    //         }, 1000);
+    //
+    //         setTimer((prevTimer) => ({
+    //             ...prevTimer,
+    //             isRunning: true,
+    //             timerId
+    //         }));
+    //     }
+    // };
+    //
+    // const stopTimer = () => {
+    //     if (timer.isRunning) {
+    //         clearInterval(timer.timerId);
+    //         setTimer((prevTimer) => ({
+    //             ...prevTimer,
+    //             isRunning: false,
+    //             time: prevTimer.time,
+    //         }));
+    //     }
+    // };
 
-            setTimer((prevTimer) => ({
-                ...prevTimer,
-                isRunning: true,
-                timerId
-            }));
-        }
-    };
+    // const resetTimer = () => {
+    //     if (!timer.isRunning && timer.taskId === taskId.task.id) {
+    //         clearInterval(timer.timerId);
+    //         setTimer((prevTimer) => ({
+    //             ...prevTimer,
+    //             time: taskId.executors.find((executor) => executor.user_id === user.user_id)?.time_spent !== null ?
+    //                 taskId.executors.find((executor) => executor.user_id === user.user_id)?.time_spent
+    //                 : 0,
+    //             isRunning: false,
+    //             timerId: null,
+    //         }));
+    //     }
+    // };
 
-    const stopTimer = () => {
-        if (timer.isRunning) {
-            clearInterval(timer.timerId);
-            setTimer((prevTimer) => ({
-                ...prevTimer,
-                isRunning: false,
-            }));
-        }
-    };
-
-    const resetTimer = () => {
-        if (!timer.isRunning && timer.taskId === taskId.task.id) {
-            clearInterval(timer.timerId);
-            setTimer((prevTimer) => ({
-                ...prevTimer,
-                time: taskId.executors.find((executor) => executor.user_id === user.user_id)?.time_spent !== null ?
-                    taskId.executors.find((executor) => executor.user_id === user.user_id)?.time_spent
-                    : 0,
-                isRunning: false,
-                timerId: null,
-            }));
-        }
-    };
-
-    const saveTimer = async () => {
-            if (!timer.isRunning && timer.taskId === taskId.task.id) {
-                clearInterval(timer.timerId);
-                setTimer((prevTimer) => ({
-                    ...prevTimer,
-                    isRunning: false,
-                    timerId: null,
-                }));
-
-                try {
-                    await timeSpent(taskId.task.id, timer.time);
-                    const updatedTaskId = await getIdTask(taskId.task.id);
-                    setTaskId(updatedTaskId);
-                } catch (error) {
-                    console.log(error)
-                }
-            }
-    };
+    // const saveTimer = async () => {
+    //         if (!timer.isRunning && timer.taskId === taskId.task.id) {
+    //             clearInterval(timer.timerId);
+    //             setTimer((prevTimer) => ({
+    //                 ...prevTimer,
+    //                 isRunning: false,
+    //                 timerId: null,
+    //             }));
+    //
+    //             try {
+    //                 await timeSpent(taskId.task.id, timer.time);
+    //                 const updatedTaskId = await getIdTask(taskId.task.id);
+    //                 setTaskId(updatedTaskId);
+    //             } catch (error) {
+    //                 console.log(error)
+    //             }
+    //         }
+    // };
 
     const handleTaskClick = () => {
         setShowTaskInfo(!showTaskInfo);
@@ -201,35 +202,35 @@ function Header({modalIsOpen}) {
                     <div className={classes.timer}>
                         {timer.taskId !== null ?
                             <div className={classes.time}>
-                                <span className={classes.buttonInfo}
-                                      onClick={handleTaskClick}>
+                                <span className={classes.buttonInfo}>
+                                      {/*onClick={() => openForm("view")}>*/}
                                     {timer.taskName}
                                 </span>
-                                {showTaskInfo && (
-                                    <div className={classes.taskInfo}>
-                                        <div className={classes.taskInfo_left}>
-                                            <span>
-                                                {timer.taskName}
-                                            </span>
-                                            {/*<p onClick={() => openForm('view')}>Информация о задаче</p>*/}
-                                        </div>
-                                        <div className={classes.taskInfo_right}>
-                                            <span>
-                                                <p>{formatTime(timer.time)}</p>
-                                            </span>
-                                            <div className={classes.taskInfo_time}>
-                                                <span onClick={timer.isRunning ? stopTimer : startTimer}
-                                                      className={classes.play}>
-                                                    {timer.isRunning ? <PauseTimerButton/> : <StartTimerButton/>}
-                                                </span>
-                                                <span onClick={saveTimer} className={classes.save}>Сохранить</span>
-                                                <span onClick={resetTimer} className={classes.trash}>
-                                                   <TrashTimerButton/>
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                )}
+                                {/*{showTaskInfo && (*/}
+                                {/*    <div className={classes.taskInfo}>*/}
+                                {/*        <div className={classes.taskInfo_left}>*/}
+                                {/*            <span>*/}
+                                {/*                {timer.taskName}*/}
+                                {/*            </span>*/}
+                                {/*            /!*<p onClick={() => openForm('view')}>Информация о задаче</p>*!/*/}
+                                {/*        </div>*/}
+                                {/*        <div className={classes.taskInfo_right}>*/}
+                                {/*            <span>*/}
+                                {/*                <p>{formatTime(timer.time)}</p>*/}
+                                {/*            </span>*/}
+                                {/*            <div className={classes.taskInfo_time}>*/}
+                                {/*                <span onClick={timer.isRunning ? stopTimer : startTimer}*/}
+                                {/*                      className={classes.play}>*/}
+                                {/*                    {timer.isRunning ? <PauseTimerButton/> : <StartTimerButton/>}*/}
+                                {/*                </span>*/}
+                                {/*                <span onClick={saveTimer} className={classes.save}>Сохранить</span>*/}
+                                {/*                /!*<span onClick={resetTimer} className={classes.trash}>*!/*/}
+                                {/*                /!*   <TrashTimerButton/>*!/*/}
+                                {/*                /!*</span>*!/*/}
+                                {/*            </div>*/}
+                                {/*        </div>*/}
+                                {/*    </div>*/}
+                                {/*)}*/}
                                 <span>
             <p>{formatTime(timer.time)}</p>
           </span>

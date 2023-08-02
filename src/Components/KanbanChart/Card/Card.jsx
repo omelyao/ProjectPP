@@ -29,12 +29,23 @@ const Card = ({
     const [timer, setTimer] = useRecoilState(timerState)
     const [projectId, setProjectId] = useRecoilState(projectsId);
     const [isHovered, setIsHovered] = useState(false);
+    const [typeTask, setTypeTask] = useState('')
     const [formType, setFormType] = useState('')
     const [showModal, setShowModal] = useState(false)
+
+    const formatTime = (totalSeconds) => {
+        const hours = Math.floor(totalSeconds / 3600).toString().padStart(2, '0');
+        const minutes = Math.floor((totalSeconds % 3600) / 60).toString().padStart(2, '0');
+        const seconds = (totalSeconds % 60).toString().padStart(2, '0');
+        return `${hours}:${minutes}:${seconds}`;
+    }
+
+
 
     const openForm = (type) => {
         setFormType(type);
         setShowModal(true);
+        setTypeTask('kanban')
     };
 
     const handleMouseEnter = () => {
@@ -55,56 +66,7 @@ const Card = ({
         }
     };
 
-    const startTimer = () => {
-        getIdTask(items.task_id)
-            .then((response) => {
-                setTaskId(response);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
 
-        if (taskId.executors.find((executor) => executor?.user_id === user?.data?.id)) {
-            if (!timer.isRunning && timer.taskId === null || !timer.isRunning && timer.taskId === taskId.task.id || !timer.isRunning && timer.taskId !== taskId.task.id && timer.timerId === null) {
-                const timerId = setInterval(() => {
-                    setTimer((prevTimer) => ({
-                        ...prevTimer,
-                        time: prevTimer.time + 1,
-                        taskId: taskId.task.id
-                    }));
-                }, 1000);
-
-                setTimer((prevTimer) => ({
-                    ...prevTimer,
-                    isRunning: true,
-                    timerId,
-                    taskId: taskId.task.id,
-                    taskName: taskId.task.name,
-                    time: taskId.executors.find((executor) => executor.user_id === user?.data?.id)?.time_spent !== null ?
-                        taskId.executors.find((executor) => executor.user_id === user?.data?.id)?.time_spent
-                        : 0,
-                }));
-            } else {
-                return null
-            }
-        }
-    };
-
-
-    const stopTimer = () => {
-        if (taskId.executors.find((executor) => executor.user_id === user?.data?.id)) {
-
-            if (timer.isRunning && timer.taskId === taskId.task.id) {
-                clearInterval(timer.timerId);
-                setTimer((prevTimer) => ({
-                    ...prevTimer,
-                    isRunning: false,
-                    taskId: taskId.task.id,
-                    taskName: taskId.task.name
-                }));
-            }
-        }
-    };
 
     return (
         <>
@@ -119,6 +81,7 @@ const Card = ({
             >
                 <div className={s.title}>
                     <span onClick={()=>openForm('view')}>{items.name}</span>
+                    <span>{timer.taskId === items.task_id ? formatTime(timer.time) : ''}</span>
                 </div>
                 <div className={s.project}>
                     <span>{tasks.title_project}</span>
@@ -148,7 +111,7 @@ const Card = ({
                     )}
                 </div>
             </div>
-            <Modal id={items.task_id} parentName={items.parent_id__name} showModal={showModal} setShowModal={setShowModal} formType={formType} setFormType={setFormType}/>
+            <Modal typeTask={typeTask} id={items.task_id} parentName={items.parent_id__name} showModal={showModal} setShowModal={setShowModal} formType={formType} setFormType={setFormType}/>
         </>
     );
 };
