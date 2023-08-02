@@ -4,7 +4,7 @@ import Button from "../UI/Button";
 import s from './KanbanHeader.module.css'
 import {useRecoilState, useRecoilValue, useSetRecoilState} from "recoil";
 import {projectsId, projectsList, tasksState} from "../../store/atom";
-import {getAllTask} from "../../services/task";
+import {deleteCompletedTask, getAllTask} from "../../services/task";
 
 
 const KanbanHeader = () => {
@@ -17,8 +17,23 @@ const KanbanHeader = () => {
         setProjectId(event.target.value)
     }
 
-    useEffect(() =>{
-        if(changeId){
+    const Delete = async () => {
+        try {
+            await deleteCompletedTask(projectId)
+            await getAllTask("kanban", projectId)
+                .then((response) => {
+                    setTasks(response);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    useEffect(() => {
+        if (changeId) {
             getAllTask("kanban", projectId)
                 .then((response) => {
                     setTasks(response);
@@ -40,7 +55,7 @@ const KanbanHeader = () => {
                     />
                 </div>
                 <div className={s.buttons}>
-                    <Button children={"Убрать завершенные задачи"} width={250}/>
+                    <Button onClick={() => Delete()} children={"Убрать завершенные задачи"} width={250}/>
                 </div>
             </div>
         </div>

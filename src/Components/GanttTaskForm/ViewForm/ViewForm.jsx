@@ -27,22 +27,22 @@ import InputDate1 from "../UI/InputDate1";
 import ButtonForm from "../UI/Button";
 import TextArea from "../UI/TextArea";
 import {toast} from "react-toastify";
-import { Right } from '../../GanttChart/GanttTable/TaskRow/UI/Right';
-import {ReactComponent as Clock} from  '../../../assets/img/clock.svg';
-import {ReactComponent as Timer} from  '../../../assets/img/timer.svg';
-import {ReactComponent as StartTimerButton} from  '../../../assets/img/startTimerButton.svg';
-import {ReactComponent as TrashTimerButton} from  '../../../assets/img/trashButton.svg';
-import {ReactComponent as PauseTimerButton} from  '../../../assets/img/pauseTimerButton.svg';
+import {Right} from '../../GanttChart/GanttTable/TaskRow/UI/Right';
+import {ReactComponent as Clock} from '../../../assets/img/clock.svg';
+import {ReactComponent as Timer} from '../../../assets/img/timer.svg';
+import {ReactComponent as StartTimerButton} from '../../../assets/img/startTimerButton.svg';
+import {ReactComponent as TrashTimerButton} from '../../../assets/img/trashButton.svg';
+import {ReactComponent as PauseTimerButton} from '../../../assets/img/pauseTimerButton.svg';
 import {useParams} from "react-router-dom";
 import {useGetUserQuery} from "../../../redux/authApi";
 
 
-const ViewForm = ({id, setFormType, setShowModal}) => {
+const ViewForm = ({id, setFormType, setShowModal, parentId, parentName}) => {
     const projectList = useRecoilValue(projectsList)
     const internsList = useRecoilValue(projectInterns)
-    const projectId= useRecoilValue(projectsId);
-    const {userId} = useParams();
-    const user = useGetUserQuery({id:userId});
+    const projectId = useRecoilValue(projectsId);
+    let {userId} = useParams();
+    let user = useGetUserQuery({id: userId});
     const taskId = useRecoilValue(taskIdState)
     const setTaskId = useSetRecoilState(taskIdState)
     const setTasks = useSetRecoilState(tasksState)
@@ -71,7 +71,7 @@ const ViewForm = ({id, setFormType, setShowModal}) => {
             setNewComments('')
             const updatedTaskId = await getIdTask(taskId.task.id);
             setTaskId(updatedTaskId);
-        }catch (e) {
+        } catch (e) {
             console.log(e)
         }
     };
@@ -97,86 +97,92 @@ const ViewForm = ({id, setFormType, setShowModal}) => {
         }
     };
 
-
-
     const formatTime = (totalSeconds) => {
         const hours = Math.floor(totalSeconds / 3600).toString().padStart(2, '0');
         const minutes = Math.floor((totalSeconds % 3600) / 60).toString().padStart(2, '0');
         const seconds = (totalSeconds % 60).toString().padStart(2, '0');
         return `${hours}:${minutes}:${seconds}`;
-    };
-
-    const getCurrentDateTime = () => {
-        const now = new Date();
-        return now.toISOString(); // Convert to ISO string format (e.g., "2023-07-12T12:08:06.650Z")
-    };
+    }
 
     const startTimer = () => {
-        if (!timer.isRunning && timer.taskId === null || !timer.isRunning && timer.taskId === id.id || !timer.isRunning && timer.taskId !== id.id && timer.timerId === null) {
-            const timerId = setInterval(() => {
-                setTimer((prevTimer) => {
-                    const currentDateTime = getCurrentDateTime();
-                    const completedDateTime = completedAt || currentDateTime;
-                    const totalSeconds = prevTimer.time + 1;
-
-                    return {
+        if (taskId.executors.find((executor) => executor.user_id === user?.data?.id)) {
+            if (!timer.isRunning && timer.taskId === null || !timer.isRunning && timer.taskId === taskId.task.id || !timer.isRunning && timer.taskId !== taskId.task.id && timer.timerId === null) {
+                const timerId = setInterval(() => {
+                    setTimer((prevTimer) => ({
                         ...prevTimer,
-                        time: taskId.task.completed_at !== null ? formatTime(totalSeconds) : totalSeconds,
-                        taskId: id.id,
-                        completedAt: completedDateTime,
-                    };
-                });
-            }, 1000);
+                        time: prevTimer.time + 1,
+                        taskId: taskId.task.id
+                    }));
+                }, 1000);
 
-            setTimer((prevTimer) => ({
-                ...prevTimer,
-                isRunning: true,
-                timerId,
-                taskId: id.id,
-                taskName: id.name,
-                task: id,
-            }));
+                setTimer((prevTimer) => ({
+                    ...prevTimer,
+                    isRunning: true,
+                    timerId,
+                    taskId: taskId.task.id,
+                    taskName: taskId.task.name,
+                    time: taskId.executors.find((executor) => executor.user_id === user?.data?.id)?.time_spent !== null ?
+                        taskId.executors.find((executor) => executor.user_id === user?.data?.id)?.time_spent
+                        : 0,
+                }));
+            }
         }
     };
 
-    const stopTimer = () => {
-        if (timer.isRunning && timer.taskId === id.id) {
-            clearInterval(timer.timerId);
-            setTimer((prevTimer) => {
-                const currentDateTime = getCurrentDateTime();
-                const completedDateTime = taskId.task.completed_at || currentDateTime;
 
-                return {
+    const stopTimer = () => {
+        if (taskId.executors.find((executor) => executor.user_id === user?.data?.id)) {
+
+            if (timer.isRunning && timer.taskId === taskId.task.id) {
+                clearInterval(timer.timerId);
+                setTimer((prevTimer) => ({
                     ...prevTimer,
                     isRunning: false,
-                    taskId: id.id,
-                    taskName: id.name,
-                    completedAt: completedDateTime,
-                };
-            });
+                    taskId: taskId.task.id,
+                    taskName: taskId.task.name
+                }));
+            }
         }
     };
 
     const resetTimer = () => {
-        if (!timer.isRunning && timer.taskId === id.id){
-            clearInterval(timer.timerId);
-            setTimer((prevTimer) => ({
-                ...prevTimer,
-                time: 0,
-                isRunning: false,
-                timerId: null,
-            }));
-            setCompletedAt(taskId.task.completed_at);
+        if (taskId.executors.find((executor) => executor.user_id === user?.data?.id)) {
+
+            if (!timer.isRunning && timer.taskId === taskId.task.id) {
+                clearInterval(timer.timerId);
+                setTimer((prevTimer) => ({
+                    ...prevTimer,
+                    time: taskId.executors.find((executor) => executor.user_id === user?.data?.id)?.time_spent !== null ?
+                        taskId.executors.find((executor) => executor.user_id === user?.data?.id)?.time_spent
+                        : 0,
+                    isRunning: false,
+                    timerId: null,
+                }));
+            }
         }
     };
 
     const saveTimer = async () => {
-        const timeToSave = taskId.task.completed_at !== null ? taskId.task.completed_at : timer.completedAt;
-        await timeSpent(id.id, timeToSave);
-        const updatedTaskId = await getIdTask(taskId.task.id);
-        setTaskId(updatedTaskId);
-    };
+        if (taskId.executors.find((executor) => executor.user_id === user?.data?.id)) {
 
+            if (!timer.isRunning && timer.taskId === taskId.task.id) {
+                clearInterval(timer.timerId);
+                setTimer((prevTimer) => ({
+                    ...prevTimer,
+                    isRunning: false,
+                    timerId: null,
+                }));
+
+                try {
+                    await timeSpent(taskId.task.id, timer.time);
+                    const updatedTaskId = await getIdTask(taskId.task.id);
+                    setTaskId(updatedTaskId);
+                } catch (error) {
+                    console.log(error)
+                }
+            }
+        }
+    };
 
 
     const handleCheckboxChange = async (stage) => {
@@ -230,13 +236,28 @@ const ViewForm = ({id, setFormType, setShowModal}) => {
         <div className={s.container}>
             <form className={s.form}>
                 <div className={s.title}>
-                <Text width={"606px"} height={"36px"} fontSize={"20px"} fontWeight={"700"} value={taskId.task && taskId.task.name} disabled/>
-                    <span style={{padding:'0px 4px'}}>
+                    <Text width={"606px"} height={"36px"} fontSize={"20px"} fontWeight={"700"}
+                          value={taskId.task && taskId.task.name} disabled/>
+                    <span style={{padding: '0px 4px'}}>
                         Базовая задача:
                         <span>&nbsp;</span>
                         <span style={{textDecoration: 'underline'}}>
                         {taskId.task && taskId.task.parent_id !== null ?
                             findTaskById(tasks.tasks, taskId.task.parent_id)?.name : "Отсутствует"}
+                            {parentName && parentName}
+                        </span>
+                    </span>
+                    <span style={{padding:'0px 4px'}}>
+                        Статус:
+                        <span>&nbsp;</span>
+                        <span>
+                        {taskId?.task?.status_id === 1? "В РАБОТУ" :
+                            taskId?.task?.status_id === 2? "ВЫПОЛНЯЕТСЯ" :
+                                taskId?.task?.status_id === 3? "ТЕСТИРОВАНИЕ" :
+                                    taskId?.task?.status_id === 4? "ПРОВЕРКА" :
+                                        taskId?.task?.status_id === 5? "ЗАВЕРШЕНА" :
+                                            taskId?.task?.status_id === 6? "ПРОСРОЧЕНА" : ''
+                        }
                         </span>
                     </span>
                 </div>
@@ -260,6 +281,24 @@ const ViewForm = ({id, setFormType, setShowModal}) => {
                                 disabled
                             />
                         </div>
+                    </div>
+                    <div className={s.elements}>
+                        <div className={`${s.element} ${s.deadlines}`}>
+                            <span>Планируемые сроки выполнения</span>
+                            <div className={s.elements}>
+                                <InputDate1
+                                    value={taskId.task && taskId.task.planned_start_date}
+                                    disabled
+                                    icon={<Clock/>}
+                                />
+                                <span style={{alignSelf: 'center'}}>-</span>
+                                <InputDate1
+                                    value={taskId.task && taskId.task.planned_final_date}
+                                    disabled
+                                    icon={<Clock/>}
+                                />
+                            </div>
+                        </div>
                         <div className={s.element}>
                             <span>Дедлайн</span>
                             <InputDate1
@@ -269,24 +308,6 @@ const ViewForm = ({id, setFormType, setShowModal}) => {
                             />
                         </div>
                     </div>
-                <div className={s.elements}>
-                    <div className={`${s.element} ${s.deadlines}`}>
-                        <span>Планируемые сроки выполнения</span>
-                        <div className={s.elements}>
-                            <InputDate1
-                                    value={taskId.task && taskId.task.planned_start_date}
-                                    disabled
-                                    icon={<Clock/>}
-                                />
-                            <span style={{alignSelf:'center'}}>-</span>
-                            <InputDate1
-                                    value={taskId.task && taskId.task.planned_final_date}
-                                    disabled
-                                    icon={<Clock/>}
-                                />
-                        </div>
-                    </div>
-                </div>
                     <div className={s.description}>
                         <TextArea
                             value={taskId.task && taskId.task.description}
@@ -345,11 +366,11 @@ const ViewForm = ({id, setFormType, setShowModal}) => {
                                             />
                                         </Right>
                                         <Text
-                                        width={"60%"}
-                                        height={"21px"}
-                                        padding={"10px"}
-                                        value={stage.description}
-                                        disabled/>
+                                            width={"60%"}
+                                            height={"21px"}
+                                            padding={"10px"}
+                                            value={stage.description}
+                                            disabled/>
                                     </div>
                                 ))}
                             </div>
@@ -362,35 +383,41 @@ const ViewForm = ({id, setFormType, setShowModal}) => {
                                 <div className={s.timeElements}>
                                     <div className={s.timeContainer}>
                                         <span className={s.timerIcon}><Timer/></span>
-                                        <span className={s.timeValue}>{timer.taskId === id.id ? formatTime(timer.time) : "00:00:00"}</span>
+                                        <span
+                                            className={s.timeValue}>{timer.taskId === id ? formatTime(timer.time) : "00:00:00"}</span>
                                     </div>
                                     <div className={s.timerButtonsContainer}>
-                                        <ButtonForm onClick={timer.isRunning ? stopTimer : startTimer} padding={'0 8px'} width={'32px'}>
-                                            {timer.isRunning && timer.taskId === id.id  ? <PauseTimerButton/> : <StartTimerButton/>}
+                                        <ButtonForm onClick={timer.isRunning ? stopTimer : startTimer} padding={'0 8px'}
+                                                    width={'32px'}>
+                                            {timer.isRunning && timer.taskId === id ? <PauseTimerButton/> :
+                                                <StartTimerButton/>}
                                         </ButtonForm>
                                         <ButtonForm onClick={saveTimer}>Сохранить</ButtonForm>
-                                        <ButtonForm onClick={resetTimer} status='notActive' padding={'0 8px'}><TrashTimerButton/></ButtonForm>
+                                        <ButtonForm onClick={resetTimer} status='notActive'
+                                                    padding={'0 8px'}><TrashTimerButton/></ButtonForm>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div className={s.timeSpent}>
                             <span className={s.label}>Затраченное время</span>
-                            <div className={s.timeSpentElements}>
-                                <span>00:00:00</span>
-                                <Text
-                                width={"fit-content"}
-                                height={"32px"}
-                                padding={"4px 8px"}
-                                border={"1px solid #ccc"}
-                                background={"#FFFFFF"}
-                                value={'ФИО'} disabled/>
-                            </div>
+                            {taskId.executors && taskId.executors.map((val, index) => (
+                                <div className={s.timeSpentElements} key={index}>
+                                    <span>{val.time_spent !== null ? formatTime(val.time_spent) : "00:00:00"}</span>
+                                    <Text
+                                        width={"fit-content"}
+                                        height={"32px"}
+                                        padding={"4px 8px"}
+                                        border={"1px solid #ccc"}
+                                        background={"#FFFFFF"}
+                                        value={`${val.user_id__last_name} ${val.user_id__first_name}`} disabled/>
+                                </div>
+                            ))}
                         </div>
                     </div>
                     <div className={s.buttons}>
                         <ButtonForm
-                                    onClick={() => setFormType('edit')}>Редактировать</ButtonForm>
+                            onClick={() => setFormType('edit')}>Редактировать</ButtonForm>
                         <ButtonForm onClick={() => setFormType('create')}>Создать
                             подзадачу</ButtonForm>
                         <ButtonForm status='deleteTask' onClick={Delete}>Удалить
@@ -443,7 +470,7 @@ const ViewForm = ({id, setFormType, setShowModal}) => {
                                                         height={'auto'}
                                                         width={'450px'}
                                                     />
-                                                    {comment.user_id_id === user.data.id &&
+                                                    {comment.user_id_id === user?.data?.id &&
                                                         <>
                                                             <ButtonForm
                                                                 height={'40px'}
@@ -471,7 +498,8 @@ const ViewForm = ({id, setFormType, setShowModal}) => {
                 </div>
             </form>
         </div>
-    );
+    )
+        ;
 };
 
 export default ViewForm;

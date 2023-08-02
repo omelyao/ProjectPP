@@ -43,7 +43,7 @@ const SelectUser = ({label}) => {
         <Wrapper>
             {label && <Label>{label}</Label>}
             <SelectItem>
-                {user.data.last_name} {user.data.first_name}
+                {user?.data?.last_name} {user?.data?.first_name}
             </SelectItem>
         </Wrapper>
     );

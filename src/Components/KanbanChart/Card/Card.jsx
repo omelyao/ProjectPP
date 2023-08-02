@@ -9,6 +9,8 @@ import {useRecoilState, useRecoilValue, useSetRecoilState} from "recoil";
 import {projectsId, taskIdState, tasksKanbanState, tasksState, timerState} from "../../../store/atom";
 import Modal from "../../GanttTaskForm/Modal/Modal";
 import {deleteComments, deleteIdTask, getAllTask, getIdTask} from "../../../services/task";
+import {useParams} from "react-router-dom";
+import {useGetUserQuery} from "../../../redux/authApi";
 
 const Card = ({
                   items,
@@ -19,7 +21,12 @@ const Card = ({
                   className,
                   tasks,
               }) => {
+    let {userId} = useParams();
+    let user = useGetUserQuery({id: userId});
     const setTasks = useSetRecoilState(tasksKanbanState);
+    const taskId = useRecoilValue(taskIdState)
+    const setTaskId = useSetRecoilState(taskIdState)
+    const [timer, setTimer] = useRecoilState(timerState)
     const [projectId, setProjectId] = useRecoilState(projectsId);
     const [isHovered, setIsHovered] = useState(false);
     const [formType, setFormType] = useState('')
@@ -48,56 +55,54 @@ const Card = ({
         }
     };
 
-    const [timer, setTimer] = useRecoilState(timerState)
-    const [completedAt, setCompletedAt] = useState(null);
-
-    const getCurrentDateTime = () => {
-        const now = new Date();
-        return now.toISOString();
-    };
-
     const startTimer = () => {
-        if (!timer.isRunning || timer.taskId === items.task_id) {
-            const timerId = setInterval(() => {
-                setTimer((prevTimer) => {
-                    const currentDateTime = getCurrentDateTime();
-                    const completedDateTime = completedAt || currentDateTime;
-                    const totalSeconds = prevTimer.time + 1;
+        getIdTask(items.task_id)
+            .then((response) => {
+                setTaskId(response);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
 
-                    return {
+        if (taskId.executors.find((executor) => executor?.user_id === user?.data?.id)) {
+            if (!timer.isRunning && timer.taskId === null || !timer.isRunning && timer.taskId === taskId.task.id || !timer.isRunning && timer.taskId !== taskId.task.id && timer.timerId === null) {
+                const timerId = setInterval(() => {
+                    setTimer((prevTimer) => ({
                         ...prevTimer,
-                        time: totalSeconds,
-                        taskId: items.task_id,
-                        completedAt: completedDateTime,
-                    };
-                });
-            }, 1000);
+                        time: prevTimer.time + 1,
+                        taskId: taskId.task.id
+                    }));
+                }, 1000);
 
-            setTimer((prevTimer) => ({
-                ...prevTimer,
-                isRunning: true,
-                timerId,
-                taskId: items.task_id,
-                taskName: items.name,
-                task: items,
-            }));
+                setTimer((prevTimer) => ({
+                    ...prevTimer,
+                    isRunning: true,
+                    timerId,
+                    taskId: taskId.task.id,
+                    taskName: taskId.task.name,
+                    time: taskId.executors.find((executor) => executor.user_id === user?.data?.id)?.time_spent !== null ?
+                        taskId.executors.find((executor) => executor.user_id === user?.data?.id)?.time_spent
+                        : 0,
+                }));
+            } else {
+                return null
+            }
         }
     };
 
-    const stopTimer = () => {
-        if (timer.isRunning && timer.taskId === items.task_id) {
-            clearInterval(timer.timerId);
-            setTimer((prevTimer) => {
-                const currentDateTime = getCurrentDateTime();
 
-                return {
+    const stopTimer = () => {
+        if (taskId.executors.find((executor) => executor.user_id === user?.data?.id)) {
+
+            if (timer.isRunning && timer.taskId === taskId.task.id) {
+                clearInterval(timer.timerId);
+                setTimer((prevTimer) => ({
                     ...prevTimer,
                     isRunning: false,
-                    taskId: items.task_id,
-                    taskName: items.name,
-                    completedAt: currentDateTime,
-                };
-            });
+                    taskId: taskId.task.id,
+                    taskName: taskId.task.name
+                }));
+            }
         }
     };
 
@@ -113,7 +118,6 @@ const Card = ({
                 onMouseLeave={handleMouseLeave}
             >
                 <div className={s.title}>
-                    {/*<span>{items.name}</span>*/}
                     <span onClick={()=>openForm('view')}>{items.name}</span>
                 </div>
                 <div className={s.project}>
@@ -124,7 +128,7 @@ const Card = ({
                 </div>
                 <div className={s.user}>
                     <User style={{width:"16px", height:"16px"}} />
-                    <span>{items.user__last_name} {items.user__first_name}</span>
+                    <span>{items.user_id__last_name} {items.user_id__first_name}</span>
                 </div>
                 <div className={s.bottom}>
                     <div className={s.deadline}>
@@ -133,18 +137,18 @@ const Card = ({
                     </div>
                     {isHovered && (
                         <div className={s.buttons}>
-                            <button onClick={timer.isRunning ? stopTimer : startTimer}>
-                                {timer.isRunning && timer.taskId === items.task_id?
-                                    <Stop style={{width:"24px", height:"24px"}}/> :
-                                    <Play style={{width:"24px", height:"24px"}}/>
-                                }
-                            </button>
+                            {/*<button onClick={timer.isRunning ? stopTimer : startTimer}>*/}
+                            {/*    {timer.isRunning && timer.taskId === items.task_id?*/}
+                            {/*        <Stop style={{width:"24px", height:"24px"}}/> :*/}
+                            {/*        <Play style={{width:"24px", height:"24px"}}/>*/}
+                            {/*    }*/}
+                            {/*</button>*/}
                             <button onClick={() => DeleteTask(items.task_id)}><Delete style={{width:"24px", height:"24px"}} /></button>
                         </div>
                     )}
                 </div>
             </div>
-            <Modal id={items.task_id} parentId={null} showModal={showModal} setShowModal={setShowModal} formType={formType} setFormType={setFormType}/>
+            <Modal id={items.task_id} parentName={items.parent_id__name} showModal={showModal} setShowModal={setShowModal} formType={formType} setFormType={setFormType}/>
         </>
     );
 };

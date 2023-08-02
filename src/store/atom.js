@@ -43,8 +43,6 @@ export const timerState = atom({
         timerId: null,
         taskId: null,
         taskName: '',
-        task: null,
-        completedAt: null
     },
 });
 

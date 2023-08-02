@@ -31,9 +31,9 @@ const CreateForm = ({parentId, setShowModal}) => {
 
     const {userId} = useParams();
     const user = useGetUserQuery({id:userId});
-    const [teamId, setTeamId] = useState(0)
-    const [executorId, setExecutorId] = useState(0)
-    let executor
+    // const [teamId, setTeamId] = useState(0)
+    // const [executorId, setExecutorId] = useState(0)
+    // let executor
     const [performers, setPerformers] = useState([]);
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
@@ -123,8 +123,8 @@ const CreateForm = ({parentId, setShowModal}) => {
         if (!finalDate) {
             missingData.push('Дата окончания');
         }
-        // if (!executorId) {
-        //     missingData.push('Ответственный');
+        // if (!performers) {
+        //     missingData.push('Исполнители');
         // }
 
         if (missingData.length > 0) {
@@ -156,7 +156,11 @@ const CreateForm = ({parentId, setShowModal}) => {
         const stagesList = stages.map((stage) => (stage.description));
 
         const responsibleUsers = [];
-        const performerIds = performers.map((performer) => performer.id_intern);
+        const performerIds = performers.map((performer) => {
+            if (performer.id_intern !== user?.data?.id) {
+                return performer.id_intern;
+            }
+        });
         responsibleUsers.push(...performerIds);
 
         // if (executorId !== 0) {
@@ -201,22 +205,21 @@ const CreateForm = ({parentId, setShowModal}) => {
                             disabled
                         />
                     </div>
-                    <div className={s.element}>
-                        <Select
-                        label="Тег команды"
-                        icon={<Project/>}
-                        options={internsList.teams}
-                        value={internsList[0]?.title}
-                        disabled
-                        />
-                    </div>
-                    <div className={s.element}>
-                        <span>Дедлайн</span>
-                        <InputDate1
-                            onChange={(event) => setDeadline(event.target.value)}
-                            icon={<Clock/>}
-                        />
-                    </div>
+                    {/*<div className={s.element}>*/}
+                    {/*    <Select*/}
+                    {/*    label="Тег команды"*/}
+                    {/*    icon={<Project/>}*/}
+                    {/*    options={internsList.teams}*/}
+                    {/*    value={internsList[0]?.title}*/}
+                    {/*    />*/}
+                    {/*</div>*/}
+                    {/*<div className={s.element}>*/}
+                    {/*    <span>Дедлайн</span>*/}
+                    {/*    <InputDate1*/}
+                    {/*        onChange={(event) => setDeadline(event.target.value)}*/}
+                    {/*        icon={<Clock/>}*/}
+                    {/*    />*/}
+                    {/*</div>*/}
                 </div>
                 <div className={s.elements}>
                     <div className={`${s.element} ${s.deadlines}`}>
@@ -234,6 +237,13 @@ const CreateForm = ({parentId, setShowModal}) => {
                                     icon={<Clock/>}
                                 />
                         </div>
+                    </div>
+                    <div className={s.element}>
+                        <span>Дедлайн</span>
+                        <InputDate1
+                            onChange={(event) => setDeadline(event.target.value)}
+                            icon={<Clock/>}
+                        />
                     </div>
                 </div>
                 <div className={s.description}>

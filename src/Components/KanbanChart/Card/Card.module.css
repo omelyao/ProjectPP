@@ -106,6 +106,8 @@
 .buttons {
     display: flex;
     flex-direction: row;
+    justify-content: flex-end;
+    width: 60px;
     gap: 8px;
 }
 

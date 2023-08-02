@@ -216,6 +216,19 @@ const EditForm = ({id, setFormType, setShowModal}) => {
                             findTaskById(tasks, taskId.task.parent_id)?.name : "Отсутствует"}
                         </span>
                     </span>
+                    <span style={{padding:'0px 4px'}}>
+                        Статус:
+                        <span>&nbsp;</span>
+                        <span style={{textDecoration:'underline'}}>
+                        {taskId?.task?.status_id === 1? "В РАБОТУ" :
+                            taskId?.task?.status_id === 2? "ВЫПОЛНЯЕТСЯ" :
+                                taskId?.task?.status_id === 3? "ТЕСТИРОВАНИЕ" :
+                                    taskId?.task?.status_id === 4? "ПРОВЕРКА" :
+                                        taskId?.task?.status_id === 5? "ЗАВЕРШЕНА" :
+                                            taskId?.task?.status_id === 6? "ПРОСРОЧЕНА" : ''
+                        }
+                        </span>
+                    </span>
                 </div>
                 {/* <div className={s.info}> */}
                 <div className={s.info}>
@@ -236,14 +249,6 @@ const EditForm = ({id, setFormType, setShowModal}) => {
                                 disabled
                             />
                         </div>
-                        <div className={s.element}>
-                            <span>Дедлайн</span>
-                                <InputDate1
-                                    defaultValue={taskId.task && taskId.task.deadline}
-                                    onChange={(event) => setDeadline(event.target.value)}
-                                    icon={<Clock/>}
-                                />
-                        </div>
                     </div>
                     <div className={s.elements}>
                         <div className={`${s.element} ${s.deadlines}`}>
@@ -261,6 +266,14 @@ const EditForm = ({id, setFormType, setShowModal}) => {
                                         icon={<Clock/>}
                                     />
                             </div>
+                        </div>
+                        <div className={s.element}>
+                            <span>Дедлайн</span>
+                            <InputDate1
+                                defaultValue={taskId.task && taskId.task.deadline}
+                                onChange={(event) => setDeadline(event.target.value)}
+                                icon={<Clock/>}
+                            />
                         </div>
                     </div>
                     <div className={s.description}>
@@ -291,23 +304,23 @@ const EditForm = ({id, setFormType, setShowModal}) => {
                     <div className={s.unimportant}>
                         <div className={s.unimportantTop}>
                             <span className={s.label}>Исполнители</span>
-                            <button type="button"  onClick={handleAddPerformer}>
-                                <Add />
-                            </button>
+                            {/*<button type="button"  onClick={handleAddPerformer}>*/}
+                            {/*    <Add />*/}
+                            {/*</button>*/}
                         </div>
                         <div className={s.unimportantLists}>
                             {taskId.executors &&
                                 taskId.executors.map((performer, index) => (
-                                    index > 1 && (
+                                    index > 0 && (
                                         <div className={s.unimportantList} key={index}>
                                             <Select
                                                 disabled
                                                 options={internsList.interns}
                                                 value={taskId.executors && taskId.executors[index]?.user_id}
                                             />
-                                            <button className={s.deleteButton}>
-                                                <Del style={{width: "16px", height: "16px"}} />
-                                            </button>
+                                            {/*<button className={s.deleteButton}>*/}
+                                            {/*    <Del style={{width: "16px", height: "16px"}} />*/}
+                                            {/*</button>*/}
                                         </div>
                                     )
                                 ))}
@@ -349,19 +362,19 @@ const EditForm = ({id, setFormType, setShowModal}) => {
                             ))}
                         </div>
                     </div>
-                    <div className={s.timeSpent}>
-                        <span className={s.label}>Затраченное время</span>
-                        <div className={s.timeSpentElements}>
-                                <span>00:00:00</span>
-                                <Text
-                                width={"fit-content"}
-                                height={"32px"}
-                                padding={"4px 8px"}
-                                border={"1px solid #ccc"}
-                                background={"#FFFFFF"}
-                                value={'ФИО'} disabled/>
-                            </div>
-                    </div>
+                    {/*<div className={s.timeSpent}>*/}
+                    {/*    <span className={s.label}>Затраченное время</span>*/}
+                    {/*    <div className={s.timeSpentElements}>*/}
+                    {/*            <span>00:00:00</span>*/}
+                    {/*            <Text*/}
+                    {/*            width={"fit-content"}*/}
+                    {/*            height={"32px"}*/}
+                    {/*            padding={"4px 8px"}*/}
+                    {/*            border={"1px solid #ccc"}*/}
+                    {/*            background={"#FFFFFF"}*/}
+                    {/*            value={'ФИО'} disabled/>*/}
+                    {/*        </div>*/}
+                    {/*</div>*/}
                     <div className={s.buttons}>
                         <ButtonForm type="submit">Сохранить</ButtonForm>
                         <ButtonForm onClick={() => setFormType('create')}>Создать подзадачу</ButtonForm>

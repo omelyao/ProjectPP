@@ -5,13 +5,13 @@ import {useDispatch, useSelector} from 'react-redux';
 import {useNavigate} from 'react-router-dom';
 import {logOut} from '../redux/authSlice';
 import {reset} from '../redux/authApi';
-import {useRecoilState, useRecoilValue} from "recoil";
+import {useRecoilState, useRecoilValue, useSetRecoilState} from "recoil";
 import {taskIdState, timerState} from "../store/atom";
 import Modal from "./GanttTaskForm/Modal/Modal";
-import {ReactComponent as StartTimerButton} from  '../assets/img/startTimerButton.svg';
-import {ReactComponent as PauseTimerButton} from  '../assets/img/pauseTimerButton.svg';
-import {ReactComponent as TrashTimerButton} from  '../assets/img/trashButton.svg';
-import {refreshAccessToken} from "../services/task";
+import {ReactComponent as StartTimerButton} from '../assets/img/startTimerButton.svg';
+import {ReactComponent as PauseTimerButton} from '../assets/img/pauseTimerButton.svg';
+import {ReactComponent as TrashTimerButton} from '../assets/img/trashButton.svg';
+import {getIdTask, getUser, refreshAccessToken, timeSpent} from "../services/task";
 
 function Header({modalIsOpen}) {
 
@@ -22,16 +22,29 @@ function Header({modalIsOpen}) {
     const [showTaskInfo, setShowTaskInfo] = useState(false);
     const [timer, setTimer] = useRecoilState(timerState);
     const taskId = useRecoilValue(taskIdState)
+    const setTaskId = useSetRecoilState(taskIdState)
     const [formType, setFormType] = useState('')
     const [showModal, setShowModal] = useState(false)
 
     const openForm = (type) => {
-        setFormType(type);
-        setShowModal(true);
+        if (user) {
+            setFormType(type);
+            setShowModal(true);
+        }
     };
 
+    // const openForm = async (type) => {
+    //     try {
+    //         await getUser(user.user_id)
+    //         await setFormType(type);
+    //         setShowModal(true);
+    //     }catch (e) {
+    //         console.log(e)
+    //     }
+    // };
+    //
     useEffect(() => {
-        const refreshInterval = setInterval(refreshAccessToken,  60 * 1000);
+        const refreshInterval = setInterval(refreshAccessToken, 60 * 1000);
         return () => clearInterval(refreshInterval);
     }, []);
 
@@ -70,13 +83,36 @@ function Header({modalIsOpen}) {
     };
 
     const resetTimer = () => {
-        clearInterval(timer.timerId);
-        setTimer((prevTimer) => ({
-            ...prevTimer,
-            time: 0,
-            isRunning: false,
-            timerId: null,
-        }));
+        if (!timer.isRunning && timer.taskId === taskId.task.id) {
+            clearInterval(timer.timerId);
+            setTimer((prevTimer) => ({
+                ...prevTimer,
+                time: taskId.executors.find((executor) => executor.user_id === user.user_id)?.time_spent !== null ?
+                    taskId.executors.find((executor) => executor.user_id === user.user_id)?.time_spent
+                    : 0,
+                isRunning: false,
+                timerId: null,
+            }));
+        }
+    };
+
+    const saveTimer = async () => {
+            if (!timer.isRunning && timer.taskId === taskId.task.id) {
+                clearInterval(timer.timerId);
+                setTimer((prevTimer) => ({
+                    ...prevTimer,
+                    isRunning: false,
+                    timerId: null,
+                }));
+
+                try {
+                    await timeSpent(taskId.task.id, timer.time);
+                    const updatedTaskId = await getIdTask(taskId.task.id);
+                    setTaskId(updatedTaskId);
+                } catch (error) {
+                    console.log(error)
+                }
+            }
     };
 
     const handleTaskClick = () => {
@@ -166,7 +202,7 @@ function Header({modalIsOpen}) {
                         {timer.taskId !== null ?
                             <div className={classes.time}>
                                 <span className={classes.buttonInfo}
-                                        onClick={handleTaskClick}>
+                                      onClick={handleTaskClick}>
                                     {timer.taskName}
                                 </span>
                                 {showTaskInfo && (
@@ -175,7 +211,7 @@ function Header({modalIsOpen}) {
                                             <span>
                                                 {timer.taskName}
                                             </span>
-                                            <p>Информация о задаче</p>
+                                            {/*<p onClick={() => openForm('view')}>Информация о задаче</p>*/}
                                         </div>
                                         <div className={classes.taskInfo_right}>
                                             <span>
@@ -183,10 +219,10 @@ function Header({modalIsOpen}) {
                                             </span>
                                             <div className={classes.taskInfo_time}>
                                                 <span onClick={timer.isRunning ? stopTimer : startTimer}
-                                                        className={classes.play}>
-                                                    {timer.isRunning ? <PauseTimerButton/> : <StartTimerButton/> }
+                                                      className={classes.play}>
+                                                    {timer.isRunning ? <PauseTimerButton/> : <StartTimerButton/>}
                                                 </span>
-                                                <span className={classes.save}>Сохранить</span>
+                                                <span onClick={saveTimer} className={classes.save}>Сохранить</span>
                                                 <span onClick={resetTimer} className={classes.trash}>
                                                    <TrashTimerButton/>
                                                 </span>
@@ -215,7 +251,8 @@ function Header({modalIsOpen}) {
                     </div>
                 </div>
             </header>
-            {/*<Modal id={timer.taskId} showModal={showModal} setShowModal={setShowModal} formType={formType} setFormType={setFormType}/>*/}
+            <Modal id={timer.taskId} showModal={showModal} setShowModal={setShowModal} formType={formType}
+                   setFormType={setFormType}/>
             <Navigation open={open} onClose={() => setOpen(false)} modalIsOpen={modalIsOpen}/>
         </div>
     );

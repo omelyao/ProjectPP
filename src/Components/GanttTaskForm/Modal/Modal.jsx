@@ -8,7 +8,7 @@ import {useRecoilValue, useSetRecoilState} from "recoil";
 import {taskIdState, tasksState} from "../../../store/atom";
 import {getIdTask} from "../../../services/task";
 
-const Modal = ({id, parentId, showModal, setShowModal, formType, setFormType}) => {
+const Modal = ({id, parentId, parentName , showModal, setShowModal, formType, setFormType}) => {
     const closeForm = () =>{
         setFormType('')
         setShowModal(false)
@@ -21,8 +21,8 @@ const Modal = ({id, parentId, showModal, setShowModal, formType, setFormType}) =
                     <div className={s.modal} onClick={e => e.stopPropagation()}>
                         <button className={s.close} onClick={closeForm}><Close/></button>
                         {formType === 'create' && (<CreateForm setShowModal={setShowModal} parentId={parentId}/>)}
-                        {formType === 'edit' && (<EditForm setShowModal={setShowModal} setFormType={setFormType} id={id}/>)}
-                        {formType === 'view' && (<ViewForm setShowModal={setShowModal}  setFormType={setFormType} id={id}/>)}
+                        {formType === 'edit' && (<EditForm setShowModal={setShowModal} setFormType={setFormType} parentName={parentName} id={id}/>)}
+                        {formType === 'view' && (<ViewForm setShowModal={setShowModal}  setFormType={setFormType} parentName={parentName} id={id}/>)}
                     </div>
                 </div>
             ) : null}

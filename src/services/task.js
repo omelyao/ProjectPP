@@ -34,6 +34,20 @@ export const getUserInfo = async() =>{
 }
 
 
+export const getUser = async(id) =>{
+    try {
+        const response = await api.get(`/UralIntern/user/${id}`, {
+            headers: {
+                Authorization: `Bearer ${store.getState()?.auth?.access}`
+            }
+        });
+        return response.data;
+    }catch (e) {
+        console.log(e);
+    }
+}
+
+
 export const getProjectInterns = async (id) =>{
     try {
         const response = await api.get(`/scheduler/api/v1/project_interns?project_id=${id}`, {
@@ -144,6 +158,17 @@ export const deleteIdTask = async (id) => {
     }
 }
 
+export const deleteCompletedTask = async (id) => {
+    try {
+        await api.delete(`/scheduler/api/v1/tasks/delete_completed?project_id=${id}`, {
+            headers: {
+                Authorization: `Bearer ${store.getState()?.auth?.access}`
+            }
+        })
+    }catch (e){
+        console.log(e);
+    }
+}
 
 export const kanbanView = async (id) => {
     try {

@@ -19,9 +19,8 @@
     flex-direction: column;
     justify-content: flex-start;
     align-items: start;
-    gap: 5px;
+    gap: 18px;
     width: 184px;
-    /* height: 10%; */
 }
 
 .elements{

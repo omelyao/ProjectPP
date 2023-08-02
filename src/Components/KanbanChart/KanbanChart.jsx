@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import s from './KanbanChart.module.css';
 import Column from './Column/Column';
-import { useRecoilValue } from 'recoil';
-import {tasksKanbanState, tasksState} from '../../store/atom';
+import {useRecoilValue, useSetRecoilState} from 'recoil';
+import {projectsId, tasksKanbanState, tasksState} from '../../store/atom';
 import {deleteIdTask, editStatus, getAllTask} from "../../services/task";
 
 const KanbanChart = () => {
+    const projectId= useRecoilValue(projectsId);
     const tasks = useRecoilValue(tasksKanbanState);
+    const setTasks = useSetRecoilState(tasksKanbanState);
 
     const [boards, setBoards] = useState([
         { id: 1, title: 'В РАБОТУ', status: 'inwork', idStatus: 'TO WORK', items: [] },
@@ -35,8 +37,10 @@ const KanbanChart = () => {
     const handleStatusChange = async (taskId, status) => {
         try {
             await editStatus(taskId, status);
+            const updatedTasks = await getAllTask("kanban", projectId);
+            setTasks(updatedTasks);
         } catch (error) {
-            console.log(error);
+            alert(error)
         }
     };
 

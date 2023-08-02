@@ -58,7 +58,6 @@
 
 .element {
     display: flex;
-    width: 30%;
     flex-direction: column;
     align-items: flex-start;
     padding: 0px;
