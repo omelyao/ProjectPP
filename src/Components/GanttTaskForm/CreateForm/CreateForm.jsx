@@ -24,7 +24,7 @@ import {useGetUserQuery} from "../../../redux/authApi";
 import {useParams} from "react-router-dom";
 import SelectUser from "../UI/SelectUser";
 
-const CreateForm = ({parentId, setShowModal, typeTask}) => {
+const CreateForm = ({parentId, setShowModal, typeTask, formType}) => {
     const projectList = useRecoilValue(projectsList)
     const internsList = useRecoilValue(projectInterns)
     const projectId= useRecoilValue(projectsId);
@@ -104,6 +104,8 @@ const CreateForm = ({parentId, setShowModal, typeTask}) => {
             return true;
         } else if (Date.parse(startDate) < parentStartDate || Date.parse(finalDate) > parentFinalDate) {
             return false;
+        } else  if (Date.parse(finalDate) > Date.parse(deadline)) {
+            return false;
         }
 
         return true;
@@ -114,7 +116,7 @@ const CreateForm = ({parentId, setShowModal, typeTask}) => {
         event.preventDefault();
         const missingData = [];
 
-        if (!name) {
+        if (!name || name === '') {
             missingData.push('Название задачи');
         }
 
@@ -125,11 +127,6 @@ const CreateForm = ({parentId, setShowModal, typeTask}) => {
         if (!finalDate) {
             missingData.push('Дата окончания');
         }
-
-        // if (performers.length === 0 || performers.some((performer) => performer.id_intern === null)) {
-        //     alert("Исполнители не выбраны");
-        //     return;
-        // }
 
         if(startDate > finalDate ){
             alert("Дата начала не может быть больше Даты окончания");
@@ -170,6 +167,11 @@ const CreateForm = ({parentId, setShowModal, typeTask}) => {
         //     responsibleUsers.push(...performerIds);
         // }
 
+        if (responsibleUsers.length === 0 || responsibleUsers.includes(null)) {
+            alert("Исполнители не выбраны");
+            return;
+        }
+
         try {
             await createTask(taskList, stagesList, responsibleUsers)
             setShowModal(false)
@@ -189,7 +191,7 @@ const CreateForm = ({parentId, setShowModal, typeTask}) => {
                         Базовая задача:
                         <span>&nbsp;</span>
                         <span style={{textDecoration:'underline'}}>
-                            {parentId !== null ? parentId.name : "Отсутствует"}
+                            {parentId !== null ? parentId?.name : "Отсутствует"}
                         </span>
                     </span>
                 </div>

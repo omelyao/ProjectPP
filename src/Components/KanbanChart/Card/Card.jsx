@@ -40,8 +40,6 @@ const Card = ({
         return `${hours}:${minutes}:${seconds}`;
     }
 
-
-
     const openForm = (type) => {
         setFormType(type);
         setShowModal(true);
@@ -111,7 +109,7 @@ const Card = ({
                     )}
                 </div>
             </div>
-            <Modal typeTask={typeTask} id={items.task_id} parentName={items.parent_id__name} showModal={showModal} setShowModal={setShowModal} formType={formType} setFormType={setFormType}/>
+            <Modal typeTask={typeTask} id={items.task_id} parentName={items.name} showModal={showModal} setShowModal={setShowModal} formType={formType} setFormType={setFormType}/>
         </>
     );
 };

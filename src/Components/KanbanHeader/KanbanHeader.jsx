@@ -3,14 +3,20 @@ import Select from "../UI/Select";
 import Button from "../UI/Button";
 import s from './KanbanHeader.module.css'
 import {useRecoilState, useRecoilValue, useSetRecoilState} from "recoil";
-import {projectsId, projectsList, tasksState} from "../../store/atom";
-import {deleteCompletedTask, getAllTask} from "../../services/task";
+import {projectInterns, projectsId, projectsList, tasksKanbanState, tasksState} from "../../store/atom";
+import {deleteCompletedTask, getAllTask, getProjectInterns} from "../../services/task";
+import {useParams} from "react-router-dom";
+import {useGetUserQuery} from "../../redux/authApi";
 
 
 const KanbanHeader = () => {
     const [projectId, setProjectId] = useRecoilState(projectsId);
     const projectList = useRecoilValue(projectsList)
-    const setTasks = useSetRecoilState(tasksState);
+    const setTasks = useSetRecoilState(tasksKanbanState);
+    const setInterns = useSetRecoilState(projectInterns)
+    const internsList = useRecoilValue(projectInterns)
+    let {userId} = useParams();
+    let user = useGetUserQuery({id: userId});
 
     const changeId = async (event) => {
         event.preventDefault()
@@ -32,8 +38,15 @@ const KanbanHeader = () => {
         }
     }
 
-    useEffect(() => {
-        if (changeId) {
+    useEffect(() =>{
+        if(changeId){
+            getProjectInterns(projectId)
+                .then((response) => {
+                    setInterns(response)
+                })
+                .catch((error) => {
+                    console.log(error)
+                })
             getAllTask("kanban", projectId)
                 .then((response) => {
                     setTasks(response);
@@ -42,7 +55,7 @@ const KanbanHeader = () => {
                     console.log(error);
                 });
         }
-    })
+    }, [])
 
     return (
         <div className={s.container}>
@@ -54,9 +67,13 @@ const KanbanHeader = () => {
                             defaultValue={projectList[0]?.id}
                     />
                 </div>
-                <div className={s.buttons}>
-                    <Button onClick={() => Delete()} children={"Убрать завершенные задачи"} width={250}/>
-                </div>
+                {internsList?.interns?.find((intern) => intern?.id_intern === user?.data?.id) &&
+                    <>
+                        <div className={s.buttons}>
+                            <Button onClick={() => Delete()} children={"Убрать завершенные задачи"} width={250}/>
+                        </div>
+                    </>
+                }
             </div>
         </div>
     );

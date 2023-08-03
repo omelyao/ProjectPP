@@ -69,6 +69,7 @@ export const getAllTask = async (type, id) => {
                 Authorization: `Bearer ${store.getState()?.auth?.access}`
             }
         });
+        console.log(store.getState()?.auth?.access)
         return response.data;
     } catch (e) {
         console.log(e);

@@ -20,7 +20,7 @@ const Modal = ({id, parentId, parentName , showModal, setShowModal, formType, se
                 <div className={s.container} onClick={() => setShowModal(false)}>
                     <div className={s.modal} onClick={e => e.stopPropagation()}>
                         <button className={s.close} onClick={closeForm}><Close/></button>
-                        {formType === 'create' && (<CreateForm typeTask={typeTask} setShowModal={setShowModal} parentId={parentId}/>)}
+                        {formType === 'create' && (<CreateForm typeTask={typeTask} formType={formType} setShowModal={setShowModal} parentName={parentName} parentId={parentId}/>)}
                         {formType === 'edit' && (<EditForm typeTask={typeTask} setShowModal={setShowModal} setFormType={setFormType} parentName={parentName} id={id}/>)}
                         {formType === 'view' && (<ViewForm typeTask={typeTask} setShowModal={setShowModal}  setFormType={setFormType} parentName={parentName} id={id}/>)}
                     </div>

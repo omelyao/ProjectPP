@@ -9,6 +9,11 @@ const GanttTable = ({
                         collapsedTasks,
                         toggleTaskCollapse,
                     }) => {
+
+    if (!tasks || tasks.length === 0) {
+        return null
+    }
+
     const taskStartDates = tasks.map((task) => new Date(task.planned_start_date));
     const taskEndDates = tasks.map((task) => new Date(task.planned_final_date));
 

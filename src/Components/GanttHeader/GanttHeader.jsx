@@ -6,15 +6,23 @@ import {useRecoilState, useRecoilValue, useSetRecoilState} from "recoil";
 import {projectInterns, projectsId, projectsList, tasksState, teamsList, userState} from "../../store/atom";
 import Modal from "../GanttTaskForm/Modal/Modal";
 import { getAllTask, getProjectInterns, getUserInfo} from "../../services/task";
+import ButtonForm from "../GanttTaskForm/UI/Button";
+import {useParams} from "react-router-dom";
+import {useGetUserQuery} from "../../redux/authApi";
 
 const GanttHeader = () => {
     const [projectId, setProjectId] = useRecoilState(projectsId);
     const [formType, setFormType] = useState('')
     const [typeTask, setTypeTask] = useState('')
     const [showModal, setShowModal] = useState(false)
+    const setInterns = useSetRecoilState(projectInterns)
     const parentId = null
     const projectList = useRecoilValue(projectsList)
     const setTasks = useSetRecoilState(tasksState);
+    const internsList = useRecoilValue(projectInterns)
+    let {userId} = useParams();
+    let user = useGetUserQuery({id: userId});
+
 
     const openForm = (type) => {
         setFormType(type);
@@ -29,6 +37,13 @@ const GanttHeader = () => {
 
     useEffect(() =>{
         if(changeId){
+            getProjectInterns(projectId)
+                .then((response) => {
+                    setInterns(response)
+                })
+                .catch((error) => {
+                    console.log(error)
+                })
             getAllTask("gantt", projectId)
                 .then((response) => {
                     setTasks(response);
@@ -37,7 +52,7 @@ const GanttHeader = () => {
                     console.log(error);
                 });
         }
-    })
+    }, [])
 
     return (
         <div className={s.container}>
@@ -49,9 +64,13 @@ const GanttHeader = () => {
                         defaultValue={projectList[0]?.id}
                     />
                 </div>
-                <div className={s.buttons}>
-                    <Button children={"Создать задачу"} onClick={()=>openForm('create')}/>
-                </div>
+                {internsList?.interns?.find((intern) => intern?.id_intern === user?.data?.id) &&
+                    <>
+                        <div className={s.buttons}>
+                            <Button children={"Создать задачу"} onClick={()=>openForm('create')}/>
+                        </div>
+                    </>
+                }
             </div>
             <Modal typeTask={typeTask} parentId={parentId} showModal={showModal} setShowModal={setShowModal} formType={formType} setFormType={setFormType}/>
         </div>

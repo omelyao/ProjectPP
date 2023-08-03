@@ -121,12 +121,17 @@ const ViewForm = ({id, setFormType, setShowModal, typeTask , parentName}) => {
                     timerId,
                     taskId: taskId.task.id,
                     taskName: taskId.task.name,
-                    time: prevTimer.time !== null ?
-                        prevTimer.time :
-                        taskId.executors.find((executor) => executor.user_id === user?.data?.id)?.time_spent !== null ?
-                        taskId.executors.find((executor) => executor.user_id === user?.data?.id)?.time_spent
-                        : 0,
+                    // time: taskId.executors.find((executor) => executor.user_id === user?.data?.id)?.time_spent !== null ?
+                    //         taskId.executors.find((executor) => executor.user_id === user?.data?.id)?.time_spent
+                    //         : 0,
+                    // time: prevTimer.time !== null ?
+                    //     prevTimer.time :
+                    //     taskId.executors.find((executor) => executor.user_id === user?.data?.id)?.time_spent !== null ?
+                    //     taskId.executors.find((executor) => executor.user_id === user?.data?.id)?.time_spent
+                    //     : 0,
                 }));
+            }else{
+                alert('Прошлая задача активна')
             }
         }
     };
@@ -141,8 +146,10 @@ const ViewForm = ({id, setFormType, setShowModal, typeTask , parentName}) => {
                     isRunning: false,
                     taskId: taskId.task.id,
                     taskName: taskId.task.name,
-                    time: prevTimer.time, // Обновляем значение времени
+                    time: prevTimer.time,
                 }));
+            }else{
+                alert('Прошлая задача активна')
             }
         }
     };
@@ -160,6 +167,8 @@ const ViewForm = ({id, setFormType, setShowModal, typeTask , parentName}) => {
                     isRunning: false,
                     timerId: null,
                 }));
+            }else{
+                alert('Прошлая задача активна')
             }
         }
     };
@@ -245,7 +254,10 @@ const ViewForm = ({id, setFormType, setShowModal, typeTask , parentName}) => {
                         <span>&nbsp;</span>
                         <span style={{textDecoration: 'underline'}}>
                         {taskId.task && taskId.task.parent_id !== null ?
-                            findTaskById(tasks.tasks, taskId.task.parent_id)?.name : "Отсутствует"}
+                            findTaskById(tasks.tasks, taskId.task.parent_id)?.name :
+                            parentName ?
+                                '' :
+                            "Отсутствует"}
                             {parentName && parentName}
                         </span>
                     </span>
@@ -334,25 +346,29 @@ const ViewForm = ({id, setFormType, setShowModal, typeTask , parentName}) => {
                         {/*    disabled*/}
                         {/*/>*/}
                     </div>
-                    <div className={s.unimportant}>
-                        <div className={s.unimportantTop}>
-                            <span className={s.label}>Исполнители</span>
-                        </div>
-                        <div className={s.unimportantLists}>
-                            {taskId.executors &&
-                                taskId.executors.map((performer, index) => (
-                                    performer?.role_id__name === "RESPONSIBLE" && (
-                                        <div className={s.unimportantList} key={index}>
-                                            <Select
-                                                disabled
-                                                options={internsList.interns}
-                                                value={taskId.executors && taskId.executors[index]?.user_id}
-                                            />
-                                        </div>
-                                    )
-                                ))}
-                        </div>
-                    </div>
+                    {taskId.executors?.length > 1 &&
+                        <>
+                            <div className={s.unimportant}>
+                                <div className={s.unimportantTop}>
+                                    <span className={s.label}>Исполнители</span>
+                                </div>
+                                <div className={s.unimportantLists}>
+                                    {taskId.executors &&
+                                        taskId.executors.map((performer, index) => (
+                                            performer?.role_id__name === "RESPONSIBLE" && (
+                                                <div className={s.unimportantList} key={index}>
+                                                    <Select
+                                                        disabled
+                                                        options={internsList.interns}
+                                                        value={taskId.executors && taskId.executors[index]?.user_id}
+                                                    />
+                                                </div>
+                                            )
+                                        ))}
+                                </div>
+                            </div>
+                        </>
+                    }
                     {taskId.stages?.length === 0 ? null :
                         <div className={s.checklist}>
                             <div className={s.checklistTop}>
@@ -388,7 +404,7 @@ const ViewForm = ({id, setFormType, setShowModal, typeTask , parentName}) => {
                                             <div className={s.timeContainer}>
                                                 <span className={s.timerIcon}><Timer/></span>
                                                 <span
-                                                    className={s.timeValue}>{timer.taskId === id ? formatTime(timer.time) : "00:00:00"}</span>
+                                                    className={s.timeValue}>{ timer.taskId === id ? formatTime(timer.time) : formatTime(taskId.executors.find((executor) => executor.user_id === user?.data?.id)?.time_spent)}</span>
                                             </div>
                                             <div className={s.timerButtonsContainer}>
                                                 <ButtonForm onClick={timer.isRunning ? stopTimer : startTimer} padding={'0 8px'}
@@ -428,8 +444,12 @@ const ViewForm = ({id, setFormType, setShowModal, typeTask , parentName}) => {
                                 onClick={() => setFormType('edit')}>Редактировать</ButtonForm>
                         </>
                         }
-                        <ButtonForm onClick={() => setFormType('create')}>Создать
-                            подзадачу</ButtonForm>
+                        {typeTask !== 'kanban' && internsList?.interns?.find((intern) => intern?.id_intern === user?.data?.id) &&
+                            <>
+                                <ButtonForm onClick={() => setFormType('create')}>Создать
+                                    подзадачу</ButtonForm>
+                            </>
+                        }
                         {taskId?.executors?.find((executor) => executor.user_id === user?.data?.id)?.role_id__name === "AUTHOR" &&
                             <>
                                 <ButtonForm status='deleteTask' onClick={Delete}>Удалить

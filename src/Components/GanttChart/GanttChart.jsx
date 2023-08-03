@@ -18,7 +18,7 @@ const GanttChart = () => {
         );
     };
 
-    if (tasks?.length === 0) {
+    if (tasks?.tasks?.length === 0) {
         return <TasksZero />
     }
 

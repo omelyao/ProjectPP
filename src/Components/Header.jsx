@@ -147,7 +147,9 @@ function Header({modalIsOpen}) {
     const out = () => {
         dispatch(reset());
         dispatch(logOut());
+        window.location.reload();
     }
+
     return (
         <div>
             <header className={`${classes["main-header"]}`}>
@@ -168,29 +170,29 @@ function Header({modalIsOpen}) {
                     </div>
                     <div className={classes['navigates']}>
                         <div
-                            className={activeCategory === 'profile' ? classes.profileActive : classes.profile}
+                            className={classes.profile}
                             onClick={() => handleCategoryClick('profile')}>
                             <img
-                                src={activeCategory === 'profile' ? require("../assets/img/activeUser.svg").default : require("../assets/img/UserHeader.svg").default}
+                                src={require("../assets/img/UserHeader.svg").default}
                                 width="16" height="16" alt="Мой профиль"
                             />
                             <p>Мой Профиль</p>
                         </div>
                         <div
-                            className={activeCategory === 'kanban' ? classes.kanbanActive : classes.kanban}
+                            className={classes.kanban}
                             onClick={() => handleCategoryClick('kanban')}>
                             <img
                                 onClick={() => setOpen(open)}
-                                src={activeCategory === 'kanban' ? require("../assets/img/activeKanban.svg").default : require("../assets/img/KanbanHeader.svg").default}
+                                src={ require("../assets/img/KanbanHeader.svg").default}
                                 width="16" height="16" alt="Мой профиль"
                             />
                             <p>Канбан</p>
                         </div>
                         <div
-                            className={activeCategory === 'gantt' ? classes.ganttActive : classes.gantt}
+                            className={classes.gantt}
                             onClick={() => handleCategoryClick('gantt')}>
                             <img
-                                src={activeCategory === 'gantt' ? require("../assets/img/activeGantt.svg").default : require("../assets/img/GanttHeader.svg.svg").default}
+                                src={require("../assets/img/GanttHeader.svg.svg").default}
                                 width="16" height="16" alt="Мой профиль"
                             />
                             <p>Гант</p>
