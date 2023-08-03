@@ -3,12 +3,12 @@ import QuestionMark from './QuestionMark';
 import RangeInput from './RangeInput';
 import classes from '../css/Criterion.module.css'
 
-function Criterion({nameCriterion, onChange, value, id, questionOnClick}) {
+function Criterion({nameCriterion, onChange, value, id, description, questionOnClick}) {
     return (
         <div className={`${classes["mark-form-p"]} ${classes["criteria"]}`}>
 
             <QuestionMark
-                onClick={() => questionOnClick(nameCriterion)}
+                onClick={() => questionOnClick(nameCriterion, description)}
                 tabIndex={0}
 
                 width="20"
