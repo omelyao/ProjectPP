@@ -7,18 +7,16 @@ import {projectInterns, projectsId, projectsList, tasksState, teamsList, userSta
 import Modal from "../GanttTaskForm/Modal/Modal";
 import { getAllTask, getProjectInterns, getUserInfo} from "../../services/task";
 import ButtonForm from "../GanttTaskForm/UI/Button";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {useGetUserQuery} from "../../redux/authApi";
+import {useSelector} from "react-redux";
 
 const GanttHeader = () => {
-    const [projectId, setProjectId] = useRecoilState(projectsId);
+    const navigate = useNavigate();
     const [formType, setFormType] = useState('')
     const [typeTask, setTypeTask] = useState('')
     const [showModal, setShowModal] = useState(false)
-    const setInterns = useSetRecoilState(projectInterns)
     const parentId = null
-    const projectList = useRecoilValue(projectsList)
-    const setTasks = useSetRecoilState(tasksState);
     const internsList = useRecoilValue(projectInterns)
     let {userId} = useParams();
     let user = useGetUserQuery({id: userId});
@@ -30,39 +28,18 @@ const GanttHeader = () => {
         setTypeTask('gantt')
     };
 
-    const changeId = async (event) => {
-        event.preventDefault()
-        setProjectId(event.target.value)
-    }
-
-    useEffect(() =>{
-        if(changeId){
-            getProjectInterns(projectId)
-                .then((response) => {
-                    setInterns(response)
-                })
-                .catch((error) => {
-                    console.log(error)
-                })
-            getAllTask("gantt", projectId)
-                .then((response) => {
-                    setTasks(response);
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
+    const handleCategoryClick = (category) => {
+        if (category === 'start') {
+            navigate(`/user/projects-lists`);
         }
-    }, [])
+    };
+
 
     return (
         <div className={s.container}>
             <div className={s.elements}>
                 <div className={s.selects}>
-                    <Select
-                        options={projectList}
-                        onChange={changeId}
-                        defaultValue={projectList[0]?.id}
-                    />
+                    <Button onClick={() => handleCategoryClick('start')} children={"Вернуться к списку"} width={250}/>
                 </div>
                 {internsList?.interns?.find((intern) => intern?.id_intern === user?.data?.id) &&
                     <>

@@ -5,23 +5,23 @@ import s from './KanbanHeader.module.css'
 import {useRecoilState, useRecoilValue, useSetRecoilState} from "recoil";
 import {projectInterns, projectsId, projectsList, tasksKanbanState, tasksState} from "../../store/atom";
 import {deleteCompletedTask, getAllTask, getProjectInterns} from "../../services/task";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {useGetUserQuery} from "../../redux/authApi";
+import {useSelector} from "react-redux";
 
 
 const KanbanHeader = () => {
+    const navigate = useNavigate();
     const [projectId, setProjectId] = useRecoilState(projectsId);
-    const projectList = useRecoilValue(projectsList)
     const setTasks = useSetRecoilState(tasksKanbanState);
-    const setInterns = useSetRecoilState(projectInterns)
     const internsList = useRecoilValue(projectInterns)
     let {userId} = useParams();
     let user = useGetUserQuery({id: userId});
-
-    const changeId = async (event) => {
-        event.preventDefault()
-        setProjectId(event.target.value)
-    }
+    const handleCategoryClick = (category) => {
+        if (category === 'start') {
+            navigate(`/user/projects-lists`);
+        }
+    };
 
     const Delete = async () => {
         try {
@@ -38,34 +38,12 @@ const KanbanHeader = () => {
         }
     }
 
-    useEffect(() =>{
-        if(changeId){
-            getProjectInterns(projectId)
-                .then((response) => {
-                    setInterns(response)
-                })
-                .catch((error) => {
-                    console.log(error)
-                })
-            getAllTask("kanban", projectId)
-                .then((response) => {
-                    setTasks(response);
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-        }
-    }, [])
 
     return (
         <div className={s.container}>
             <div className={s.elements}>
                 <div className={s.selects}>
-                    <Select dis={"Мои задачи"}
-                            options={projectList}
-                            onChange={changeId}
-                            defaultValue={projectList[0]?.id}
-                    />
+                    <Button onClick={() => handleCategoryClick('start')} children={"Вернуться к списку"} width={250}/>
                 </div>
                 {internsList?.interns?.find((intern) => intern?.id_intern === user?.data?.id) &&
                     <>

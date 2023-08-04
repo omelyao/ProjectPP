@@ -17,6 +17,7 @@ import React, {useState} from "react";
 import Gantt from "./pages/gantt/gantt";
 import Kanban from "./pages/kanban/kanban";
 import {ToastContainer} from "react-toastify";
+import StartPage from "./pages/startPage/StartPage";
 
 function App() {
     const [modalIsOpen, setModalIsOpen] = useState(false)
@@ -44,6 +45,14 @@ function App() {
                     element={
                         <PrivateRoute>
                             <Project />
+                        </PrivateRoute>
+                    }
+                />
+                <Route
+                    path="/user/projects-lists"
+                    element={
+                        <PrivateRoute>
+                            <StartPage />
                         </PrivateRoute>
                     }
                 />

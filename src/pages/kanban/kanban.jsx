@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import KanbanHeader from "../../Components/KanbanHeader/KanbanHeader";
 import s from './kanban.module.css'
 import KanbanChart from "../../Components/KanbanChart/KanbanChart";
@@ -12,9 +12,18 @@ import {getAllTask, getProjectInterns, getUserInfo, refreshAccessToken} from "..
 const Kanban = () => {
     const setUser = useSetRecoilState(userState);
     const [projectId, setProjectId] = useRecoilState(projectsId);
-    const setProjectList = useSetRecoilState(projectsList)
-    const setTasks = useSetRecoilState(tasksKanbanState);
-    const setInterns = useSetRecoilState(projectInterns)
+    const setProjectList = useSetRecoilState(projectsList);
+    const setTasks = useSetRecoilState(tasksState);
+    const setInterns = useSetRecoilState(projectInterns);
+    const [isLoading, setIsLoading] = useState(true); // Состояние загрузки данных
+    const [hasError, setHasError] = useState(false); // Состояние ошибки
+
+    useEffect(() => {
+        const storedProjectId = parseInt(localStorage.getItem('projectIds'));
+        if (storedProjectId) {
+            setProjectId(storedProjectId);
+        }
+    }, [setProjectId]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -27,20 +36,29 @@ const Kanban = () => {
 
                 setUser(userInfo);
                 setProjectList(userInfo);
-                setProjectId(userInfo[0]?.id);
                 setTasks(tasks);
                 setInterns(interns);
+                setIsLoading(false); // Устанавливаем состояние загрузки данных после получения данных
+                setHasError(false); // Сбрасываем состояние ошибки
             } catch (error) {
                 console.log(error);
+                setIsLoading(false); // Устанавливаем состояние загрузки данных после получения ошибки
+                setHasError(true); // Устанавливаем состояние ошибки
             }
         };
 
         fetchData();
-    }, [setUser, setProjectList, setTasks, setInterns]);
+    }, [setUser, setProjectList, setTasks, setInterns, setProjectId, projectId]);
 
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
+
+    if (hasError) {
+        return <div>Error occurred while fetching data.</div>;
+    }
 
     return (
-
         <ThemeProvider theme={theme}>
             <GlobalStyles/>
             <div className={s.container}>

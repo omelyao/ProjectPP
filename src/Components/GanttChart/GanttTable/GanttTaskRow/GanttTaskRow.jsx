@@ -59,16 +59,6 @@ const GanttTaskRow = ({
             setNewEndIndex(0)
             const updatedTasks = await getAllTask("gantt",projectId);
             setTasks(updatedTasks);
-            // toast.success('Дата изменена!', {
-            //     position: "top-right",
-            //     autoClose: 1000,
-            //     hideProgressBar: false,
-            //     closeOnClick: true,
-            //     pauseOnHover: true,
-            //     draggable: true,
-            //     progress: undefined,
-            //     theme: "light",
-            // });
         } catch (error) {
             console.log(error);
             setStartIndex(
@@ -79,16 +69,6 @@ const GanttTaskRow = ({
             );
             setNewStartIndex(0)
             setNewEndIndex(0)
-            // toast.error('Дата не изменилась!', {
-            //     position: "top-right",
-            //     autoClose: 1000,
-            //     hideProgressBar: false,
-            //     closeOnClick: true,
-            //     pauseOnHover: true,
-            //     draggable: true,
-            //     progress: undefined,
-            //     theme: "light",
-            // });
         }
     };
 

@@ -116,7 +116,7 @@ const CreateForm = ({parentId, setShowModal, typeTask, formType}) => {
         event.preventDefault();
         const missingData = [];
 
-        if (!name || name === '') {
+        if (!name) {
             missingData.push('Название задачи');
         }
 
@@ -127,6 +127,7 @@ const CreateForm = ({parentId, setShowModal, typeTask, formType}) => {
         if (!finalDate) {
             missingData.push('Дата окончания');
         }
+
 
         if(startDate > finalDate ){
             alert("Дата начала не может быть больше Даты окончания");
@@ -158,6 +159,16 @@ const CreateForm = ({parentId, setShowModal, typeTask, formType}) => {
         });
         responsibleUsers.push(...performerIds);
 
+        if (responsibleUsers.length === 0 || responsibleUsers.includes(null)) {
+            missingData.push("Исполнители не выбраны");
+        }
+
+        if (missingData.length > 0) {
+            const message = `Вы не ввели следующие обязательные данные:\n${missingData.join('\n')}`;
+            alert(message);
+            return;
+        }
+
         // if (executorId !== 0) {
         //     responsibleUsers.push(executorId);
         // }
@@ -166,11 +177,6 @@ const CreateForm = ({parentId, setShowModal, typeTask, formType}) => {
         //     const performerIds = performers.map((performer) => performer.id_intern);
         //     responsibleUsers.push(...performerIds);
         // }
-
-        if (responsibleUsers.length === 0 || responsibleUsers.includes(null)) {
-            alert("Исполнители не выбраны");
-            return;
-        }
 
         try {
             await createTask(taskList, stagesList, responsibleUsers)

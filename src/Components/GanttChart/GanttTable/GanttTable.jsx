@@ -25,9 +25,13 @@ const GanttTable = ({
             (latestDate.getTime() - earliestDate.getTime()) / (1000 * 60 * 60 * 24)
         ) + 1;
 
+    const totalDurationInDays = projectDurationInDays + 15;
+
     const startDate = new Date(earliestDate);
+    startDate.setDate(startDate.getDate() - 7); // Subtract 30 days on the left side
+
     const endDate = new Date(startDate);
-    endDate.setDate(endDate.getDate() + projectDurationInDays - 1);
+    endDate.setDate(endDate.getDate() + totalDurationInDays - 1);
 
     const dateArray = [];
     for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
@@ -35,17 +39,15 @@ const GanttTable = ({
     }
 
     const groupedDates = dateArray.reduce((acc, date) => {
-        const monthString = date.toLocaleString("default", {month: "long"});
+        const monthString = date.toLocaleString("default", { month: "long" });
         acc[monthString] = acc[monthString] || [];
         acc[monthString].push(date);
         return acc;
     }, {});
 
-    const monthArrays = Object.keys(groupedDates).map(
-        (month) => groupedDates[month]
-    );
+    const monthArrays = Object.keys(groupedDates).map((month) => groupedDates[month]);
 
-    const numDays = projectDurationInDays || 0;
+    const numDays = totalDurationInDays || 0;
     const dayCellWidth = 100;
     const tableWrapperWidth = numDays * dayCellWidth;
 
@@ -71,7 +73,7 @@ const GanttTable = ({
                 </div>
             </div>
 
-            <div className={`${s.row} ${s.ganttTable}`}>
+            <div className={s.row}>
                 <div className={s.tableWrapper} style={{ width: `${tableWrapperWidth}px` }}>
                     <div className={s.tableHeader}>
                         {monthArrays.map((monthArray, index) => (
@@ -96,7 +98,7 @@ const GanttTable = ({
                         <GanttTaskRow
                             key={task.id}
                             task={task}
-                            projectDurationInDays={projectDurationInDays}
+                            projectDurationInDays={totalDurationInDays}
                             startDate={startDate}
                             collapsedTasks={collapsedTasks}
                         />

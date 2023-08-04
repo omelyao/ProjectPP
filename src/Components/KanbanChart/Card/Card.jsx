@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import s from './Card.module.css'
-import { ReactComponent as User } from "../../../assets/img/User.svg";
-import { ReactComponent as Cal } from "../../../assets/img/calendar.svg";
-import { ReactComponent as Play } from "../../../assets/img/CardButtons.svg";
-import { ReactComponent as Stop } from "../../../assets/img/StopCardButton.svg";
-import { ReactComponent as Delete } from "../../../assets/img/DeleteCardButtons.svg";
+import {ReactComponent as User} from "../../../assets/img/User.svg";
+import {ReactComponent as Cal} from "../../../assets/img/calendar.svg";
+import {ReactComponent as Play} from "../../../assets/img/CardButtons.svg";
+import {ReactComponent as Stop} from "../../../assets/img/StopCardButton.svg";
+import {ReactComponent as Delete} from "../../../assets/img/DeleteCardButtons.svg";
 import {useRecoilState, useRecoilValue, useSetRecoilState} from "recoil";
 import {projectsId, taskIdState, tasksKanbanState, tasksState, timerState} from "../../../store/atom";
 import Modal from "../../GanttTaskForm/Modal/Modal";
@@ -40,6 +40,15 @@ const Card = ({
         return `${hours}:${minutes}:${seconds}`;
     }
 
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        const day = date.getDate();
+        const month = date.getMonth() + 1;
+        const year = date.getFullYear();
+
+        return `${String(day).padStart(2, '0')}.${String(month).padStart(2, '0')}.${year}`;
+    };
+
     const openForm = (type) => {
         setFormType(type);
         setShowModal(true);
@@ -65,7 +74,6 @@ const Card = ({
     };
 
 
-
     return (
         <>
             <div
@@ -78,7 +86,7 @@ const Card = ({
                 onMouseLeave={handleMouseLeave}
             >
                 <div className={s.title}>
-                    <span onClick={()=>openForm('view')}>{items.name}</span>
+                    <span onClick={() => openForm('view')}>{items.name}</span>
                     <span>{timer.taskId === items.task_id ? formatTime(timer.time) : ''}</span>
                 </div>
                 <div className={s.project}>
@@ -88,13 +96,15 @@ const Card = ({
                     <span>#{items.team__teg}</span>
                 </div>
                 <div className={s.user}>
-                    <User style={{width:"16px", height:"16px"}} />
+                    <User style={{width: "16px", height: "16px"}}/>
                     <span>{items.user_id__last_name} {items.user_id__first_name}</span>
                 </div>
                 <div className={s.bottom}>
                     <div className={s.deadline}>
-                        <Cal style={{width:"16px", height:"16px"}}/>
-                        <span>{items.planned_final_date}</span>
+                        <Cal style={{width: "16px", height: "16px"}}/>
+                        <span>
+  {items.planned_final_date && formatDate(items.planned_final_date)}
+</span>
                     </div>
                     {isHovered && (
                         <div className={s.buttons}>
@@ -104,12 +114,14 @@ const Card = ({
                             {/*        <Play style={{width:"24px", height:"24px"}}/>*/}
                             {/*    }*/}
                             {/*</button>*/}
-                            <button onClick={() => DeleteTask(items.task_id)}><Delete style={{width:"24px", height:"24px"}} /></button>
+                            <button onClick={() => DeleteTask(items.task_id)}><Delete
+                                style={{width: "24px", height: "24px"}}/></button>
                         </div>
                     )}
                 </div>
             </div>
-            <Modal typeTask={typeTask} id={items.task_id} parentName={items.name} showModal={showModal} setShowModal={setShowModal} formType={formType} setFormType={setFormType}/>
+            <Modal typeTask={typeTask} id={items.task_id} parentName={items.name} showModal={showModal}
+                   setShowModal={setShowModal} formType={formType} setFormType={setFormType}/>
         </>
     );
 };

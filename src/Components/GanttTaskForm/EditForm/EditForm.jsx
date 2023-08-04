@@ -218,7 +218,7 @@ const EditForm = ({id, setFormType, setShowModal, typeTask, parentName}) => {
                         </span>
                     </span>
                 </div>
-                {/*<div className={s.info}>*/}
+                <div className={s.info}>
                 <div className={s.elements}>
                     <div className={s.project}>
                         <Select
@@ -371,10 +371,10 @@ const EditForm = ({id, setFormType, setShowModal, typeTask, parentName}) => {
                 {/*</div>*/}
                 <div className={s.buttons}>
                     <ButtonForm type="submit">Сохранить</ButtonForm>
-                    <ButtonForm onClick={() => setFormType('create')}>Создать подзадачу</ButtonForm>
+                    {/*<ButtonForm onClick={() => setFormType('create')}>Создать подзадачу</ButtonForm>*/}
                     <ButtonForm status='deleteTask' onClick={Delete}>Удалить задачу</ButtonForm>
                 </div>
-                {/*</div>*/}
+                </div>
             </form>
         </div>
     );

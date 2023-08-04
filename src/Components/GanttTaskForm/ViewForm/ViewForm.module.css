@@ -26,7 +26,7 @@
 }
 
 .info::-webkit-scrollbar {
-    width: 8px; /* Ширина полосы прокрутки */
+    width: 8px;
 }
 
 .info::-webkit-scrollbar-thumb {
@@ -34,7 +34,7 @@
     border-radius: 4px; /* Скругление углов полосы прокрутки */
 }
 
-.info:hover {
+.info {
     overflow: auto;
 }
 

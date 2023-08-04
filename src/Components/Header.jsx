@@ -33,16 +33,7 @@ function Header({modalIsOpen}) {
         }
     };
 
-    // const openForm = async (type) => {
-    //     try {
-    //         await getUser(user.user_id)
-    //         await setFormType(type);
-    //         setShowModal(true);
-    //     }catch (e) {
-    //         console.log(e)
-    //     }
-    // };
-    //
+
     useEffect(() => {
         const refreshInterval = setInterval(refreshAccessToken, 60 * 1000);
         return () => clearInterval(refreshInterval);
@@ -55,77 +46,10 @@ function Header({modalIsOpen}) {
         return `${hours}:${minutes}:${seconds}`;
     };
 
-    // const startTimer = () => {
-    //     if (!timer.isRunning) {
-    //         const timerId = setInterval(() => {
-    //             setTimer((prevTimer) => ({
-    //                 ...prevTimer,
-    //                 time: prevTimer.time + 1,
-    //             }));
-    //         }, 1000);
-    //
-    //         setTimer((prevTimer) => ({
-    //             ...prevTimer,
-    //             isRunning: true,
-    //             timerId
-    //         }));
-    //     }
-    // };
-    //
-    // const stopTimer = () => {
-    //     if (timer.isRunning) {
-    //         clearInterval(timer.timerId);
-    //         setTimer((prevTimer) => ({
-    //             ...prevTimer,
-    //             isRunning: false,
-    //             time: prevTimer.time,
-    //         }));
-    //     }
-    // };
-
-    // const resetTimer = () => {
-    //     if (!timer.isRunning && timer.taskId === taskId.task.id) {
-    //         clearInterval(timer.timerId);
-    //         setTimer((prevTimer) => ({
-    //             ...prevTimer,
-    //             time: taskId.executors.find((executor) => executor.user_id === user.user_id)?.time_spent !== null ?
-    //                 taskId.executors.find((executor) => executor.user_id === user.user_id)?.time_spent
-    //                 : 0,
-    //             isRunning: false,
-    //             timerId: null,
-    //         }));
-    //     }
-    // };
-
-    // const saveTimer = async () => {
-    //         if (!timer.isRunning && timer.taskId === taskId.task.id) {
-    //             clearInterval(timer.timerId);
-    //             setTimer((prevTimer) => ({
-    //                 ...prevTimer,
-    //                 isRunning: false,
-    //                 timerId: null,
-    //             }));
-    //
-    //             try {
-    //                 await timeSpent(taskId.task.id, timer.time);
-    //                 const updatedTaskId = await getIdTask(taskId.task.id);
-    //                 setTaskId(updatedTaskId);
-    //             } catch (error) {
-    //                 console.log(error)
-    //             }
-    //         }
-    // };
-
-    const handleTaskClick = () => {
-        setShowTaskInfo(!showTaskInfo);
-    };
-
     const handleCategoryClick = (category) => {
         setActiveCategory(category);
-        if (category === 'kanban') {
-            navigate(`/user/${user.user_id}/kanban`);
-        } else if (category === 'gantt') {
-            navigate(`/user/${user.user_id}/gantt`);
+        if (category === 'start') {
+            navigate(`/user/projects-lists`);
         } else if (category === 'profile') {
             navigate(`/user/${user.user_id}/user`)
         }
@@ -179,23 +103,13 @@ function Header({modalIsOpen}) {
                             <p>Мой Профиль</p>
                         </div>
                         <div
-                            className={classes.kanban}
-                            onClick={() => handleCategoryClick('kanban')}>
-                            <img
-                                onClick={() => setOpen(open)}
-                                src={ require("../assets/img/KanbanHeader.svg").default}
-                                width="16" height="16" alt="Мой профиль"
-                            />
-                            <p>Канбан</p>
-                        </div>
-                        <div
                             className={classes.gantt}
-                            onClick={() => handleCategoryClick('gantt')}>
+                            onClick={() => handleCategoryClick('start')}>
                             <img
                                 src={require("../assets/img/GanttHeader.svg.svg").default}
                                 width="16" height="16" alt="Мой профиль"
                             />
-                            <p>Гант</p>
+                            <p>Проекты</p>
                         </div>
                     </div>
                 </div>

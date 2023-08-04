@@ -7,8 +7,8 @@ import {deleteIdTask, editStatus, getAllTask} from "../../services/task";
 
 const KanbanChart = () => {
     const projectId= useRecoilValue(projectsId);
-    const tasks = useRecoilValue(tasksKanbanState);
-    const setTasks = useSetRecoilState(tasksKanbanState);
+    const tasks = useRecoilValue(tasksState);
+    const setTasks = useSetRecoilState(tasksState);
 
     const [boards, setBoards] = useState([
         { id: 1, title: 'В РАБОТУ', status: 'inwork', idStatus: 'TO WORK', items: [] },

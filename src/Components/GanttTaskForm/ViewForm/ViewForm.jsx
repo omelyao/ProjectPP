@@ -468,6 +468,13 @@ const ViewForm = ({id, setFormType, setShowModal, typeTask , parentName}) => {
                                                     >
                                                         Сохранить
                                                     </ButtonForm>
+                                                    <ButtonForm
+                                                        height={'40px'}
+                                                        width={'100px'}
+                                                        onClick={() => setEditingCommentId(null)}
+                                                    >
+                                                        Отменить
+                                                    </ButtonForm>
                                                 </>
                                             ) : (
                                                 <>
