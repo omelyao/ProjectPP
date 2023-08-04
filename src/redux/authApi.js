@@ -2,7 +2,9 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { logOut, setCredentials } from "./authSlice";
 import { Mutex } from "async-mutex";
 
-export const domen = process.env.REACT_APP_API_URL;
+const url = process.env.REACT_APP_API_URL
+
+export const domen = process.env.REACT_APP_API_URL
 //http://studprzi.beget.tech
 //http://127.0.0.1:8000
 //https://lkural.pythonanywhere.com

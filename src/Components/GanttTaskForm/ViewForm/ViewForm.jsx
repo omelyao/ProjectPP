@@ -121,9 +121,9 @@ const ViewForm = ({id, setFormType, setShowModal, typeTask , parentName}) => {
                     timerId,
                     taskId: taskId.task.id,
                     taskName: taskId.task.name,
-                    // time: taskId.executors.find((executor) => executor.user_id === user?.data?.id)?.time_spent !== null ?
-                    //         taskId.executors.find((executor) => executor.user_id === user?.data?.id)?.time_spent
-                    //         : 0,
+                    time: taskId.executors.find((executor) => executor.user_id === user?.data?.id)?.time_spent !== null ?
+                            taskId.executors.find((executor) => executor.user_id === user?.data?.id)?.time_spent
+                            : 0,
                     // time: prevTimer.time !== null ?
                     //     prevTimer.time :
                     //     taskId.executors.find((executor) => executor.user_id === user?.data?.id)?.time_spent !== null ?
@@ -131,13 +131,13 @@ const ViewForm = ({id, setFormType, setShowModal, typeTask , parentName}) => {
                     //     : 0,
                 }));
             }else{
-                alert('Прошлая задача активна')
+                alert('Таймер запущен у другой задачи')
             }
         }
     };
 
 
-    const stopTimer = () => {
+    const stopTimer = async() => {
         if (taskId.executors.find((executor) => executor.user_id === user?.data?.id)) {
             if (timer.isRunning && timer.taskId === taskId.task.id) {
                 clearInterval(timer.timerId);
@@ -148,53 +148,26 @@ const ViewForm = ({id, setFormType, setShowModal, typeTask , parentName}) => {
                     taskName: taskId.task.name,
                     time: prevTimer.time,
                 }));
-            }else{
-                alert('Прошлая задача активна')
-            }
-        }
-    };
-
-    const resetTimer = () => {
-        if (taskId.executors.find((executor) => executor.user_id === user?.data?.id)) {
-
-            if (!timer.isRunning && timer.taskId === taskId.task.id) {
-                clearInterval(timer.timerId);
-                setTimer((prevTimer) => ({
-                    ...prevTimer,
-                    time: taskId.executors.find((executor) => executor.user_id === user?.data?.id)?.time_spent !== null ?
-                        taskId.executors.find((executor) => executor.user_id === user?.data?.id)?.time_spent
-                        : 0,
-                    isRunning: false,
-                    timerId: null,
-                }));
-            }else{
-                alert('Прошлая задача активна')
-            }
-        }
-    };
-
-    const saveTimer = async () => {
-        if (taskId.executors.find((executor) => executor.user_id === user?.data?.id)) {
-
-            if (!timer.isRunning && timer.taskId === taskId.task.id) {
-                clearInterval(timer.timerId);
-                setTimer((prevTimer) => ({
-                    ...prevTimer,
-                    isRunning: false,
-                    timerId: null,
-                }));
-
                 try {
                     await timeSpent(taskId.task.id, timer.time);
                     const updatedTaskId = await getIdTask(taskId.task.id);
                     setTaskId(updatedTaskId);
+                    setTimer((prevTimer) => ({
+                        ...prevTimer,
+                        time: 0,
+                        isRunning: false,
+                        timerId: null,
+                        taskId: null,
+                        taskName: '',
+                    }));
                 } catch (error) {
                     console.log(error)
                 }
+            }else{
+                alert('Таймер запущен у другой задачи')
             }
         }
     };
-
 
     const handleCheckboxChange = async (stage) => {
         try {
@@ -412,9 +385,9 @@ const ViewForm = ({id, setFormType, setShowModal, typeTask , parentName}) => {
                                                     {timer.isRunning && timer.taskId === id ? <PauseTimerButton/> :
                                                         <StartTimerButton/>}
                                                 </ButtonForm>
-                                                <ButtonForm onClick={saveTimer}>Сохранить</ButtonForm>
-                                                <ButtonForm onClick={resetTimer} status='notActive'
-                                                            padding={'0 8px'}><TrashTimerButton/></ButtonForm>
+                                                {/*<ButtonForm onClick={saveTimer}>Сохранить</ButtonForm>*/}
+                                                {/*<ButtonForm onClick={resetTimer} status='notActive'*/}
+                                                {/*            padding={'0 8px'}><TrashTimerButton/></ButtonForm>*/}
                                             </div>
                                         </div>
                                     </div>
