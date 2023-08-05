@@ -56,7 +56,7 @@ const Gantt = () => {
     }
 
     if (hasError) {
-        return <div>Error occurred while fetching data.</div>;
+        return <div>Error 404</div>;
     }
 
 

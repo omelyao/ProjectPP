@@ -51,11 +51,11 @@ const Kanban = () => {
     }, [setUser, setProjectList, setTasks, setInterns, setProjectId, projectId]);
 
     if (isLoading) {
-        return <div>Loading...</div>;
+        return <div>Загрузка...</div>;
     }
 
     if (hasError) {
-        return <div>Error occurred while fetching data.</div>;
+        return <div>Error 404</div>;
     }
 
     return (
