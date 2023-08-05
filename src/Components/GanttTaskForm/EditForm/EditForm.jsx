@@ -43,7 +43,6 @@ const EditForm = ({id, setFormType, setShowModal, typeTask, parentName}) => {
     const [taskId, setTaskId] = useRecoilState(taskIdState)
     const setTasks = useSetRecoilState(tasksState)
     const tasks = useRecoilValue(tasksState)
-
     const options = [
         {id: 1, name: 'Название проекта'},
         {id: 21, name: 'ЛК оценка'},
@@ -90,13 +89,20 @@ const EditForm = ({id, setFormType, setShowModal, typeTask, parentName}) => {
         }
     };
 
-    const handleStageDescriptionChange = async (index, description) => {
+    let timer;
+
+    const handleStageDescriptionChange = (index, description) => {
         const updatedStages = [...taskId.stages];
         if (updatedStages[index]) {
-            const updatedStage = {...updatedStages[index], description};
+            const updatedStage = { ...updatedStages[index], description };
             updatedStages[index] = updatedStage;
-            setTaskId({...taskId, stages: updatedStages});
-            await editsStages(updatedStage); // Вызываем editsStages с обновленным этапом
+            setTaskId({ ...taskId, stages: updatedStages });
+
+            clearTimeout(timer);
+            timer = setTimeout(async () => {
+                await editsStages(updatedStage);
+                timer = null;
+            }, 1000);
         }
     };
 
@@ -119,6 +125,20 @@ const EditForm = ({id, setFormType, setShowModal, typeTask, parentName}) => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+
+        setStartDate(taskId.task.planned_start_date)
+        setFinalDate(taskId.task.planned_final_date)
+        setDeadline(taskId.task.deadline)
+
+        if(startDate > finalDate){
+            alert("Дата начала не может быть больше Даты окончания");
+            return
+        }
+
+        if(finalDate > deadline || startDate > deadline){
+            alert("Дата не может быть больше Даты дедлайна");
+            return
+        }
 
         if (!validateDates()) {
             alert("Подзадача не может выходить за отрезок времени базовой задачи.");

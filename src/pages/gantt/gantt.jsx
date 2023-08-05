@@ -52,7 +52,7 @@ const Gantt = () => {
     }, [setUser, setProjectList, setTasks, setInterns, setProjectId, projectId]);
 
     if (isLoading) {
-        return <div>Загрузка...</div>;
+        return <div></div>;
     }
 
     if (hasError) {
