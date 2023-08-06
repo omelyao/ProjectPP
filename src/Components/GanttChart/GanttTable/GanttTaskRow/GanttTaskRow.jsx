@@ -16,6 +16,7 @@ const GanttTaskRow = ({
 
     const {
         id,
+        status_id__name: statusIdName,
         planned_start_date: taskStartDate,
         planned_final_date: taskEndDate,
         deadline: deadTask,
@@ -133,7 +134,9 @@ const GanttTaskRow = ({
 
     const getCellStyle = (indentLevel) => {
         let colorClass;
-        if (indentLevel === 0 || indentLevel === 1) {
+        if (statusIdName === "COMPLETED"){
+            colorClass = s.cellColor3;
+        }else if (indentLevel === 0 || indentLevel === 1) {
             colorClass = s.cellColor1;
         } else {
             colorClass = s.cellColor2;

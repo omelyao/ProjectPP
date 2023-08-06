@@ -63,7 +63,10 @@ const TaskRow = ({
                                 {isCollapsed ? <Path /> : <Vector />}
                             </CollapseButton>
                         )}
-                        <span style={{cursor: "pointer"}} onClick={()=>openForm('view')}>{task.name}</span>
+                        {task?.status_id__name === "COMPLETED" ?
+                            <span style={{cursor: "pointer", textDecoration: "line-through"}} onClick={()=>openForm('view')}>{task.name}</span> :
+                            <span style={{cursor: "pointer"}} onClick={()=>openForm('view')}>{task.name}</span>
+                        }
                     </Title>
                     <Right place = 'flex-end' width = '200px'>
                         <span>{timer.taskId === task.id ? formatTime(timer.time) : ''}</span>

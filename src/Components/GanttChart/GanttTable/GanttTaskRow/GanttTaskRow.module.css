@@ -41,6 +41,10 @@
     background-color: #fab44c;
 }
 
+.cellColor3 {
+    background-color: #989898;
+}
+
 .ganttDateCell {
     font-weight: bold;
 }
