@@ -29,7 +29,10 @@ const StyledSpan = styled.span`
 const InputDate1 = ({ value, onChange, disabled, defaultValue, icon }) => (
   <StyledDiv>
       <StyledSpan>{icon}</StyledSpan>
-      <StyledInput type="date" defaultValue={defaultValue} value={value} onChange={onChange} disabled={disabled}/>
+      {defaultValue ?
+          <StyledInput type="date" defaultValue={defaultValue}  onChange={onChange} disabled={disabled}/>:
+          <StyledInput type="date"  value={value} onChange={onChange} disabled={disabled}/>
+      }
   </StyledDiv>
 )
 

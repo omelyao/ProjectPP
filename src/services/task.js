@@ -142,7 +142,7 @@ export const updateIdTask = async (id, task) => {
             }
         })
     }catch (e){
-        console.log(e);
+        alert(`Задача не изменилась`);
     }
 }
 

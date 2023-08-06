@@ -7,13 +7,14 @@ import {useNavigate} from "react-router-dom";
 const StyledLi = styled.li`
     border-radius: 8px;
     border: 1px solid #B6BDC3;
-    background: #FFF;
+    background: #F5F7F9;
     padding: 24px 16px;
     display: flex;
   align-items: center;
     justify-content: space-between;
     margin-bottom: 16px;
     color: #31393C;
+  transition: 0.3s all ease-out;
 
     &:hover, &:focus {
         border-radius: 8px;

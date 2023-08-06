@@ -233,12 +233,14 @@ const CreateForm = ({parentId, setShowModal, typeTask, formType}) => {
                         <div className={s.elements}>
                             <InputDate1
                                     value={startDate}
+                                    defaultValue={parentId?.planned_start_date}
                                     onChange={(event) => setStartDate(event.target.value)}
                                     icon={<Clock/>}
                                 />
                                 <span style={{alignSelf:'center'}}>-</span>
                             <InputDate1
                                     value={finalDate}
+                                    defaultValue={parentId?.planned_final_date}
                                     onChange={(event) => setFinalDate(event.target.value)}
                                     icon={<Clock/>}
                                 />
@@ -247,6 +249,7 @@ const CreateForm = ({parentId, setShowModal, typeTask, formType}) => {
                     <div className={s.element}>
                         <span>Дедлайн</span>
                         <InputDate1
+                            defaultValue={parentId?.deadline}
                             onChange={(event) => setDeadline(event.target.value)}
                             icon={<Clock/>}
                         />

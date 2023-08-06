@@ -160,7 +160,7 @@ const GanttTaskRow = ({
             <>
                 <div
                     className={s.startDate}
-                    style={{ left: `${start * 100}px`, width: `100px` }}
+                    style={{ left: `${start * 100}px`, width: `50px` }}
                     onMouseDown={handleStartDateDragStart}
                 />
                 <div
@@ -169,7 +169,7 @@ const GanttTaskRow = ({
                 />
                 <div
                     className={s.endDate}
-                    style={{ left: `${end * 100}px`, width: `100px` }}
+                    style={{ right: `${(projectDurationInDays - end - 1) * 100}px`, width: `50px` }}
                     onMouseDown={handleEndDateDragStart}
                 />
             </>
