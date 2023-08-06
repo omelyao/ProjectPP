@@ -18,6 +18,7 @@ const StartPage = () => {
     const setProjectList = useSetRecoilState(projectsList)
     const setInterns = useSetRecoilState(projectInterns)
     const [activeCategory, setActiveCategory] = useState("");
+    const [searchQuery, setSearchQuery] = useState(""); // добавляем состояние для поискового запроса
     const {user} = useSelector(state => state.auth);
     const setTasks = useSetRecoilState(tasksState);
 
@@ -59,9 +60,6 @@ const StartPage = () => {
     };
 
     useEffect(() => {
-        // if (parseInt(localStorage.getItem('projectIds'))) {
-        //     setProjectId(parseInt(localStorage.getItem('projectIds')))
-        // }
         const fetchData = async () => {
             try {
                 const [userInfo] = await Promise.all([
@@ -78,10 +76,30 @@ const StartPage = () => {
         fetchData();
     }, [setUser, setProjectList]);
 
+    // функция обработки изменения значения в строке поиска
+    const handleSearchQueryChange = (e) => {
+        setSearchQuery(e.target.value);
+    };
+
+    // фильтрация проектов по поисковому запросу
+    const filteredProjects = User?.filter((project) =>
+        project.title.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
     return (
         <div className={s.container}>
             <div className={s.elements}>
                 <p className={s.title}>Мои проекты</p>
+                <div className={s.searchContainer}>
+                    <input
+                        className={s.searchForm}
+                        type="text"
+                        value={searchQuery}
+                        onChange={handleSearchQueryChange}
+                        placeholder="Поиск по названию проекта"
+                    />
+                    {/*<ButtonForm>Поиск</ButtonForm>*/}
+                </div>
             </div>
 
             <div className={s.projectsContainer}>
@@ -92,7 +110,7 @@ const StartPage = () => {
                         <div className={s.col3}>Дата начала</div>
                         <div className={s.col4}>Дата окончания</div>
                     </li>
-                    {User?.map((val, i) => (
+                    {filteredProjects?.map((val, i) => (
                         <>
                             <TableRow
                                 key={i}

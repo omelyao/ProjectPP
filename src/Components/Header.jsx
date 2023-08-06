@@ -103,7 +103,7 @@ function Header({modalIsOpen}) {
                             <p>Мой Профиль</p>
                         </div>
                         <div
-                            className={classes.gantt}
+                            className={classes.profile}
                             onClick={() => handleCategoryClick('start')}>
                             <img
                                 src={require("../assets/img/GanttHeader.svg.svg").default}

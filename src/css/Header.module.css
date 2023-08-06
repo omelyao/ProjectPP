@@ -77,7 +77,7 @@
     line-height: 32px;
 }
 
-.kanbanActive, .ganttActive{
+.kanban, .gantt:hover{
     display:flex;
     align-items: center;
     justify-content: center;

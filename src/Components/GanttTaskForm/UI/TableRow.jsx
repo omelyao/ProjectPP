@@ -51,19 +51,19 @@ const TableRow = ({project, value, startDate, endDate, key, handleCategoryClick}
             <div
                 className={classes.gantt}
                 onClick={() => handleCategoryClick('kanban', value)}>
-                <img
-                    src={require("../../../assets/img/KanbanHeader.svg").default}
-                    width="16" height="16" alt="Мой профиль"
-                />
+                {/*<img*/}
+                {/*    src={require("../../../assets/img/KanbanHeader.svg").default}*/}
+                {/*    width="16" height="16" alt="Мой профиль"*/}
+                {/*/>*/}
                 <p>Канбан</p>
             </div>
             <div
                 className={classes.gantt}
                 onClick={() => handleCategoryClick('gantt', value)}>
-                <img
-                    src={require("../../../assets/img/GanttHeader.svg.svg").default}
-                    width="16" height="16" alt="Мой профиль"
-                />
+                {/*<img*/}
+                {/*    src={require("../../../assets/img/GanttHeader.svg.svg").default}*/}
+                {/*    width="16" height="16" alt="Мой профиль"*/}
+                {/*/>*/}
                 <p>Гант</p>
             </div>
         </StyledDiv2>
