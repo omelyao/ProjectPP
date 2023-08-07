@@ -120,7 +120,7 @@ const Card = ({
                     )}
                 </div>
             </div>
-            <Modal typeTask={typeTask} id={items.task_id} parentName={items.name} showModal={showModal}
+            <Modal typeTask={typeTask} id={items.task_id} parentName={items.parent_id__name} showModal={showModal}
                    setShowModal={setShowModal} formType={formType} setFormType={setFormType}/>
         </>
     );
