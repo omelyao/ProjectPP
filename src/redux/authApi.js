@@ -4,7 +4,8 @@ import { Mutex } from "async-mutex";
 
 const url = process.env.REACT_APP_API_URL
 
-export const domen = process.env.REACT_APP_API_URL
+// export const domen = process.env.REACT_APP_API_URL
+export const domen = 'http://studprzi.beget.tech'
 //http://studprzi.beget.tech
 //http://127.0.0.1:8000
 //https://lkural.pythonanywhere.com
