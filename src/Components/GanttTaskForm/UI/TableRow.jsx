@@ -1,8 +1,8 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import classes from "../../../css/Header.module.css";
-import {useSelector} from "react-redux";
-import {useNavigate} from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const StyledLi = styled.li`
     border-radius: 8px;
@@ -26,11 +26,12 @@ const StyledLi = styled.li`
 `;
 
 const StyledDiv1 = styled.div`
-    flex-basis: 30%;
+    flex-basis: 25%;
+    font-size:26px;
 `;
 
 const StyledDiv2 = styled.div`
-    flex-basis: 30%;
+    flex-basis: 40%;
   display: flex;
   flex-direction: row;
   gap: 5px;
@@ -38,14 +39,16 @@ const StyledDiv2 = styled.div`
 
 const StyledDiv3 = styled.div`
     flex-basis: 20%;
+    font-size:26px;
 `;
 
 const StyledDiv4 = styled.div`
-    flex-basis: 20%;
+    flex-basis: 15%;
+    font-size:26px;
 `;
 
 
-const TableRow = ({project, value, startDate, endDate, key, handleCategoryClick}) => (
+const TableRow = ({ project, value, startDate, endDate, key, handleCategoryClick }) => (
     <StyledLi key={key}>
         <StyledDiv1>{project}</StyledDiv1>
         <StyledDiv2>

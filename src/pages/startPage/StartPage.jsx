@@ -1,12 +1,12 @@
 import s from './StartPage.module.css'
 import TableRow from "../../Components/GanttTaskForm/UI/TableRow";
 import ButtonForm from "../../Components/GanttTaskForm/UI/Button";
-import {useRecoilState, useRecoilValue, useSetRecoilState} from "recoil";
-import {projectInterns, projectsId, projectsList, tasksState, userState} from "../../store/atom";
-import {useEffect, useState} from "react";
-import {getAllTask, getProjectInterns, getUserInfo} from "../../services/task";
-import {useNavigate} from "react-router-dom";
-import {useSelector} from "react-redux";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { projectInterns, projectsId, projectsList, tasksState, userState } from "../../store/atom";
+import { useEffect, useState } from "react";
+import { getAllTask, getProjectInterns, getUserInfo } from "../../services/task";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 
 const StartPage = () => {
@@ -19,7 +19,7 @@ const StartPage = () => {
     const setInterns = useSetRecoilState(projectInterns)
     const [activeCategory, setActiveCategory] = useState("");
     const [searchQuery, setSearchQuery] = useState(""); // добавляем состояние для поискового запроса
-    const {user} = useSelector(state => state.auth);
+    const { user } = useSelector(state => state.auth);
     const setTasks = useSetRecoilState(tasksState);
 
     const handleCategoryClick = async (category, projectId) => {
@@ -118,7 +118,7 @@ const StartPage = () => {
                                 value={val.id}
                                 handleCategoryClick={handleCategoryClick}
                                 startDate={val.start_date}
-                                endDate={val.end_date}/>
+                                endDate={val.end_date} />
                         </>
                     ))}
                 </ul>
