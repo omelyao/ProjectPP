@@ -21,7 +21,9 @@ ul{
     padding: 0;
 }
 .title {
-    font-size: 22px;
+    font-size: 46px;
+    margin-bottom: 1em;
+    font-weight: 500;
     color: #31393C;
 }
 
@@ -34,10 +36,10 @@ ul{
 }
 
 .searchForm {
-    width: 20%;
-    height: 32px;
+    width: 400px;
+    height: 50px;
     border-radius: 5px;
-    border: 1px solid #B6BDC3;
+    border: 1px solid #9ca2a7;
     padding: 4px 8px;
     outline: 0;
 }
@@ -60,17 +62,26 @@ ul{
 }
 
 .col1 {
-    flex-basis: 32%;
+    font-size: 30px;
+    flex-basis: 57%;
+    margin-bottom:5px;
 }
 
 .col2 {
-    flex-basis: 38%;
+    display: none;
+    font-size: 30px;
+    flex-basis: 35%;
+    margin-bottom:5px;
 }
 
 .col3 {
-    flex-basis: 20%;
+    font-size: 30px;
+    flex-basis: 21%;
+    margin-bottom:5px;
 }
 
 .col4 {
-    flex-basis: 15%;
+    font-size: 30px;
+    flex-basis: 22%;
+    margin-bottom:5px;
 }

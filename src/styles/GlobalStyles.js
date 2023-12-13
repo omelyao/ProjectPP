@@ -1,4 +1,4 @@
-import {createGlobalStyle} from "styled-components";
+import { createGlobalStyle } from "styled-components";
 
 
 const GlobalStyles = createGlobalStyle`
@@ -85,6 +85,8 @@ const GlobalStyles = createGlobalStyle`
     font-weight: 400;
     height: 100%;
     width: 100%;
+    overflow-x:auto;
+    overflow-y:auto;
   }
 
   ::-webkit-calendar-picker-indicator { 

@@ -82,11 +82,11 @@
     display:flex;
     align-items: center;
     justify-content: center;
-    width: 134px;
-    height: 32px;
+    width: 124px;
+    height: 40px;
     gap: 8px;
     border-radius: 5px;
-    background: #0340BB;
+    background-color: #FE7A01;
     cursor: pointer;
     color:  white;
     transition: 0.2s;

@@ -8,7 +8,7 @@ const StyledLi = styled.li`
     border-radius: 8px;
     border: 1px solid #B6BDC3;
     background: #F5F7F9;
-    padding: 24px 16px;
+    padding: 24px 24px;
     display: flex;
   align-items: center;
     justify-content: space-between;
@@ -31,19 +31,19 @@ const StyledDiv1 = styled.div`
 `;
 
 const StyledDiv2 = styled.div`
-    flex-basis: 40%;
+    flex-basis: 34%;
   display: flex;
   flex-direction: row;
   gap: 5px;
 `;
 
 const StyledDiv3 = styled.div`
-    flex-basis: 20%;
+    flex-basis: 23%;
     font-size:26px;
 `;
 
 const StyledDiv4 = styled.div`
-    flex-basis: 15%;
+    flex-basis: 18%;
     font-size:26px;
 `;
 

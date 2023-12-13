@@ -1,9 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
-body{
-    overflow-x: hidden;
-    overflow-y: hidden;
-}
 .main{
     width: 475px;
     margin:0 auto;
