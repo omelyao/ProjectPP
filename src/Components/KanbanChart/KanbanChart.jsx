@@ -1,21 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import s from './KanbanChart.module.css';
 import Column from './Column/Column';
-import {useRecoilValue, useSetRecoilState} from 'recoil';
-import {projectsId, tasksKanbanState, tasksState} from '../../store/atom';
-import {deleteIdTask, editStatus, getAllTask} from "../../services/task";
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { projectsId, tasksKanbanState, tasksState } from '../../store/atom';
+import { deleteIdTask, editStatus, getAllTask } from "../../services/task";
 
 const KanbanChart = () => {
-    const projectId= useRecoilValue(projectsId);
+    const projectId = useRecoilValue(projectsId);
     const tasks = useRecoilValue(tasksState);
     const setTasks = useSetRecoilState(tasksState);
 
     const [boards, setBoards] = useState([
-        { id: 1, title: 'В РАБОТУ', status: 'inwork', idStatus: 'TO WORK', items: [] },
-        { id: 2, title: 'ВЫПОЛНЯЮТСЯ', status: 'except', idStatus: 'IN PROGRESS', items: [] },
-        { id: 3, title: 'ТЕСТИРОВАНИЕ', status: 'test', idStatus: 'TESTING', items: [] },
-        { id: 4, title: 'ПРОВЕРКА', status: 'check', idStatus: 'CHECKING', items: [] },
-        { id: 5, title: 'ЗАВЕРШЕННЫЕ', status: 'complete', idStatus: 'COMPLETED', items: [] },
+        { id: 1, title: 'В работу', status: 'inwork', idStatus: 'TO WORK', items: [] },
+        { id: 2, title: 'Выполняются', status: 'except', idStatus: 'IN PROGRESS', items: [] },
+        { id: 3, title: 'Тестирование', status: 'test', idStatus: 'TESTING', items: [] },
+        { id: 4, title: 'Проверка', status: 'check', idStatus: 'CHECKING', items: [] },
+        { id: 5, title: 'Завершенные', status: 'complete', idStatus: 'COMPLETED', items: [] },
     ]);
 
     useEffect(() => {

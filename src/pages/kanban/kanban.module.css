@@ -3,7 +3,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 100%;
+    margin: 0 auto;
+    width: 1580px;
     height: 100%;
     gap: 20px;
 }

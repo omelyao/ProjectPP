@@ -56,6 +56,7 @@ const GlobalStyles = createGlobalStyle`
   }
 
   img, svg {
+    
     max-width: 100%;
     height: auto;
   }
@@ -79,14 +80,15 @@ const GlobalStyles = createGlobalStyle`
   }
 
   html,body{
-    background: #F5F7F9;
+    background: white;
     font-size: 16px;
     font-family: Roboto;
     font-weight: 400;
+    max-height: 1080px;
     height: 100%;
     width: 100%;
-    overflow-x:auto;
     overflow-y:auto;
+    overflow-x:hidden;
   }
 
   ::-webkit-calendar-picker-indicator { 

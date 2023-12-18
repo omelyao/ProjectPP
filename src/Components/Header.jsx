@@ -1,22 +1,22 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import classes from '../css/Header.module.css'
 import Navigation from './Navigation';
-import {useDispatch, useSelector} from 'react-redux';
-import {useNavigate} from 'react-router-dom';
-import {logOut} from '../redux/authSlice';
-import {reset} from '../redux/authApi';
-import {useRecoilState, useRecoilValue, useSetRecoilState} from "recoil";
-import {taskIdState, timerState} from "../store/atom";
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { logOut } from '../redux/authSlice';
+import { reset } from '../redux/authApi';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { taskIdState, timerState } from "../store/atom";
 import Modal from "./GanttTaskForm/Modal/Modal";
-import {ReactComponent as StartTimerButton} from '../assets/img/startTimerButton.svg';
-import {ReactComponent as PauseTimerButton} from '../assets/img/pauseTimerButton.svg';
-import {ReactComponent as TrashTimerButton} from '../assets/img/trashButton.svg';
-import {getIdTask, getUser, refreshAccessToken, timeSpent} from "../services/task";
+import { ReactComponent as StartTimerButton } from '../assets/img/startTimerButton.svg';
+import { ReactComponent as PauseTimerButton } from '../assets/img/pauseTimerButton.svg';
+import { ReactComponent as TrashTimerButton } from '../assets/img/trashButton.svg';
+import { getIdTask, getUser, refreshAccessToken, timeSpent } from "../services/task";
 
-function Header({modalIsOpen}) {
+function Header({ modalIsOpen }) {
 
     const [open, setOpen] = useState(false);
-    const {user} = useSelector(state => state.auth);
+    const { user } = useSelector(state => state.auth);
 
     const [activeCategory, setActiveCategory] = useState("");
     const [showTaskInfo, setShowTaskInfo] = useState(false);
@@ -61,9 +61,9 @@ function Header({modalIsOpen}) {
         return (
             <header className={classes["main-header"]}>
                 <img className={classes['small-logo']}
-                     src={require("../images/logo_small.svg").default}
-                     width="48" height="48"
-                     alt="Логотип"
+                    src={require("../images/logo_small.svg").default}
+                    width="80" height="80"
+                    alt="Логотип"
                 />
             </header>)
     }
@@ -80,46 +80,46 @@ function Header({modalIsOpen}) {
                 <div className={classes.left}>
                     <div className={classes.leftIcon}>
                         <img className={classes['nav-icon']}
-                             onClick={() => setOpen(!open)}
-                             src={require("../assets/img/burger.svg").default}
-                             width="24" height="24"
-                             alt="Иконка навигации"
+                            onClick={() => setOpen(!open)}
+                            src={require("../assets/img/BIGMENU.svg").default}
+                            width="50" height="36"
+                            alt="Иконка навигации"
                         />
 
                         <img className={classes['small-logo']}
-                             src={require("../images/logo_small.svg").default}
-                             width="48" height="48"
-                             alt="Логотип"
+                            src={require("../images/logo_small.svg").default}
+                            width="80" height="80"
+                            alt="Логотип"
                         />
                     </div>
+                </div>
+                <div className={classes['right']}>
                     <div className={classes['navigates']}>
                         <div
                             className={classes.profile}
                             onClick={() => handleCategoryClick('profile')}>
-                            <img
-                                src={require("../assets/img/UserHeader.svg").default}
-                                width="16" height="16" alt="Мой профиль"
+                            <img className={classes['headerimg']}
+                                src={require("../assets/img/USER10.svg").default}
+                                width="32" height="32" alt="Мой профиль"
                             />
-                            <p>Мой Профиль</p>
+                            <p>ПРОФИЛЬ</p>
                         </div>
                         <div
                             className={classes.profile}
                             onClick={() => handleCategoryClick('start')}>
                             <img
-                                src={require("../assets/img/GanttHeader.svg.svg").default}
-                                width="16" height="16" alt="Мой профиль"
+                                src={require("../assets/img/menu-kebab-horizontal-3-svgrepo-com.svg").default}
+                                width="45" height="45" alt="Мой профиль"
                             />
-                            <p>Проекты</p>
+                            <p>ПРОЕКТЫ</p>
                         </div>
                     </div>
-                </div>
-                <div className={classes['right']}>
 
                     <div className={classes.timer}>
                         {timer.taskId !== null ?
                             <div className={classes.time}>
                                 <span className={classes.buttonInfo}>
-                                      {/*onClick={() => openForm("view")}>*/}
+                                    {/*onClick={() => openForm("view")}>*/}
                                     {timer.taskName}
                                 </span>
                                 {/*{showTaskInfo && (*/}
@@ -148,29 +148,29 @@ function Header({modalIsOpen}) {
                                 {/*    </div>*/}
                                 {/*)}*/}
                                 <span>
-            <p>{formatTime(timer.time)}</p>
-          </span>
+                                    <p>{formatTime(timer.time)}</p>
+                                </span>
                             </div>
                             : null
                         }
                     </div>
 
-                    <img className={classes['settings-icon']}
-                         onClick={() => navigate("/change-info")}
-                         src={require("../assets/img/settings.svg").default}
-                         width="24" height="24"
-                         alt="Настройка"
-                    />
+                    {/*<img className={classes['settings-icon']}
+                        onClick={() => navigate("/change-info")}
+                        src={require("../assets/img/settings.svg").default}
+                        width="24" height="24"
+                        alt="Настройка"
+                    />*/}
 
                     <div className={classes["exit"]} onClick={() => out()}>
-                        <img src={require("../assets/img/exit.svg").default} width="24" height="24" alt="Выйти"/>
-                        <p>Выйти</p>
+                        <img src={require("../assets/img/exit.svg").default} width="24" height="24" alt="Выйти" />
+                        <p>ВЫЙТИ</p>
                     </div>
                 </div>
             </header>
             <Modal id={timer.taskId} showModal={showModal} setShowModal={setShowModal} formType={formType}
-                   setFormType={setFormType}/>
-            <Navigation open={open} onClose={() => setOpen(false)} modalIsOpen={modalIsOpen}/>
+                setFormType={setFormType} />
+            <Navigation open={open} onClose={() => setOpen(false)} modalIsOpen={modalIsOpen} />
         </div>
     );
 }
