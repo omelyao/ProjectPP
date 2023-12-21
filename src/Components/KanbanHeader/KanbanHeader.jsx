@@ -57,11 +57,13 @@ const KanbanHeader = () => {
                 </div>
                 {internsList?.interns?.find((intern) => intern?.id_intern === user?.data?.id) &&
                     <>
-                        <div className={s.buttons}>
-                            <Button children={"Создать задачу"} onClick={() => openForm('create')} />
-                        </div>
-                        <div className={s.buttons}>
-                            <Button onClick={() => Delete()} children={"Убрать завершенные задачи"} width={250} />
+                        <div className={s.innerbutton}>
+                            <div className={s.buttons}>
+                                <Button children={"Создать задачу"} onClick={() => openForm('create')} />
+                            </div>
+                            <div className={s.buttons}>
+                                <Button onClick={() => Delete()} children={"Убрать завершенные задачи"} width={250} />
+                            </div>
                         </div>
                     </>
                 }

@@ -14,7 +14,7 @@
     justify-content: flex-start;
     align-items: center;
     gap: 20px;
-    width: 50%;
+    width: 60%;
     height: 50%;
 }
 .selects button{
@@ -23,6 +23,11 @@
     background-color: white;
     align-items: center;
     width: max-content;
+}
+.innerbutton{
+    display: flex;
+    justify-content: space-between;
+    width: 40%;
 }
 .buttons{
     display: flex;

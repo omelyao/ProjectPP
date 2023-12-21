@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import s from './CreateForm.module.css'
-import {useRecoilState, useRecoilValue, useSetRecoilState} from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import {
     projectInterns,
     projectsId,
@@ -8,32 +8,32 @@ import {
     tasksState,
     userState
 } from "../../../store/atom";
-import {createTask, getAllTask, getIdTask, getProjectInterns, getUserInfo} from "../../../services/task";
+import { createTask, getAllTask, getIdTask, getProjectInterns, getUserInfo } from "../../../services/task";
 import Text from "../UI/Text";
 import Select from "../UI/Select";
-import {ReactComponent as Project} from  '../../../assets/img/projects.svg'
-import {ReactComponent as Add} from  '../../../assets/img/addButtForm.svg'
-import {ReactComponent as Del} from  '../../../assets/img/delButtForm.svg'
+import { ReactComponent as Project } from '../../../assets/img/projects.svg'
+import { ReactComponent as Add } from '../../../assets/img/addButtForm.svg'
+import { ReactComponent as Del } from '../../../assets/img/delButtForm.svg'
 import InputDate1 from "../UI/InputDate1";
 import ButtonForm from "../UI/Button";
 import TextArea from "../UI/TextArea";
-import {toast} from "react-toastify";
+import { toast } from "react-toastify";
 import { Right } from '../../GanttChart/GanttTable/TaskRow/UI/Right';
-import {ReactComponent as Clock} from  '../../../assets/img/clock.svg'
-import {useGetUserQuery} from "../../../redux/authApi";
-import {useParams} from "react-router-dom";
+import { ReactComponent as Clock } from '../../../assets/img/clock.svg'
+import { useGetUserQuery } from "../../../redux/authApi";
+import { useParams } from "react-router-dom";
 import SelectUser from "../UI/SelectUser";
 
-const CreateForm = ({parentId, setShowModal, typeTask, formType}) => {
+const CreateForm = ({ parentId, setShowModal, typeTask, formType }) => {
     const projectList = useRecoilValue(projectsList)
     const internsList = useRecoilValue(projectInterns)
-    const projectId= useRecoilValue(projectsId);
+    const projectId = useRecoilValue(projectsId);
 
-    const {userId} = useParams();
-    const user = useGetUserQuery({id:userId});
-    // const [teamId, setTeamId] = useState(0)
-    // const [executorId, setExecutorId] = useState(0)
-    // let executor
+    const { userId } = useParams();
+    const user = useGetUserQuery({ id: userId });
+    const [teamId, setTeamId] = useState(0)
+    const [executorId, setExecutorId] = useState(0)
+    let executor
     const [performers, setPerformers] = useState([]);
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
@@ -52,7 +52,7 @@ const CreateForm = ({parentId, setShowModal, typeTask, formType}) => {
             .catch((error) => {
                 console.log(error);
             });
-    },[setInterns])
+    }, [setInterns])
 
     const handleAddPerformer = () => {
         const newPerformer = {
@@ -63,11 +63,11 @@ const CreateForm = ({parentId, setShowModal, typeTask, formType}) => {
         setPerformers([...performers, newPerformer]);
     };
 
-    // const handleAddExecutor = (event) =>{
-    //     event.preventDefault()
-    //     executor = parseInt(event.target.value)
-    //     setExecutorId(executor)
-    // }
+    const handleAddExecutor = (event) => {
+        event.preventDefault()
+        executor = parseInt(event.target.value)
+        setExecutorId(executor)
+    }
 
 
     const handleDeletePerformer = (id) => {
@@ -104,7 +104,7 @@ const CreateForm = ({parentId, setShowModal, typeTask, formType}) => {
             return true;
         } else if (Date.parse(startDate) < parentStartDate || Date.parse(finalDate) > parentFinalDate) {
             return false;
-        } else  if (Date.parse(finalDate) > Date.parse(deadline)) {
+        } else if (Date.parse(finalDate) > Date.parse(deadline)) {
             return false;
         }
 
@@ -129,7 +129,7 @@ const CreateForm = ({parentId, setShowModal, typeTask, formType}) => {
         }
 
 
-        if(startDate > finalDate ){
+        if (startDate > finalDate) {
             alert("Дата начала не может быть больше Даты окончания");
             return
         }
@@ -169,14 +169,14 @@ const CreateForm = ({parentId, setShowModal, typeTask, formType}) => {
             return;
         }
 
-        // if (executorId !== 0) {
-        //     responsibleUsers.push(executorId);
-        // }
+        if (executorId !== 0) {
+            responsibleUsers.push(executorId);
+        }
 
-        // if (performers.length > 0) {
-        //     const performerIds = performers.map((performer) => performer.id_intern);
-        //     responsibleUsers.push(...performerIds);
-        // }
+        if (performers.length > 0) {
+            const performerIds = performers.map((performer) => performer.id_intern);
+            responsibleUsers.push(...performerIds);
+        }
 
         try {
             await createTask(taskList, stagesList, responsibleUsers)
@@ -192,11 +192,11 @@ const CreateForm = ({parentId, setShowModal, typeTask, formType}) => {
         <div className={s.container}>
             <form className={s.form} onSubmit={handleSubmit}>
                 <div className={s.title}>
-                    <Text optional={true} width={"606px"} height={"36px"} padding={"10px"} border={"1px solid #ccc"} background={"#FFFFFF"} fontSize={"20px"} fontWeight={"700"} onChange={(event) => setName(event.target.value)}/>
-                    <span style={{padding:'0px 4px'}}>
+                    <Text optional={true} width={"606px"} height={"36px"} padding={"10px"} border={"1px solid #ccc"} background={"#FFFFFF"} fontSize={"20px"} fontWeight={"700"} onChange={(event) => setName(event.target.value)} />
+                    <span style={{ padding: '0px 4px' }}>
                         Базовая задача:
                         <span>&nbsp;</span>
-                        <span style={{textDecoration:'underline'}}>
+                        <span style={{ textDecoration: 'underline' }}>
                             {parentId !== null ? parentId?.name : "Отсутствует"}
                         </span>
                     </span>
@@ -205,45 +205,45 @@ const CreateForm = ({parentId, setShowModal, typeTask, formType}) => {
                     <div className={s.project}>
                         <Select
                             label="Проект"
-                            icon={<Project/>}
+                            icon={<Project />}
                             value={projectId}
                             options={projectList}
                             disabled
                         />
                     </div>
-                    {/*<div className={s.element}>*/}
-                    {/*    <Select*/}
-                    {/*    label="Тег команды"*/}
-                    {/*    icon={<Project/>}*/}
-                    {/*    options={internsList.teams}*/}
-                    {/*    value={internsList[0]?.title}*/}
-                    {/*    />*/}
-                    {/*</div>*/}
-                    {/*<div className={s.element}>*/}
-                    {/*    <span>Дедлайн</span>*/}
-                    {/*    <InputDate1*/}
-                    {/*        onChange={(event) => setDeadline(event.target.value)}*/}
-                    {/*        icon={<Clock/>}*/}
-                    {/*    />*/}
-                    {/*</div>*/}
+                    <div className={s.element}>
+                        <Select
+                            label="Тег команды"
+                            icon={<Project />}
+                            options={internsList.teams}
+                            value={internsList[0]?.title}
+                        />
+                    </div>
+                    <div className={s.element}>
+                        <span>Дедлайн</span>
+                        <InputDate1
+                            onChange={(event) => setDeadline(event.target.value)}
+                            icon={<Clock />}
+                        />
+                    </div>
                 </div>
                 <div className={s.elements}>
                     <div className={`${s.element} ${s.deadlines}`}>
                         <span>Планируемые сроки выполнения</span>
                         <div className={s.elements}>
                             <InputDate1
-                                    value={startDate}
-                                    defaultValue={parentId?.planned_start_date}
-                                    onChange={(event) => setStartDate(event.target.value)}
-                                    icon={<Clock/>}
-                                />
-                                <span style={{alignSelf:'center'}}>-</span>
+                                value={startDate}
+                                defaultValue={parentId?.planned_start_date}
+                                onChange={(event) => setStartDate(event.target.value)}
+                                icon={<Clock />}
+                            />
+                            <span style={{ alignSelf: 'center' }}>-</span>
                             <InputDate1
-                                    value={finalDate}
-                                    defaultValue={parentId?.planned_final_date}
-                                    onChange={(event) => setFinalDate(event.target.value)}
-                                    icon={<Clock/>}
-                                />
+                                value={finalDate}
+                                defaultValue={parentId?.planned_final_date}
+                                onChange={(event) => setFinalDate(event.target.value)}
+                                icon={<Clock />}
+                            />
                         </div>
                     </div>
                     <div className={s.element}>
@@ -251,7 +251,7 @@ const CreateForm = ({parentId, setShowModal, typeTask, formType}) => {
                         <InputDate1
                             defaultValue={parentId?.deadline}
                             onChange={(event) => setDeadline(event.target.value)}
-                            icon={<Clock/>}
+                            icon={<Clock />}
                         />
                     </div>
                 </div>
@@ -263,22 +263,19 @@ const CreateForm = ({parentId, setShowModal, typeTask, formType}) => {
                         onChange={(event) => setDescription(event.target.value)}
                     />
                 </div>
-                <div className={s.important}>
-                    <SelectUser
+                <div className={s.unimportant}>
+                    {<Select
                         label="Постановщик"
-                    />
-                    {/*<Select*/}
-                    {/*    label="Ответственный"*/}
-                    {/*    icon={<Project/>}*/}
-                    {/*    options={internsList.interns}*/}
-                    {/*    onChange={handleAddExecutor}*/}
-                    {/*    dis={"Выберите"}*/}
-                    {/*/>*/}
+                        icon={<Project />}
+                        options={internsList.interns}
+                        onChange={handleAddExecutor}
+                        dis={"Выберите"}
+                    />}
                 </div>
                 <div className={s.unimportant}>
                     <div className={s.unimportantTop}>
                         <span className={s.label}>Исполнители</span>
-                        <button type="button"  onClick={handleAddPerformer}>
+                        <button type="button" onClick={handleAddPerformer}>
                             <Add />
                         </button>
                     </div>
@@ -297,7 +294,7 @@ const CreateForm = ({parentId, setShowModal, typeTask, formType}) => {
                                     dis={"Выберите"}
                                 />
                                 <button className={s.deleteButton} type="button" onClick={() => handleDeletePerformer(performer.id)}>
-                                    <Del style={{width: "16px", height: "16px"}} />
+                                    <Del style={{ width: "16px", height: "16px" }} />
                                 </button>
                             </div>
                         ))}
@@ -306,7 +303,7 @@ const CreateForm = ({parentId, setShowModal, typeTask, formType}) => {
                 <div className={s.checklist}>
                     <div className={s.checklistTop}>
                         <span className={s.label}>Чек-лист</span>
-                        <button type="button"  onClick={handleAddStages}>
+                        <button type="button" onClick={handleAddStages}>
                             <Add />
                         </button>
                     </div>
@@ -314,7 +311,7 @@ const CreateForm = ({parentId, setShowModal, typeTask, formType}) => {
                         {stages.map((stage, index) => (
                             <div className={s.checkList} key={index}>
                                 <Right>
-                                    <input type="checkbox"/>
+                                    <input type="checkbox" />
                                 </Right>
                                 <Text
                                     width={"60%"}
@@ -330,7 +327,7 @@ const CreateForm = ({parentId, setShowModal, typeTask, formType}) => {
                                     }}
                                 />
                                 <button className={s.deleteButton} type="button" onClick={() => handleDeleteStages(stage.id)}>
-                                    <Del style={{width: "16px", height: "16px"}}/>
+                                    <Del style={{ width: "16px", height: "16px" }} />
                                 </button>
                             </div>
                         ))}

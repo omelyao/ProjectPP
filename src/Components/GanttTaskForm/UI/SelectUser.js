@@ -1,10 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 import shape from "../../../assets/img/shape.svg"
-import {useRecoilValue} from "recoil";
-import {projectInterns} from "../../../store/atom";
-import {useParams} from "react-router-dom";
-import {useGetUserQuery} from "../../../redux/authApi";
+import { useRecoilValue } from "recoil";
+import { projectInterns } from "../../../store/atom";
+import { useParams } from "react-router-dom";
+import { useGetUserQuery } from "../../../redux/authApi";
 
 const Wrapper = styled.div`
   display: flex;
@@ -36,17 +36,17 @@ const SelectItem = styled.div`
   text-overflow: ellipsis;
 `;
 
-const SelectUser = ({label}) => {
-    const {userId} = useParams();
-    const user = useGetUserQuery({id:userId});
-    return (
-        <Wrapper>
-            {label && <Label>{label}</Label>}
-            <SelectItem>
-                {user?.data?.last_name} {user?.data?.first_name}
-            </SelectItem>
-        </Wrapper>
-    );
+const SelectUser = ({ label }) => {
+  const { userId } = useParams();
+  const user = useGetUserQuery({ id: userId });
+  return (
+    <Wrapper>
+      {label && <Label>{label}</Label>}
+      <SelectItem>
+        {user?.data?.last_name} {user?.data?.first_name}
+      </SelectItem>
+    </Wrapper>
+  );
 };
 
 export default SelectUser;
